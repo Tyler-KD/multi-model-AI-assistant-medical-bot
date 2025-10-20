@@ -1,0 +1,61 @@
+# my env name - medicalagents
+
+# Added flask requirements
+Flask>=2.3.3
+requests>=2.31.0
+Werkzeug>=2.3.7
+gunicorn>=21.2.0
+
+# Added fastapi and uvicorn for the API
+fastapi
+uvicorn
+pydantic
+
+# Added RAG dependencies
+qdrant-client>=1.6.0
+sentence-transformers>=2.2.2
+langchain>=0.1.0
+langchain-community>=0.0.13
+tiktoken>=0.5.1
+beautifulsoup4>=4.12.2
+python-dotenv>=1.0.0
+
+# Core dependencies
+python-dotenv
+pydantic
+fastapi
+uvicorn
+python-multipart
+
+# LangChain and LangGraph
+langchain
+langchain-openai
+langgraph
+
+# Vector database
+qdrant-client
+faiss-cpu
+
+# OpenAI
+openai
+
+# Web search
+google-search-results
+
+# Computer vision dependencies
+opencv-python
+numpy
+scikit-image
+torch
+torchvision
+onnxruntime
+pillow
+
+# Speech processing
+elevenlabs
+
+# UI (optional)
+gradio
+
+# Testing
+pytest

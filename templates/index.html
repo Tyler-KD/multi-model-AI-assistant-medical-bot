@@ -1,0 +1,426 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chat-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eaeaea;
+            background-color: #f8f9fa;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .chat-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-footer {
+            padding: 15px;
+            border-top: 1px solid #eaeaea;
+            background-color: #f8f9fa;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        .message {
+            max-width: 80%;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            position: relative;
+        }
+        .user-message {
+            background-color: #e3f2fd;
+            color: #000;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+        .assistant-message {
+            background-color: #f5f5f5;
+            color: #000;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+        .agent-tag {
+            display: inline-block;
+            background-color: #ebf5ff;
+            color: #0d6efd;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .message-input {
+            border-radius: 20px;
+            padding: 10px 15px;
+            resize: none;
+        }
+        .file-upload-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .file-upload-btn {
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+        .file-upload-input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            filter: alpha(opacity=0);
+        }
+        .preview-container {
+            margin-top: 10px;
+            display: none;
+        }
+        .preview-image {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 5px;
+        }
+        .thinking {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+        .dot {
+            height: 8px;
+            width: 8px;
+            margin-right: 5px;
+            background-color: #0d6efd;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        .dot:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+        .dot:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+        .sidebar {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            height: 90vh;
+            overflow-y: auto;
+        }
+        .sidebar h5 {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 10px;
+        }
+        .agent-info {
+            margin-bottom: 15px;
+        }
+        .agent-info h6 {
+            color: #0d6efd;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                height: auto;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 mb-3">
+                <div class="sidebar">
+                    <h5>
+                        <i class="fas fa-robot me-2"></i>
+                        Medical Assistant
+                    </h5>
+                    <div class="agent-info">
+                        <h6>Available Agents</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-comment-medical me-2"></i> Medical Conversation Agent</li>
+                            <li><i class="fas fa-database me-2"></i> Medical RAG Agent</li>
+                            <li><i class="fas fa-search me-2"></i> Web Search Agent</li>
+                        </ul>
+                    </div>
+                    <div class="agent-info">
+                        <h6>Computer Vision Agents</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-brain me-2"></i> Brain Tumor Segmentation</li>
+                            <li><i class="fas fa-lungs me-2"></i> Chest X-ray Analysis</li>
+                            <li><i class="fas fa-allergies me-2"></i> Skin Lesion Classification</li>
+                        </ul>
+                    </div>
+                    <button id="clear-chat" class="btn btn-outline-danger w-100 mt-3">
+                        <i class="fas fa-trash me-2"></i> Clear Conversation
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Chat Container -->
+            <div class="col-md-9">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-stethoscope me-2"></i>
+                            Multi-Agent Medical Assistant
+                        </h5>
+                        <small class="text-muted">Upload medical images or ask health-related questions</small>
+                    </div>
+                    
+                    <div id="chat-body" class="chat-body">
+                        <div class="message assistant-message">
+                            <div class="agent-tag">System</div>
+                            <p>Hello! I'm your medical assistant. You can ask me health-related questions or upload medical images for analysis.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-footer">
+                        <form id="chat-form" class="d-flex align-items-end">
+                            <div class="file-upload-container me-2">
+                                <button type="button" class="file-upload-btn btn btn-primary">
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
+                                <input type="file" class="file-upload-input" id="image-upload" accept="image/*">
+                            </div>
+                            
+                            <div class="flex-grow-1">
+                                <div class="preview-container" id="preview-container">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <img id="preview-image" class="preview-image me-2" src="">
+                                        <button type="button" class="btn btn-sm btn-outline-danger" id="remove-image">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <textarea id="message-input" class="form-control message-input" rows="1" placeholder="Ask a medical question..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary rounded-circle ms-2" style="width: 40px; height: 40px;">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatBody = document.getElementById('chat-body');
+            const chatForm = document.getElementById('chat-form');
+            const messageInput = document.getElementById('message-input');
+            const imageUpload = document.getElementById('image-upload');
+            const previewContainer = document.getElementById('preview-container');
+            const previewImage = document.getElementById('preview-image');
+            const removeImageBtn = document.getElementById('remove-image');
+            const clearChatBtn = document.getElementById('clear-chat');
+            
+            // We no longer need to store conversation history in frontend
+            // Only maintain display messages
+            let displayMessages = [];
+            
+            // Auto-resize textarea
+            messageInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            // Handle image upload
+            imageUpload.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
+                        previewContainer.style.display = 'block';
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Remove image preview
+            removeImageBtn.addEventListener('click', function() {
+                imageUpload.value = '';
+                previewContainer.style.display = 'none';
+                previewImage.src = '';
+            });
+            
+            // Clear chat (only visual)
+            clearChatBtn.addEventListener('click', function() {
+                displayMessages = [];
+                chatBody.innerHTML = `
+                    <div class="message assistant-message">
+                        <div class="agent-tag">System</div>
+                        <p>Hello! I'm your medical assistant. You can ask me health-related questions or upload medical images for analysis.</p>
+                    </div>
+                `;
+            });
+            
+            // Handle form submission
+            chatForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const message = messageInput.value.trim();
+                if (!message && !imageUpload.files.length) return;
+                
+                // Store image data if available
+                let imageDataUrl = null;
+                if (imageUpload.files.length > 0) {
+                    imageDataUrl = previewImage.src;
+                }
+                
+                // Add user message to chat
+                const userMessageElement = document.createElement('div');
+                userMessageElement.className = 'message user-message';
+                
+                // Create message content with image if available
+                let messageContent = `<p>${message}</p>`;
+                if (imageDataUrl) {
+                    messageContent += `
+                        <div class="mt-2">
+                            <img src="${imageDataUrl}" alt="Uploaded image" class="img-fluid rounded" style="max-height: 200px;">
+                        </div>
+                    `;
+                }
+                
+                userMessageElement.innerHTML = messageContent;
+                chatBody.appendChild(userMessageElement);
+                
+                // Add thinking indicator
+                const thinkingElement = document.createElement('div');
+                thinkingElement.className = 'message assistant-message thinking';
+                thinkingElement.innerHTML = `
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                `;
+                chatBody.appendChild(thinkingElement);
+                
+                // Scroll to bottom
+                chatBody.scrollTop = chatBody.scrollHeight;
+                
+                // Clear input
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                
+                // Create form data
+                const formData = new FormData();
+                formData.append('message', message);
+                
+                // Add image if available
+                if (imageUpload.files.length > 0) {
+                    formData.append('file', imageUpload.files[0]);
+                }
+                
+                try {
+                    // Send to backend
+                    const response = await fetch('/send_message', {
+                        method: 'POST',
+                        body: formData,
+                        credentials: 'include' // Important for cookie handling
+                    });
+                    
+                    const data = await response.json();
+                    
+                    // Remove thinking indicator
+                    chatBody.removeChild(thinkingElement);
+                    
+                    // Add response to chat
+                    const assistantMessageElement = document.createElement('div');
+                    assistantMessageElement.className = 'message assistant-message';
+                    assistantMessageElement.innerHTML = `
+                        <div class="agent-tag">${data.agent}</div>
+                        <div>${marked.parse(data.response)}</div>
+                    `;
+                    chatBody.appendChild(assistantMessageElement);
+                    
+                    // Store messages for display purposes only
+                    displayMessages.push({
+                        role: "user",
+                        content: message,
+                        image: imageDataUrl
+                    });
+                    
+                    displayMessages.push({
+                        role: "assistant",
+                        content: data.response,
+                        agent: data.agent
+                    });
+                    
+                    // Clear file upload preview
+                    imageUpload.value = '';
+                    previewContainer.style.display = 'none';
+                    
+                } catch (error) {
+                    console.error("Error:", error);
+                    // Remove thinking indicator
+                    chatBody.removeChild(thinkingElement);
+                    
+                    // Add error message
+                    const errorElement = document.createElement('div');
+                    errorElement.className = 'message assistant-message';
+                    errorElement.innerHTML = `
+                        <div class="agent-tag">System</div>
+                        <p class="text-danger">Sorry, there was an error processing your request. Please try again.</p>
+                    `;
+                    chatBody.appendChild(errorElement);
+                }
+                
+                // Scroll to bottom again
+                chatBody.scrollTop = chatBody.scrollHeight;
+            });
+            
+            // Allow sending message with Enter key
+            messageInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    chatForm.dispatchEvent(new Event('submit'));
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -54,8 +54,5 @@ pillow
 # Speech processing
 elevenlabs
 
-# UI (optional)
-gradio
-
 # Testing
 pytest

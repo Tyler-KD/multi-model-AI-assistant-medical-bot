@@ -1,0 +1,70 @@
+flowchart TD
+    %% Main Input Flow
+    UserInput[User Input] -->|Speech| SpeechInput[Speech Input]
+    UserInput -->|Text| TextInput[Text Input]
+    UserInput -->|Image| ImageUpload[Image Upload]
+    
+    %% Speech Processing
+    SpeechInput --> SpeechToText[Speech-to-Text]
+    SpeechToText --> TextInput
+    
+    %% Input Processing
+    TextInput --> InputGuardrails[Input Guardrails]
+    ImageUpload --> InputGuardrails
+    
+    %% Central Processing
+    InputGuardrails --> AssistantChatbot[Assistant Chatbot]
+    
+    %% Medical Decision Branch
+    AssistantChatbot --> MedicalAgentDecision[Medical Agent Decision]
+    MedicalAgentDecision --> SkinLesion[Skin Lesion]
+    MedicalAgentDecision --> BrainTumor[Brain Tumor]
+    MedicalAgentDecision --> ChestXray[Chest X-ray]
+    
+    %% Validation
+    SkinLesion --> HumanValidation[Human-in-the-loop Validation]
+    BrainTumor --> HumanValidation
+    ChestXray --> HumanValidation
+
+    %%Test
+    HumanValidation --> AssistantChatbot
+    
+    %% LLM Conversation Branch
+    AssistantChatbot --> LLMConversation[LLM Powered Conversation]
+    
+    %% Support Systems for LLM - With bi-directional arrow for Web Search
+    LLMConversation <--> WebSearchAgent[Web Search Agent]
+    LLMConversation --> RAGAgent[RAG Agent\nVector DB Retrieval]
+    LLMConversation --> OutputGuardrails[Output Guardrails]
+    
+    %% Confidence Check with High Confidence going back to LLM
+    RAGAgent --> ConfidenceCheck[Confidence Check]
+    ConfidenceCheck -->|Low Confidence| WebSearchAgent
+    ConfidenceCheck -->|High Confidence| LLMConversation
+    
+    %% Output Flow (removed the erroneous high confidence arrow)
+    OutputGuardrails --> TextOutput[Text Output to UI]
+    TextOutput --> TextToSpeech[Text-to-Speech]
+    TextToSpeech --> SpeechOutput[Speech Output]
+    
+    %% Style definitions with higher contrast and no white backgrounds
+    classDef processing fill:#FFD700,stroke:#000,stroke-width:2px,color:#000,font-weight:bold
+    classDef input fill:#A9A9A9,stroke:#000,stroke-width:2px,color:#000,font-weight:bold
+    classDef output fill:#87CEEB,stroke:#000,stroke-width:2px,color:#000,font-weight:bold
+    classDef decision fill:#ff6666,stroke:#000,stroke-width:2px,color:#000,font-weight:bold
+    classDef chatbot fill:#009933,stroke:#000,stroke-width:2px,color:#000,font-weight:bold
+    classDef medical fill:#ff9966,stroke:#000,stroke-width:2px,color:#000,font-weight:bold
+    classDef validation fill:#FFDAB9,stroke:#000,stroke-width:2px,color:#000,font-weight:bold
+    classDef agent fill:#7CFC00,stroke:#000,stroke-width:2px,color:#000,font-weight:bold
+    classDef search fill:#9966ff,stroke:#000,stroke-width:2px,color:#000,font-weight:bold
+    
+    %% Apply styles
+    class SpeechToText,InputGuardrails,OutputGuardrails,TextToSpeech processing
+    class ConfidenceCheck input
+    class UserInput,SpeechInput,TextInput,ImageUpload,LLMConversation,TextOutput,SpeechOutput output
+    class AssistantChatbot chatbot
+    class MedicalAgentDecision decision
+    class SkinLesion,BrainTumor,ChestXray medical
+    class HumanValidation validation
+    class RAGAgent agent
+    class WebSearchAgent search

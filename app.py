@@ -6,7 +6,7 @@ import os
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = 'uploads/frontend'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max upload
 app.config['API_URL'] = "http://localhost:8000"  # Your FastAPI backend URL
 
@@ -70,11 +70,18 @@ def send_message():
             result = response.json()
             
             # Create response object to modify
-            flask_response = jsonify({
+            response_data = {
                 "status": "success",
                 "agent": result["agent"],
                 "response": result["response"]
-            })
+            }
+            
+            # Add result image URL if it exists
+            if "result_image" in result:
+                # Prefix with the FastAPI URL
+                response_data["result_image"] = f"{app.config['API_URL']}{result['result_image']}"
+            
+            flask_response = jsonify(response_data)
             
             # Extract session cookie from response if it exists
             if 'session_id' in response.cookies:

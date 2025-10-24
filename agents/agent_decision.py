@@ -126,7 +126,8 @@ def create_agent_graph():
         # Check if input contains an image
         if isinstance(current_input, dict) and "image" in current_input:
             has_image = True
-            image_type_response = AgentConfig.image_analyzer.process_image(current_input.get("image", None))
+            image_path = current_input.get("image", None)
+            image_type_response = AgentConfig.image_analyzer.analyze_image(image_path)
             image_type = image_type_response['image_type']
             print("ANALYZED IMAGE TYPE: ", image_type)
         
@@ -366,9 +367,22 @@ def create_agent_graph():
     def run_chest_xray_agent(state: AgentState) -> AgentState:
         """Handle chest X-ray image analysis."""
 
+        current_input = state["current_input"]
+        image_path = current_input.get("image", None)
+
         print(f"Selected agent: CHEST_XRAY_AGENT")
 
-        response = AIMessage(content="This would be handled by the chest X-ray agent, analyzing the image.")
+        # classify chest x-ray into covid or normal
+        predicted_class = AgentConfig.image_analyzer.classify_chest_xray(image_path)
+
+        if predicted_class == "covid19":
+            response = AIMessage(content="The analysis of the uploaded chest X-ray image indicates a **POSITIVE** result for **COVID-19**.")
+        elif predicted_class == "normal":
+            response = AIMessage(content="The analysis of the uploaded chest X-ray image indicates a **NEGATIVE** result for **COVID-19**, i.e., **NORMAL**.")
+        else:
+            response = AIMessage(content="The uploaded image is not clear enough to make a diagnosis / the image is not a medical image.")
+
+        # response = AIMessage(content="This would be handled by the chest X-ray agent, analyzing the image.")
 
         return {
             **state,
@@ -380,9 +394,20 @@ def create_agent_graph():
     def run_skin_lesion_agent(state: AgentState) -> AgentState:
         """Handle skin lesion image analysis."""
 
+        current_input = state["current_input"]
+        image_path = current_input.get("image", None)
+
         print(f"Selected agent: SKIN_LESION_AGENT")
 
-        response = AIMessage(content="This would be handled by the skin lesion agent, analyzing the skin image.")
+        # classify chest x-ray into covid or normal
+        predicted_mask = AgentConfig.image_analyzer.segment_skin_lesion(image_path)
+
+        if predicted_mask:
+            response = AIMessage(content="Following is the analysis (**segmentation**) output of the uploaded skin lesion image.")
+        else:
+            response = AIMessage(content="The uploaded image is not clear enough to make a diagnosis / the image is not a medical image.")
+
+        # response = AIMessage(content="This would be handled by the skin lesion agent, analyzing the skin image.")
 
         return {
             **state,

@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medical Assistant</title>
+    <title>Agentic Medical Assistant</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/chromatography.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -110,6 +111,29 @@
             max-height: 100px;
             border-radius: 5px;
         }
+        .result-image {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 5px;
+            margin-top: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .image-side-by-side {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .image-container {
+            flex: 1;
+            min-width: 200px;
+        }
+        .image-caption {
+            font-size: 0.85em;
+            text-align: center;
+            margin-top: 5px;
+            color: #666;
+        }
         .thinking {
             display: flex;
             align-items: center;
@@ -183,9 +207,9 @@
                     <div class="agent-info">
                         <h6>Computer Vision Agents</h6>
                         <ul class="list-unstyled">
-                            <li><i class="fas fa-brain me-2"></i> Brain Tumor Segmentation</li>
-                            <li><i class="fas fa-lungs me-2"></i> Chest X-ray Analysis</li>
-                            <li><i class="fas fa-allergies me-2"></i> Skin Lesion Classification</li>
+                            <li><i class="fas fa-brain me-2"></i> Brain Tumor Detection</li>
+                            <li><i class="fas fa-lungs me-2"></i> Chest X-ray Covid-19 Classification</li>
+                            <li><i class="fas fa-allergies me-2"></i> Skin Lesion Segmentation</li>
                         </ul>
                     </div>
                     <button id="clear-chat" class="btn btn-outline-danger w-100 mt-3">
@@ -371,10 +395,41 @@
                     // Add response to chat
                     const assistantMessageElement = document.createElement('div');
                     assistantMessageElement.className = 'message assistant-message';
-                    assistantMessageElement.innerHTML = `
+                    
+                    // Build HTML content for the response
+                    let assistantHtml = `
                         <div class="agent-tag">${data.agent}</div>
                         <div>${marked.parse(data.response)}</div>
                     `;
+                    
+                    // Add result image if it exists
+                    if (data.result_image) {
+                        // If the skin lesion segmentation agent was used and both the user uploaded
+                        // an image and we have a result image, display them side by side
+                        if (data.agent === "SKIN_LESION_AGENT, HUMAN_VALIDATION" && imageDataUrl) {
+                            assistantHtml += `
+                                <div class="image-side-by-side">
+                                    <div class="image-container">
+                                        <img src="${imageDataUrl}" alt="Original image" class="img-fluid rounded">
+                                        <div class="image-caption">Original Image</div>
+                                    </div>
+                                    <div class="image-container">
+                                        <img src="${data.result_image}" alt="Segmented image" class="img-fluid rounded">
+                                        <div class="image-caption">Segmentation Result</div>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            // Otherwise just show the result image
+                            assistantHtml += `
+                                <div class="mt-3">
+                                    <img src="${data.result_image}" alt="Result image" class="result-image">
+                                </div>
+                            `;
+                        }
+                    }
+                    
+                    assistantMessageElement.innerHTML = assistantHtml;
                     chatBody.appendChild(assistantMessageElement);
                     
                     // Store messages for display purposes only
@@ -387,7 +442,8 @@
                     displayMessages.push({
                         role: "assistant",
                         content: data.response,
-                        agent: data.agent
+                        agent: data.agent,
+                        resultImage: data.result_image
                     });
                     
                     // Clear file upload preview

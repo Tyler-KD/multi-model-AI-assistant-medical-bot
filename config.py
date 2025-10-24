@@ -28,7 +28,7 @@ class RAGConfig:
         self.embedding_dim = 1536  # Add the embedding dimension here
         self.distance_metric = "Cosine"  # Add this with a default value
         self.use_local = True  # Add this with a default value
-        self.local_path = "./data/qdrant_db2"  # Add this with a default value
+        self.local_path = "./data/qdrant_db"  # Add this with a default value
         self.url = os.getenv("QDRANT_URL")
         self.api_key = os.getenv("QDRANT_API_KEY")
         self.collection_name = "medical_assistance_rag"  # Ensure a valid name
@@ -75,12 +75,13 @@ class RAGConfig:
 
 class MedicalCVConfig:
     def __init__(self):
-        self.brain_tumor_model_path = "models/brain_tumor_segmentation.onnx"
-        self.chest_xray_model_path = "models/chest_xray_detection.onnx"
-        self.skin_lesion_model_path = "models/skin_lesion_classification.onnx"
-        self.brain_image_size = (240, 240, 155)
-        self.chest_xray_image_size = (512, 512)
-        self.skin_lesion_image_size = (224, 224)
+        self.brain_tumor_model_path = "./agents/image_analysis_agent/brain_tumor_agent/models/brain_tumor_segmentation.pth"
+        self.chest_xray_model_path = "./agents/image_analysis_agent/chest_xray_agent/models/covid_chest_xray_model.pth"
+        self.skin_lesion_model_path = "./agents/image_analysis_agent/skin_lesion_agent/models/checkpointN25_.pth.tar"
+        self.skin_lesion_segmentation_output_path = "./uploads/skin_lesion_output/segmentation_plot.png"
+        # self.brain_image_size = (240, 240, 155)
+        # self.chest_xray_image_size = (512, 512)
+        # self.skin_lesion_image_size = (224, 224)
         self.llm = AzureChatOpenAI(
             deployment_name = os.getenv("deployment_name"),  # Replace with your Azure deployment name
             model_name = os.getenv("model_name"),  # Replace with your Azure model name
@@ -136,7 +137,7 @@ class Config:
         self.ui = UIConfig()
         self.eleven_labs_api_key = os.getenv("ELEVEN_LABS_API_KEY")
         self.tavily_api_key = os.getenv("TAVILY_API_KEY")
-        self.max_conversation_history = 20
+        self.max_conversation_history = 40  # storing 20 sets of QnA in history
 
 # # Example usage
 # config = Config()

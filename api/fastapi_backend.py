@@ -3,6 +3,7 @@ import json
 import uuid
 from config import Config
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Depends, Request, Response
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Dict, Union
 import uvicorn
@@ -14,13 +15,19 @@ config = Config()
 # Add a simple in-memory storage (use a database in production)
 conversation_store = {}
 
-UPLOAD_FOLDER = "uploads"  # Define your desired upload folder
+UPLOAD_FOLDER = "uploads/backend"  # Define your desired upload folder
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Create the folder if it doesn't exist
+
+# Create output folders
+SKIN_LESION_OUTPUT = "uploads/skin_lesion_output"
+os.makedirs(SKIN_LESION_OUTPUT, exist_ok=True)
 
 app = FastAPI(title="Multi-Agent Medical Chatbot", version="1.0")
 
+# Mount the uploads directory to make images accessible via URL
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 class QueryRequest(BaseModel):
-    
     query: str
 
 @app.post("/chat")
@@ -63,7 +70,23 @@ def chat(request: QueryRequest, response: Response, request_obj: Request):
 
         print(history)
 
-        return {"response": response_text, "agent": response_data["agent_name"]}
+        # Check if the agent is skin lesion segmentation and find the image path
+        result = {
+            "response": response_text, 
+            "agent": response_data["agent_name"]
+        }
+        
+        # If it's the skin lesion segmentation agent, check for output image
+        print("########## DEBUGGING ########## Agent Name:", response_data["agent_name"])
+        if response_data["agent_name"] == "SKIN_LESION_AGENT, HUMAN_VALIDATION":
+            segmentation_path = os.path.join(SKIN_LESION_OUTPUT, "segmentation_plot.png")
+            if os.path.exists(segmentation_path):
+                result["result_image"] = f"/uploads/skin_lesion_output/segmentation_plot.png"
+                print(result)
+            else:
+                print("Skin Lesion Output path does not exist.")
+        
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -93,7 +116,7 @@ async def upload_image(response: Response, request_obj: Request, image: UploadFi
 
     try:
         query = {"text": text, "image": file_path}
-        response_data = process_query(query)
+        response_data = process_query(query, history)
         response_text = response_data['output'].content
 
         # Update conversation history with agent response
@@ -111,7 +134,23 @@ async def upload_image(response: Response, request_obj: Request, image: UploadFi
 
         print(history)
 
-        return {"response": response_text, "agent": response_data["agent_name"]}
+        # Check if the agent is skin lesion segmentation and find the image path
+        result = {
+            "response": response_text, 
+            "agent": response_data["agent_name"]
+        }
+        
+        # If it's the skin lesion segmentation agent, check for output image
+        print("########## DEBUGGING ########## Agent Name:", response_data["agent_name"])
+        if response_data["agent_name"] == "SKIN_LESION_AGENT, HUMAN_VALIDATION":
+            segmentation_path = os.path.join(SKIN_LESION_OUTPUT, "segmentation_plot.png")
+            if os.path.exists(segmentation_path):
+                result["result_image"] = f"/uploads/skin_lesion_output/segmentation_plot.png"
+                print(result)
+            else:
+                print("Skin Lesion Output path does not exist.")
+        
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

@@ -20,7 +20,7 @@
 
 ----
  
-<!-- ## 📚 Table of Contents
+## 📚 Table of Contents
 - [Overview](#overview)
 - [Demo](#demo)
 - [Technical Flow Chart](#️technical-flowchart)
@@ -33,7 +33,7 @@
 - [Citing](#citing)
 - [Contact](#contact)
 
----- -->
+----
 
 ## 📌 Overview <a name="overview"></a>
 The **Multi-Agent Medical Assistant** is an advanced AI-powered chatbot system designed to assist in medical diagnosis, research, and patient interactions.
@@ -174,7 +174,7 @@ QDRANT_API_KEY =
 ### 5️⃣ Run the Application  
 - Run the following commands one after another in separate windows with same directorty and virtual environment. Keep both running simultanesouly.
 ```bash  
-uvicorn api/fastapi_backend:app --reload
+uvicorn api.fastapi_backend:app --reload
 ```
 
 ```bash
@@ -194,7 +194,7 @@ python ingest_rag_data.py --dir ./data/raw
 ---
 
 ## 🧠 Usage  <a name="usage"></a>
-- Upload medical images for **AI-based diagnosis**.  
+- Upload medical images for **AI-based diagnosis**. Task specific Computer Vision model powered agents - upload images from 'sample_images' folder to try out.
 - Ask medical queries to leverage **retrieval-augmented generation (RAG)** if information in memory or **web-search** to retrieve latest information.  
 - Use **voice-based** interaction (speech-to-text and text-to-speech).  
 - Review AI-generated insights with **human-in-the-loop verification**.  

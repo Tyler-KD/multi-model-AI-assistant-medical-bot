@@ -99,6 +99,7 @@ class QdrantRetriever:
             self.logger.error(f"Error upserting documents: {e}")
             raise
     
+    # retrieve incorporating metadata filters
     def retrieve(self, query_vector: List[float], filters: Optional[Dict] = None, 
                  top_k: int = 10) -> List[Dict[str, Any]]:
         """
@@ -186,6 +187,77 @@ class QdrantRetriever:
         except Exception as e:
             self.logger.error(f"Error retrieving documents: {e}")
             raise
+
+    # retrieve WITHOUT incorporating metadata filters
+    # def retrieve(self, query_vector: List[float], filters: Optional[Dict] = None, 
+    #             top_k: int = 10) -> List[Dict[str, Any]]:
+    #     """
+    #     Retrieve relevant documents based on vector similarity and optional filters.
+    #     """
+    #     try:
+    #         filter_obj = None
+            
+    #         # Only apply filters if you have the corresponding metadata in your documents
+    #         if filters and self.use_filters:  # Add a class attribute to enable/disable filtering
+    #             filter_conditions = []
+                
+    #             # Process specialty filter
+    #             if "specialty" in filters and filters["specialty"]:
+    #                 filter_conditions.append(
+    #                     qdrant_models.FieldCondition(
+    #                         key="specialty",
+    #                         match=qdrant_models.MatchValue(value=filters["specialty"])
+    #                     )
+    #                 )
+                
+    #             # Process medical entities filter
+    #             if "medical_entities" in filters and filters["medical_entities"]:
+    #                 for entity in filters["medical_entities"]:
+    #                     filter_conditions.append(
+    #                         qdrant_models.FieldCondition(
+    #                             key="medical_entities",
+    #                             match=qdrant_models.MatchAny(any=[entity])
+    #                         )
+    #                     )
+                
+    #             # Combine all filters
+    #             if filter_conditions:
+    #                 filter_obj = qdrant_models.Filter(
+    #                     must=filter_conditions
+    #                 )
+            
+    #         # Perform search - default to pure vector search if no filters
+    #         results = self.client.search(
+    #             collection_name=self.collection_name,
+    #             query_vector=query_vector,
+    #             query_filter=filter_obj,  # This will be None if no filters are applied
+    #             limit=top_k,
+    #             with_payload=True,
+    #             score_threshold=0.5  # Lower the threshold to get more results
+    #         )
+            
+    #         # Format results
+    #         formatted_results = []
+    #         for result in results:
+    #             metadata = {}
+    #             # Only extract metadata fields that exist in the payload
+    #             for field in ["source", "specialty", "section", "publication_date", 
+    #                         "medical_entities", "chunk_number", "total_chunks"]:
+    #                 if field in result.payload:
+    #                     metadata[field] = result.payload[field]
+                
+    #             formatted_results.append({
+    #                 "id": result.id,
+    #                 "content": result.payload["content"],
+    #                 "metadata": metadata,
+    #                 "score": result.score
+    #             })
+            
+    #         return formatted_results
+        
+    #     except Exception as e:
+    #         self.logger.error(f"Error retrieving documents: {e}")
+    #         return []  # Return empty list instead of raising to avoid breaking the whole pipeline
     
     def delete_documents(self, document_ids: List[Union[str, int]]):
         """

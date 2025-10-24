@@ -56,3 +56,9 @@ elevenlabs
 
 # Testing
 pytest
+
+# Data Ingestion dependencies
+unstructured
+unstructured[pdf]  # For better PDF support
+unstructured[all-docs]  # For all document types
+pypdf2

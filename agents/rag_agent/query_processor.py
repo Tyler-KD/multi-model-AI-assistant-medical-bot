@@ -38,51 +38,6 @@ class QueryProcessor:
             "gastroenterology": ["stomach", "intestine", "liver", "digestive", "gastric"],
             "ophthalmology": ["eye", "vision", "retina", "cataract", "glaucoma"]
         }
-    
-    # def process_query(self, query: str) -> Tuple[List[float], Dict[str, Any]]:
-    #     """
-    #     Process the query to generate embedding and extract metadata filters.
-        
-    #     Args:
-    #         query: User query string
-            
-    #     Returns:
-    #         Tuple of (query_embedding, extracted_filters)
-    #     """
-    #     try:
-    #         # Analyze query
-    #         expanded_query = self._expand_query(query)
-    #         medical_entities = self._extract_medical_entities(query)
-    #         specialty = self._detect_specialty(query)
-            
-    #         # Generate embedding
-    #         query_embedding = self.embedding_model.embed_query(expanded_query)#.tolist()
-            
-    #         # Create filter dict for retrieval
-    #         filters = {
-    #             "medical_entities": medical_entities if medical_entities else None,
-    #             "specialty": specialty if specialty else None
-    #         }
-    #         # filters = {
-    #         #     "medical_entities": [doc_metadata["medical_entities"]] if isinstance(doc_metadata["medical_entities"], str) else doc_metadata.get("medical_entities", []),
-    #         #     "specialty": doc_metadata.get("specialty", ""),
-    #         # }
-
-            
-    #         # Only keep non-None values
-    #         filters = {k: v for k, v in filters.items() if v is not None}
-            
-    #         self.logger.info(f"Processed query with filters: {filters}")
-    #         # DEBUG
-    #         print(f"Filters being sent: {filters}")
-    #         return query_embedding, filters
-            
-    #     except Exception as e:
-    #         self.logger.error(f"Error processing query: {e}")
-    #         # Return just the embedding with no filters as fallback
-    #         return self.embedding_model.embed_query(query), {}#.tolist(), {}
-
-    from typing import List, Tuple, Dict, Any
 
     def process_query(self, query: str) -> Tuple[List[float], Dict[str, Any]]:
         """

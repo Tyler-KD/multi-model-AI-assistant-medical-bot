@@ -37,11 +37,17 @@ class ResponseGenerator:
             if not retrieved_docs:
                 return self._generate_no_documents_response(query)
             
+            # print("####### PRINTED from rag_agent/response_generator.py: retrieved_docs:", retrieved_docs)
+            
             # Format documents for context
             formatted_context = self._format_context(retrieved_docs)
+
+            # print("####### PRINTED from rag_agent/response_generator.py: formatted_context:", formatted_context)
             
             # Build prompt
             prompt = self._build_prompt(query, formatted_context, chat_history)
+
+            # print("####### PRINTED from rag_agent/response_generator.py: prompt:", prompt)
             
             # Generate response
             response = self.llm.invoke(prompt)
@@ -89,6 +95,7 @@ class ResponseGenerator:
             
             # Check if adding this would exceed max context length
             if total_length + len(formatted_doc) > self.max_context_length:
+                # print("############### DEBUGGING ############: breaking out of formatting context loop due to low configured context length.")
                 break
                 
             context_parts.append(formatted_doc)

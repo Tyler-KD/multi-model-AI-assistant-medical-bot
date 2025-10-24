@@ -76,31 +76,24 @@ https://github.com/user-attachments/assets/42df729c-7f74-4af1-a3df-e88226af8549
 
 ## ✨ Key Features  <a name="key-features"></a>
 
-- 🤖 **Multi-Agent Architecture**  
-  Specialized agents working in harmony to handle diagnosis, information retrieval, reasoning, and more
+- 🤖 **Multi-Agent Architecture** : Specialized agents working in harmony to handle diagnosis, information retrieval, reasoning, and more
 
-- 🔍 **Advanced RAG Retrieval System**  
-  Leveraging Qdrant for precise vector search and sophisticated hybrid retrieval techniques
+- 🔍 **Advanced RAG Retrieval System** : Leveraging Qdrant for precise vector search and sophisticated hybrid retrieval techniques, supported file types: .txt, .csv, .json, .pdf
 
 - 🏥 **Medical Imaging Analysis**  
   - Brain Tumor Segmentation
   - Chest X-ray Disease Detection
   - Skin Lesion Classification
 
-- 🌐 **Real-time Research Integration**  
-  Web search agent that retrieves the latest medical research papers and findings
+- 🌐 **Real-time Research Integration** : Web search agent that retrieves the latest medical research papers and findings
 
-- 📊 **Confidence-Based Verification**  
-  Log probability analysis ensures high accuracy in medical recommendations
+- 📊 **Confidence-Based Verification** : Log probability analysis ensures high accuracy in medical recommendations
 
-- 🎙️ **Voice Interaction Capabilities**  
-  Seamless speech-to-text and text-to-speech powered by Eleven Labs API
+- 🎙️ **Voice Interaction Capabilities** : Seamless speech-to-text and text-to-speech powered by Eleven Labs API
 
-- 👩‍⚕️ **Expert Oversight System**  
-  Human-in-the-loop verification by medical professionals before finalizing outputs
+- 👩‍⚕️ **Expert Oversight System** : Human-in-the-loop verification by medical professionals before finalizing outputs
 
-- 💻 **Intuitive User Interface**  
-  Designed for healthcare professionals with minimal technical expertise
+- 💻 **Intuitive User Interface** : Designed for healthcare professionals with minimal technical expertise
 
 ## 🛠️ Technology Stack  <a name="tech-stack"></a>
 
@@ -112,7 +105,7 @@ https://github.com/user-attachments/assets/42df729c-7f74-4af1-a3df-e88226af8549
 | **Medical Imaging** | Computer Vision Models |
 | | • Brain Tumor: Semantic Segmentation |
 | | • Chest X-ray: Object Detection |
-| | • Skin Lesion: Classification |
+| | • Skin Lesion: Image Classification |
 | **Voice Processing** | Eleven Labs API |
 | **Frontend** | HTML, CSS, JavaScript |
 | **Deployment** | Docker, CI/CD Pipeline |
@@ -170,7 +163,7 @@ ELEVEN_LABS_API_KEY =
 # Web Search API Key (Free credits available with new Eleven Labs Account)
 TAVILY_API_KEY = 
 
-# (OPTIONAL) Hugging Face Token
+# Hugging Face Token - using reranker model "ms-marco-TinyBERT-L-6"
 HUGGINGFACE_TOKEN = 
 
 # (OPTIONAL) If using Qdrant server version, local does not require API key
@@ -186,6 +179,16 @@ uvicorn api/fastapi_backend:app --reload
 
 ```bash
 python app.py
+```
+
+### 6️⃣ Ingest additional data into the Vector DB
+- Run any one of the following commands as required. First one to ingest one document at a time, second one to ingest multiple documents from a directory.
+```bash
+python ingest_rag_data.py --file ./data/raw/brain_tumors_ucni.pdf
+```
+
+```bash
+python ingest_rag_data.py --dir ./data/raw
 ```
 
 ---

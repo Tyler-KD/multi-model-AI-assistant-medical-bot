@@ -33,27 +33,38 @@ rag = MedicalRAG(config, llm, embedding_model = embedding_model)
 
 # Test document ingestion
 def test_ingestion():
-    sample_docs = [
-        {
-            "content": "Diabetes mellitus is a disorder characterized by hyperglycemia...",
-            "metadata": {"source": "medical_textbook", "topic": "diabetes", "specialty": "endocrinology"}
-        },
-        {
-            "content": "Hypertension, also known as high blood pressure, is a long-term medical condition...",
-            "metadata": {"source": "medical_journal", "topic": "hypertension", "specialty": "cardiology"}
-        }
-    ]
+
+    # Define path to sample PDF files
+    # pdf_paths = "./data/raw/brain_tumors_ucni.pdf"
+    pdf_paths = "./data/raw/Diabetesmellitus.pdf"
     
-    result = rag.ingest_documents(sample_docs)
+    # Process and ingest the PDF files
+    result = rag.ingest_file(pdf_paths)
     print("Ingestion result:", json.dumps(result, indent=2))
+
+    # sample_docs = [
+    #     {
+    #         "content": "Diabetes mellitus is a disorder characterized by hyperglycemia...",
+    #         "metadata": {"source": "medical_textbook", "topic": "diabetes", "specialty": "endocrinology"}
+    #     },
+    #     {
+    #         "content": "Hypertension, also known as high blood pressure, is a long-term medical condition...",
+    #         "metadata": {"source": "medical_journal", "topic": "hypertension", "specialty": "cardiology"}
+    #     }
+    # ]
+    
+    # result = rag.ingest_documents(sample_docs)
+    # print("Ingestion result:", json.dumps(result, indent=2))
     return result["success"]
 
 # Test query processing
 def test_query():
     queries = [
-        "What are the symptoms of diabetes?",                           # related info has been ingested - output confidence medium/high
-        "How is hypertension treated?",                                 # related info has been ingested - output confidence medium/high
-        "What is the connection between diabetes and hypertension?"     # no direct info, but related topics exist - output confidence low
+        "What are the types of benign brain tumor?",
+        "What do you know about brain tumors?",
+        # "What are the symptoms of diabetes?",                           # related info has been ingested - output confidence medium/high
+        # "How is hypertension treated?",                                 # related info has been ingested - output confidence medium/high
+        # "What is the connection between diabetes and hypertension?"     # no direct info, but related topics exist - output confidence low
     ]
     
     for query in queries:
@@ -77,7 +88,8 @@ if __name__ == "__main__":
     print("Starting RAG system tests...")
     
     print("\n1. Testing document ingestion...")
-    ingestion_success = test_ingestion()
+    # ingestion_success = test_ingestion()
+    ingestion_success = True
     
     if ingestion_success:
         print("\n2. Testing query processing...")

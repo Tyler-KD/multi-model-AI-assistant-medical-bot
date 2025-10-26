@@ -270,7 +270,7 @@ def create_agent_graph():
 
         response = AgentConfig.llm.invoke(conversation_prompt)
 
-        print("########### DEBUGGING #########: reponse from conversation agent llm:", response)
+        # print("########### DEBUGGING #########: reponse from conversation agent llm:", response)
 
         # response = AIMessage(content="This would be handled by the conversation agent.")
 
@@ -403,7 +403,7 @@ def create_agent_graph():
         predicted_mask = AgentConfig.image_analyzer.segment_skin_lesion(image_path)
 
         if predicted_mask:
-            response = AIMessage(content="Following is the analysis (**segmentation**) output of the uploaded skin lesion image.")
+            response = AIMessage(content="Following is the analyzed **segmented** output of the uploaded skin lesion image:")
         else:
             response = AIMessage(content="The uploaded image is not clear enough to make a diagnosis / the image is not a medical image.")
 

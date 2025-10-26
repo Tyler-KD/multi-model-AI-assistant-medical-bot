@@ -68,7 +68,7 @@ def chat(request: QueryRequest, response: Response, request_obj: Request):
         # Set session cookie
         response.set_cookie(key="session_id", value=session_id)
 
-        print(history)
+        # print(history)
 
         # Check if the agent is skin lesion segmentation and find the image path
         result = {
@@ -77,7 +77,7 @@ def chat(request: QueryRequest, response: Response, request_obj: Request):
         }
         
         # If it's the skin lesion segmentation agent, check for output image
-        print("########## DEBUGGING ########## Agent Name:", response_data["agent_name"])
+        # print("########## DEBUGGING ########## Agent Name:", response_data["agent_name"])
         if response_data["agent_name"] == "SKIN_LESION_AGENT, HUMAN_VALIDATION":
             segmentation_path = os.path.join(SKIN_LESION_OUTPUT, "segmentation_plot.png")
             if os.path.exists(segmentation_path):
@@ -132,7 +132,7 @@ async def upload_image(response: Response, request_obj: Request, image: UploadFi
         # Set session cookie
         response.set_cookie(key="session_id", value=session_id)
 
-        print(history)
+        # print(history)
 
         # Check if the agent is skin lesion segmentation and find the image path
         result = {
@@ -141,7 +141,7 @@ async def upload_image(response: Response, request_obj: Request, image: UploadFi
         }
         
         # If it's the skin lesion segmentation agent, check for output image
-        print("########## DEBUGGING ########## Agent Name:", response_data["agent_name"])
+        # print("########## DEBUGGING ########## Agent Name:", response_data["agent_name"])
         if response_data["agent_name"] == "SKIN_LESION_AGENT, HUMAN_VALIDATION":
             segmentation_path = os.path.join(SKIN_LESION_OUTPUT, "segmentation_plot.png")
             if os.path.exists(segmentation_path):
@@ -149,6 +149,12 @@ async def upload_image(response: Response, request_obj: Request, image: UploadFi
                 print(result)
             else:
                 print("Skin Lesion Output path does not exist.")
+        
+        # Remove temporary file after sending
+        try:
+            os.remove(file_path)
+        except Exception as e:
+            print(f"Failed to remove temporary file: {str(e)}")
         
         return result
     except Exception as e:

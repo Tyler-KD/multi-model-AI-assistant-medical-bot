@@ -270,6 +270,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
     <script>
+
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+        let audioContext;
+        let currentAudio = null;  // Store a single audio instance
+        // let elevenlabsApiKey = 'sk_4c9d3dfca9e183c7e8a7c0b9c6f7483e074ded17251e5fe7'; // Replace with your actual API key
+        let selectedVoiceId = '21m00Tcm4TlvDq8ikWAM'; // Default voice ID (Rachel)
+
         document.addEventListener('DOMContentLoaded', function() {
             const chatBody = document.getElementById('chat-body');
             const chatForm = document.getElementById('chat-form');
@@ -279,6 +288,28 @@
             const previewImage = document.getElementById('preview-image');
             const removeImageBtn = document.getElementById('remove-image');
             const clearChatBtn = document.getElementById('clear-chat');
+
+            // Add voice recording button to the UI
+            const fileUploadContainer = document.querySelector('.file-upload-container');
+            const voiceButtonHTML = `
+                <button type="button" class="btn btn-warning rounded-circle ms-2" id="voice-record-btn" style="width: 40px; height: 40px;">
+                    <i class="fas fa-microphone"></i>
+                </button>
+            `;
+            fileUploadContainer.insertAdjacentHTML('afterend', voiceButtonHTML);
+            
+            const voiceRecordBtn = document.getElementById('voice-record-btn');
+            
+            // Voice recording functionality
+            voiceRecordBtn.addEventListener('click', toggleRecording);
+            
+            // Initialize audio context
+            try {
+                window.AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioContext = new AudioContext();
+            } catch (e) {
+                console.error('Web Audio API is not supported in this browser');
+            }
             
             // We no longer need to store conversation history in frontend
             // Only maintain display messages
@@ -327,6 +358,7 @@
             chatForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
+                // Get message from input or transcribed text
                 const message = messageInput.value.trim();
                 if (!message && !imageUpload.files.length) return;
                 
@@ -396,10 +428,18 @@
                     const assistantMessageElement = document.createElement('div');
                     assistantMessageElement.className = 'message assistant-message';
                     
-                    // Build HTML content for the response
+                    // Get clean text for TTS (without markdown)
+                    const cleanText = removeMarkdown(data.response);
+                    
+                    // Build HTML content for the response with audio controls
                     let assistantHtml = `
                         <div class="agent-tag">${data.agent}</div>
                         <div>${marked.parse(data.response)}</div>
+                        <div class="audio-controls mt-2">
+                            <button class="btn btn-sm btn-outline-primary play-tts-btn">
+                                <i class="fas fa-play"></i> Play Voice Response
+                            </button>
+                        </div>
                     `;
                     
                     // Add result image if it exists
@@ -431,6 +471,77 @@
                     
                     assistantMessageElement.innerHTML = assistantHtml;
                     chatBody.appendChild(assistantMessageElement);
+                    
+                    // Get the play button and add click event to speak text
+                    const playButton = assistantMessageElement.querySelector('.play-tts-btn');
+
+                    playButton.addEventListener('click', async function () {
+                        // Get a reasonable amount of text to convert to speech (limit to 1000 chars to keep requests smaller)
+                        const textForSpeech = cleanText.length > 1000 ? cleanText.substring(0, 1000) + "..." : cleanText;
+
+                        // Disable the button while generating speech
+                        this.disabled = true;
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+
+                        try {
+                            // Get the new audio URL
+                            const audioUrl = await generateSpeech(textForSpeech);
+
+                            // Stop and clean up previous audio if playing
+                            if (currentAudio) {
+                                currentAudio.pause();
+                                currentAudio.currentTime = 0;
+                                URL.revokeObjectURL(currentAudio.src);  // Free up memory
+                                currentAudio = null;  // Clear the reference
+                            }
+
+                            // Create a new audio element for the new speech
+                            currentAudio = new Audio(audioUrl);
+
+                            // Set event listeners for button updates
+                            currentAudio.onplay = () => {
+                                this.innerHTML = '<i class="fas fa-pause"></i> Pause';
+                                this.classList.remove('btn-outline-primary');
+                                this.classList.add('btn-primary');
+                                this.disabled = false;
+                            };
+
+                            currentAudio.onpause = () => {
+                                this.innerHTML = '<i class="fas fa-play"></i> Play';
+                                this.classList.remove('btn-primary');
+                                this.classList.add('btn-outline-primary');
+                            };
+
+                            currentAudio.onended = () => {
+                                this.innerHTML = '<i class="fas fa-play"></i> Play Again';
+                                this.classList.remove('btn-primary');
+                                this.classList.add('btn-outline-primary');
+                                URL.revokeObjectURL(audioUrl);  // Free memory after playback
+                                currentAudio = null;  // Ensure reference is cleared
+                            };
+
+                            // Toggle play/pause on button click
+                            this.onclick = () => {
+                                if (currentAudio && currentAudio.paused) {
+                                    currentAudio.play();
+                                } else {
+                                    currentAudio.pause();
+                                }
+                            };
+
+                            // Play the generated speech
+                            currentAudio.play();
+                        } catch (error) {
+                            console.error("TTS Error:", error);
+                            this.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Voice failed';
+                            this.disabled = false;
+                        }
+                    });
+
+                    
+                    // Auto-play the voice response if needed
+                    // Uncomment the next line to automatically play the voice response
+                    // playButton.click();
                     
                     // Store messages for display purposes only
                     displayMessages.push({
@@ -468,7 +579,7 @@
                 // Scroll to bottom again
                 chatBody.scrollTop = chatBody.scrollHeight;
             });
-            
+
             // Allow sending message with Enter key
             messageInput.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
@@ -477,6 +588,197 @@
                 }
             });
         });
+
+        // Speech Recorder button function
+        function toggleRecording() {
+            const voiceButton = document.getElementById('voice-record-btn');
+            
+            if (!isRecording) {
+                // Start recording
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(stream => {
+                        // mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+                        audioChunks = [];
+                        
+                        mediaRecorder.addEventListener('dataavailable', event => {
+                            audioChunks.push(event.data);
+                        });
+                        
+                        mediaRecorder.addEventListener('stop', () => {
+                            // const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType });
+                            transcribeSpeech(audioBlob);
+                            
+                            // Reset UI
+                            voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+                            voiceButton.classList.remove('btn-danger');
+                            voiceButton.classList.add('btn-warning');
+                        });
+                        
+                        // Start recording
+                        mediaRecorder.start();
+                        isRecording = true;
+                        
+                        // Update UI
+                        voiceButton.innerHTML = '<i class="fas fa-stop"></i>';
+                        voiceButton.classList.remove('btn-warning');
+                        voiceButton.classList.add('btn-danger');
+                    })
+                    .catch(error => {
+                        console.error('Error accessing microphone:', error);
+                        alert('Could not access microphone. Please check your browser permissions.');
+                    });
+            } else {
+                // Stop recording
+                mediaRecorder.stop();
+                isRecording = false;
+                
+                // Update UI to show processing
+                voiceButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                voiceButton.disabled = true;
+                
+                // Each track needs to be stopped to turn off the microphone
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+        }
+
+        function transcribeSpeech(audioBlob) {
+            const voiceButton = document.getElementById('voice-record-btn');
+            const messageInput = document.getElementById('message-input');
+            
+            // Create a temporary element to display processing status
+            const statusElement = document.createElement('div');
+            statusElement.className = 'alert alert-info mt-2';
+            statusElement.innerHTML = 'Processing voice input...';
+            document.querySelector('.chat-footer').prepend(statusElement);
+            
+            // Always use server-side transcription for recorded audio
+            const formData = new FormData();
+            formData.append('audio', audioBlob);
+            
+            fetch('/transcribe', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.transcript) {
+                    messageInput.value = data.transcript;
+                    messageInput.focus();
+                } else {
+                    throw new Error('Transcription failed');
+                }
+            })
+            .catch(error => {
+                console.error('Transcription error:', error);
+                statusElement.className = 'alert alert-danger mt-2';
+                statusElement.innerHTML = 'Failed to transcribe speech. Please try again or type your message.';
+            })
+            .finally(() => {
+                // Clean up
+                setTimeout(() => {
+                    statusElement.remove();
+                    voiceButton.disabled = false;
+                    voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+                }, 3000);
+            });
+        }
+
+        // Function to generate speech using ElevenLabs API
+        // Function to generate speech using the secure backend
+        async function generateSpeech(text) {
+            try {
+                const response = await fetch('/generate-speech', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: text,
+                        voice_id: selectedVoiceId  // Replace with the correct voice ID
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // Convert response to a playable audio blob
+                const audioBlob = await response.blob();
+                return URL.createObjectURL(audioBlob);
+            } catch (error) {
+                console.error("Error generating speech:", error);
+                throw error;
+            }
+        }
+        // async function generateSpeech(text) {
+        //     try {
+        //         const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${selectedVoiceId}/stream`, {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Accept': 'audio/mpeg',
+        //                 'Content-Type': 'application/json',
+        //                 'xi-api-key': elevenlabsApiKey
+        //             },
+        //             body: JSON.stringify({
+        //                 text: text,
+        //                 model_id: "eleven_monolingual_v1",
+        //                 voice_settings: {
+        //                     stability: 0.5,
+        //                     similarity_boost: 0.5
+        //                 }
+        //             })
+        //         });
+
+        //         if (!response.ok) {
+        //             throw new Error(`HTTP error! status: ${response.status}`);
+        //         }
+
+        //         const blob = await response.blob();
+        //         return URL.createObjectURL(blob);
+        //     } catch (error) {
+        //         console.error("Error generating speech:", error);
+        //         throw error;
+        //     }
+        // }
+
+        // Helper function to remove markdown for clean TTS
+        function removeMarkdown(text) {
+            if (!text) return '';
+            
+            // Remove code blocks
+            text = text.replace(/```[\s\S]*?```/g, 'Code block omitted for speech.');
+            
+            // Remove inline code
+            text = text.replace(/`([^`]+)`/g, '$1');
+            
+            // Remove headers
+            text = text.replace(/#{1,6}\s+/g, '');
+            
+            // Remove bold/italic markers
+            text = text.replace(/(\*\*|__)(.*?)\1/g, '$2');
+            text = text.replace(/(\*|_)(.*?)\1/g, '$2');
+            
+            // Remove list markers
+            text = text.replace(/^\s*[\*\-+]\s+/gm, '');
+            text = text.replace(/^\s*\d+\.\s+/gm, '');
+            
+            // Remove links, keep text
+            text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+            
+            // Remove images
+            text = text.replace(/!\[([^\]]+)\]\([^)]+\)/g, 'Image: $1');
+            
+            // Remove blockquotes
+            text = text.replace(/^\>\s+/gm, '');
+            
+            // Handle line breaks sensibly for speech
+            text = text.replace(/\n{2,}/g, '. ');
+            text = text.replace(/\n/g, ' ');
+            
+            return text;
+        }
     </script>
 </body>
 </html>

@@ -112,7 +112,8 @@ class SkinLesionSegmentation:
         try:
             img = cv2.imread(image_path, cv2.IMREAD_COLOR)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) / 255.0  # Normalize to [0,1]
-            img_tensor = torch.Tensor(img).unsqueeze(0).permute(0, 3, 1, 2).to(self.device)
+            img_resized = cv2.resize(img, (256, 256))
+            img_tensor = torch.Tensor(img_resized).unsqueeze(0).permute(0, 3, 1, 2).to(self.device)
 
             with torch.no_grad():
                 generated_mask = self.model(img_tensor).squeeze().cpu().numpy()

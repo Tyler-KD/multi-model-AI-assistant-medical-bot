@@ -35,7 +35,6 @@ class RAGConfig:
         self.chunk_size = 512  # Set a default value
         self.chunk_overlap = 50  # If you use overlap, set it too
         self.processed_docs_dir = "./data/processed"  # Set a default value
-        # self.vector_db_path = "data/vector_db"
         self.collection_name = "medical_knowledge"
         # self.embedding_model = "text-embedding-3-large"
         # Initialize Azure OpenAI Embeddings
@@ -79,9 +78,6 @@ class MedicalCVConfig:
         self.chest_xray_model_path = "./agents/image_analysis_agent/chest_xray_agent/models/covid_chest_xray_model.pth"
         self.skin_lesion_model_path = "./agents/image_analysis_agent/skin_lesion_agent/models/checkpointN25_.pth.tar"
         self.skin_lesion_segmentation_output_path = "./uploads/skin_lesion_output/segmentation_plot.png"
-        # self.brain_image_size = (240, 240, 155)
-        # self.chest_xray_image_size = (512, 512)
-        # self.skin_lesion_image_size = (224, 224)
         self.llm = AzureChatOpenAI(
             deployment_name = os.getenv("deployment_name"),  # Replace with your Azure deployment name
             model_name = os.getenv("model_name"),  # Replace with your Azure model name
@@ -96,15 +92,17 @@ class APIConfig:
         self.port = 8000
         self.debug = True
         self.rate_limit = 10
-        self.max_image_upload_size = 10
+        self.max_image_upload_size = 5  # 1 MB max upload
 
 class SpeechConfig:
     def __init__(self):
-        self.tts_voice_id = "EXAVITQu4vr4xnSDxMaL"
-        self.tts_stability = 0.5
-        self.tts_similarity_boost = 0.8
-        self.stt_model = "whisper-1"
-        self.stt_language = "en"
+        # self.tts_voice_id = "EXAVITQu4vr4xnSDxMaL"
+        # self.tts_stability = 0.5
+        # self.tts_similarity_boost = 0.8
+        # self.stt_model = "whisper-1"
+        # self.stt_language = "en"
+        self.eleven_labs_api_key = os.getenv("ELEVEN_LABS_API_KEY")  # Replace with your actual key
+        self.eleven_labs_voice_id = "21m00Tcm4TlvDq8ikWAM"    # Default voice ID (Rachel)
 
 class ValidationConfig:
     def __init__(self):

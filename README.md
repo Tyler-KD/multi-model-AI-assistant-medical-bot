@@ -44,7 +44,9 @@ Using a **Multi-Agentic framework**, this assistant integrates **Large Language 
 
 ## 💫 Demo <a name="demo"></a>
 
-https://github.com/user-attachments/assets/42df729c-7f74-4af1-a3df-e88226af8549
+
+https://github.com/user-attachments/assets/addd61f7-905e-43ba-b5da-c6deedf0fbb9
+
 
 If you like what you see and would want to support the project's developer, you can <a href="https://www.buymeacoffee.com/souvikmajumder" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a> ! :)
 

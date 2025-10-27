@@ -69,7 +69,8 @@ class RAGConfig:
         self.include_sources = True  # ADD THIS LINE
         self.metrics_save_path = "./logs/rag_metrics.json"  # ADD THIS LINE
 
-        self.min_retrieval_confidence = 0.4 # the auto routing from RAG agent to WEB_SEARCH agent is dependent on this value
+        # ADJUST ACCORDING TO ASSISTANT'S BEHAVIOUR BASED ON THE DATA INGESTED:
+        self.min_retrieval_confidence = 0.4  #the auto routing from RAG agent to WEB_SEARCH agent is dependent on this value
 
 class MedicalCVConfig:
     def __init__(self):
@@ -119,7 +120,7 @@ class ValidationConfig:
 class UIConfig:
     def __init__(self):
         self.theme = "light"
-        self.max_chat_history = 50
+        # self.max_chat_history = 50
         self.enable_speech = True
         self.enable_image_upload = True
 

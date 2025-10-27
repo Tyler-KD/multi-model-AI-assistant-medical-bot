@@ -87,12 +87,12 @@ def test_agent_decision():
         
 
         try:
-            response_text = response['output'].content
+            response_text = response['messages'][-1].content
             # confidence_score = response['confidence']
             # sources = response['sources']
             # agent = response['agent']
         except:
-            response_text = response['output']
+            response_text = response['messages'][-1].content
             
         print(f"Response: {response_text}")
         print(f"Agent: {response['agent_name']}")
@@ -104,9 +104,9 @@ def test_agent_decision():
             conversation_history.append(HumanMessage(content=test_case["query"]["text"]))
         
         try:
-            conversation_history.append(AIMessage(content=response['output'].content))
+            conversation_history.append(AIMessage(content=response['messages'][-1].content.content))
         except:
-            conversation_history.append(AIMessage(content=response['output']))
+            conversation_history.append(AIMessage(content=response['messages'][-1].content))
         
         # Keep conversation history to a reasonable size
         if len(conversation_history) > 10:

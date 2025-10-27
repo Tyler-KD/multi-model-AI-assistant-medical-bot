@@ -44,65 +44,6 @@ class MedicalRAG:
         # self.evaluator = RAGEvaluator(config)
         
         self.logger.info("Medical RAG system initialized successfully")
-    
-    # def process_query(self, query: str, chat_history: Optional[List[Dict[str, str]]] = None) -> Dict[str, Any]:
-    #     """
-    #     Process a user query and generate a response.
-        
-    #     Args:
-    #         query: User query
-    #         chat_history: Optional chat history
-            
-    #     Returns:
-    #         Dictionary containing response and metadata
-    #     """
-    #     start_time = time.time()
-
-    #     self.logger.info(f"Processing query: {query}")
-        
-    #     try:
-    #         # Process query
-    #         query_vector, filters = self.query_processor.process_query(query)
-            
-    #         # Retrieve documents
-    #         retrieval_start = time.time()
-    #         retrieved_docs = self.retriever.retrieve(query_vector, filters)
-    #         retrieval_time = time.time() - retrieval_start
-            
-    #         # Log retrieval
-    #         # self.evaluator.log_retrieval(query, retrieved_docs, retrieval_time, success=(len(retrieved_docs) > 0))
-            
-    #         # Rerank documents if any were retrieved
-    #         if retrieved_docs:
-    #             reranked_docs = self.reranker.rerank(query, retrieved_docs)
-    #         else:
-    #             reranked_docs = []
-            
-    #         # Generate response
-    #         response_start = time.time()
-    #         response = self.response_generator.generate_response(query, reranked_docs, chat_history)
-    #         response_time = time.time() - response_start
-            
-    #         # Log response
-    #         # self.evaluator.log_response(query, response, response_time)
-            
-    #         # Calculate quality metrics
-    #         # quality_metrics = self.evaluator.evaluate_response_quality(query, reranked_docs, response)
-            
-    #         # Add metrics to response
-    #         # response["metrics"] = quality_metrics
-    #         response["processing_time"] = time.time() - start_time
-            
-    #         return response
-            
-    #     except Exception as e:
-    #         self.logger.error(f"Error processing query: {e}")
-    #         return {
-    #             "response": "I apologize, but I encountered an error while processing your query. Please try again or rephrase your question.",
-    #             "sources": [],
-    #             "confidence": 0.0,
-    #             "processing_time": time.time() - start_time
-    #         }
 
     def process_query(self, query: str, chat_history: Optional[List[Dict[str, str]]] = None) -> Dict[str, Any]:
         """

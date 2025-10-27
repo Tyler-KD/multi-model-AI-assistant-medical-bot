@@ -129,18 +129,18 @@ class ResponseGenerator:
         # Build the prompt
         prompt = f"""You are a medical assistant providing accurate information based on verified medical sources.
         
-{history_text}The user has asked the following question:
-"{query}"
+        {history_text}The user has asked the following question:
+        "{query}"
 
-I've retrieved the following information to help answer this question:
+        I've retrieved the following information to help answer this question:
 
-{context}
+        {context}
 
-{self.response_format_instructions}
+        {self.response_format_instructions}
 
-Based on the provided information, please answer the user's question thoroughly but concisely. If the information doesn't contain the answer, acknowledge the limitations of the available information.
+        Based on the provided information, please answer the user's question thoroughly but concisely. If the information doesn't contain the answer, acknowledge the limitations of the available information.
 
-Medical Assistant Response:"""
+        Medical Assistant Response:"""
 
         return prompt
     

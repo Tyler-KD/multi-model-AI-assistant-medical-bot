@@ -146,7 +146,7 @@ async def upload_image(response: Response, request_obj: Request, image: UploadFi
             segmentation_path = os.path.join(SKIN_LESION_OUTPUT, "segmentation_plot.png")
             if os.path.exists(segmentation_path):
                 result["result_image"] = f"/uploads/skin_lesion_output/segmentation_plot.png"
-                print(result)
+                # print(result)
             else:
                 print("Skin Lesion Output path does not exist.")
         

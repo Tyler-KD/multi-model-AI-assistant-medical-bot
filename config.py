@@ -35,7 +35,6 @@ class RAGConfig:
         self.chunk_size = 512  # Set a default value
         self.chunk_overlap = 50  # If you use overlap, set it too
         self.processed_docs_dir = "./data/processed"  # Set a default value
-        self.collection_name = "medical_knowledge"
         # self.embedding_model = "text-embedding-3-large"
         # Initialize Azure OpenAI Embeddings
         self.embedding_model = AzureOpenAIEmbeddings(
@@ -70,7 +69,7 @@ class RAGConfig:
         self.include_sources = True  # ADD THIS LINE
         self.metrics_save_path = "./logs/rag_metrics.json"  # ADD THIS LINE
 
-        self.min_retrieval_confidence = 0.5 # the auto routing from RAG agent to WEB_SEARCH agent is dependent on this value
+        self.min_retrieval_confidence = 0.4 # the auto routing from RAG agent to WEB_SEARCH agent is dependent on this value
 
 class MedicalCVConfig:
     def __init__(self):

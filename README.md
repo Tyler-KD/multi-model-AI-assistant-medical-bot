@@ -25,7 +25,7 @@
 - [Demo](#demo)
 - [Technical Flow Chart](#technical-flowchart)
 - [Key Features](#key-features)
-- [Tech Stack](#️technology-stack)
+- [Tech Stack](#technology-stack)
 - [Installation and Setup](#installation-setup)
 - [Usage](#usage)
 - [Contributions](#contributions)

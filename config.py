@@ -32,8 +32,8 @@ class RAGConfig:
         self.url = os.getenv("QDRANT_URL")
         self.api_key = os.getenv("QDRANT_API_KEY")
         self.collection_name = "medical_assistance_rag"  # Ensure a valid name
-        self.chunk_size = 512  # Set a default value
-        self.chunk_overlap = 50  # If you use overlap, set it too
+        self.chunk_size = 512  # Modify based on documents and performance
+        self.chunk_overlap = 50  # Modify based on documents and performance
         self.processed_docs_dir = "./data/processed"  # Set a default value
         # self.embedding_model = "text-embedding-3-large"
         # Initialize Azure OpenAI Embeddings
@@ -55,6 +55,8 @@ class RAGConfig:
         self.top_k = 5
         self.similarity_threshold = 0.75
         self.huggingface_token = os.getenv("HUGGINGFACE_TOKEN")
+
+        self.chunking_strategy = "hybrid" # Options: semantic, sliding_window, recursive, hybrid
 
         self.reranker_model = "cross-encoder/ms-marco-TinyBERT-L-6"
         self.reranker_top_k = 5

@@ -36,9 +36,31 @@
 ----
 
 ## 📌 Overview <a name="overview"></a>
-The **Multi-Agent Medical Assistant** is an advanced AI-powered chatbot system designed to assist in medical diagnosis, research, and patient interactions.
 
-Using a **Multi-Agentic framework**, this assistant integrates **Large Language Models, Computer Vision Models, Retrieval Augmented Generation leveraging Vector Database, and Web Search** to provide **accurate**, **reliable**, and **up-to-date** medical insights.
+The **Multi-Agent Medical Assistant** is an **AI-powered chatbot** designed to assist with **medical diagnosis, research, and patient interactions**.  
+
+🚀 **Powered by Multi-Agent Intelligence**, this system integrates:  
+- **🤖 Large Language Models (LLMs)**  
+- **🖼️ Computer Vision Models** for medical imaging analysis  
+- **📚 Retrieval-Augmented Generation (RAG)** leveraging vector databases  
+- **🌐 Real-time Web Search** for up-to-date medical insights  
+- **👨‍⚕️ Human-in-the-Loop Validation** to verify AI-based medical image diagnoses  
+
+### **What You’ll Learn from This Project** 👨‍💻📖  
+🔹 **Multi-Agent Orchestration** with structured graph workflows  
+🔹 **Advanced RAG Techniques** – hybrid retrieval, semantic chunking, and vector search  
+🔹 **⚡ Confidence-Based Routing** & **Agent-to-Agent Handoff**  
+🔹 **🔒 Scalable, Production-Ready AI with Modularized Code & Robust Exception Handling**  
+
+📂 **For learners**: Check out `agents/README.md` for a **detailed breakdown** of the agentic workflow! 🎯  
+
+<!-- The **Multi-Agent Medical Assistant** is an advanced AI-powered chatbot system designed to assist in medical diagnosis, research, and patient interactions.
+
+Using a **Multi-Agentic framework**, this assistant integrates **Large Language Models, Computer Vision Models, Retrieval Augmented Generation leveraging Vector Database**, and **Web Search** to provide **accurate**, **reliable**, and **up-to-date** medical insights.
+
+This project serves as a **comprehensive resource** for learning and implementing **GenAI with multi-agent orchestration**. It demonstrates **advanced Retrieval-Augmented Generation (RAG)**, integrating **vector search with hybrid retrieval techniques**, **efficient chunking strategies respecting document semantic boundaries**, **confidence-based routing**, **agent-to-agent handoff**, **real-time web search capabilities**, **human-in-the-loop validation** and more. The system incorporates **specialized AI agents** for medical reasoning, diagnosis, and research retrieval, all working seamlessly through a structured graph workflow. Developers will gain insights into **modular agentic AI solution design, and robust exception handling** — ensuring **scalability and production readiness**.
+
+For learners: Refer `agents/README.md` for detailed explanation of the agentic workflow. -->
 
 ---
 

@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.serialization import safe_globals
+from .model_download import download_model_checkpoint
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -80,15 +80,18 @@ class SkinLesionSegmentation:
         try:
             # with safe_globals([UNet]):
             #     model = torch.load(self.model_path, weights_only=False, map_location=self.device)
+            # Call this before using the model
+            download_model_checkpoint('1rvn4ucOH6UBoNk-GB9bUWuGTLkNIVUf0', self.model_path)
             model = UNet(n_channels=3, n_classes=1).to(self.device)  # Explicitly initialize UNet
             # model.load_state_dict(torch.load(self.model_path, weights_only=False, map_location=self.device), strict=False)
             model.load_state_dict(torch.load(self.model_path, map_location=torch.device(self.device))['state_dict'])
+            # model = torch.load(self.model_path, map_location=torch.device(DEVICE))
             model.eval()
             logger.info(f"Model loaded successfully from {self.model_path}")
             return model
         except Exception as e:
             logger.error(f"Error loading model: {e}")
-            raise
+            raise e
 
     def _overlay_mask(self, img, mask, output_path):
         """Overlay the segmentation mask on the original image."""
@@ -105,7 +108,7 @@ class SkinLesionSegmentation:
             return True
         except Exception as e:
             logger.error(f"Error generating overlay: {e}")
-            raise
+            raise e
     
     def predict(self, image_path, output_path):
         """Segment lesion in an image and return overlaid visualization."""
@@ -124,11 +127,11 @@ class SkinLesionSegmentation:
 
         except Exception as e:
             logger.error(f"Error during segmentation: {e}")
-            raise
+            raise e
 
 
 # # Example Usage
 # if __name__ == "__main__":
 #     segmenter = SkinLesionSegmentation(model_path="./models/skin_lesion_segmentation.pth")
-#     segmented_image = segmenter.predict("./ISIC_0012560.jpg", "./segmentation_plot.png")
+#     segmented_image = segmenter.predict("./images/ISIC_0020840.jpg", "./segmentation_plot.png")
 #     logger.info(f"Segmentation completed. Output saved at: {segmented_image}")

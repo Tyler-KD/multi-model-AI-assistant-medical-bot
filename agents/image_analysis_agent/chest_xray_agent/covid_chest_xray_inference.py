@@ -51,6 +51,7 @@ class ChestXRayClassification:
         except Exception as e:
             # print(f"Error loading model: {e}")
             self.logger.error(f"Error loading model: {e}")
+            raise e
     
     def predict(self, img_path):
         """Predict the class of a given image."""
@@ -78,6 +79,6 @@ class ChestXRayClassification:
             return None
 
 # if __name__ == "__main__":
-#     classifier = ChestXRayAgent()
-#     predicted_class = classifier.predict('./images/NORMAL2-IM-0374-0001.jpeg')
+#     classifier = ChestXRayClassification('./models/covid_chest_xray_model.pth')
+#     predicted_class = classifier.predict('./images/NORMAL2-IM-0362-0001.jpeg')
 #     print(f"PREDICTED CLASS: {predicted_class}")

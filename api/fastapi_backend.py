@@ -5,7 +5,7 @@ from config import Config
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Depends, Request, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from typing import Dict, Union
+from typing import Dict, Union, Optional
 import uvicorn
 from agents.agent_decision import process_query
 
@@ -100,6 +100,40 @@ async def upload_image(response: Response, request_obj: Request, image: UploadFi
             print(f"Failed to remove temporary file: {str(e)}")
         
         return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/validate")
+def validate_medical_output(response: Response, request_obj: Request, validation_result: str = Form(...), comments: Optional[str] = Form(None)):
+    """Handle human validation for medical AI outputs."""
+    
+    # Generate session ID for cookie if it doesn't exist
+    session_id = request_obj.cookies.get("session_id", str(uuid.uuid4()))
+
+    try:
+        # Set session cookie
+        response.set_cookie(key="session_id", value=session_id)
+        
+        # Re-run the agent decision system with the validation input
+        validation_query = f"Validation result: {validation_result}"
+        if comments:
+            validation_query += f" Comments: {comments}"
+        
+        response_data = process_query(validation_query)
+
+        if validation_result.lower() == 'yes':
+            return {
+                "status": "validated",
+                "message": "**Output confirmed by human validator:**",
+                "response": response_data['messages'][-1].content
+            }
+        else:
+            return {
+                "status": "rejected",
+                "comments": comments,
+                "message": "**Output requires further review:**",
+                "response": response_data['messages'][-1].content
+            }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

@@ -303,5 +303,56 @@ def request_entity_too_large(error):
         "response": f"File too large. Maximum size allowed: {config.api.max_image_upload_size}MB"
     }), 413
 
+@app.route('/send_validation', methods=['POST'])
+def send_validation():
+    """
+    Receives validation data from the UI and forwards it to the FastAPI '/validate' endpoint.
+    """
+    try:
+        # Parse form data
+        validation_result = request.form.get('validation_result')
+        comments = request.form.get('comments', '')
+
+        if not validation_result:
+            return jsonify({"error": "No validation result provided"}), 400
+
+        # If there's a session cookie, pass it to FastAPI
+        session_cookie = request.cookies.get('session_id')
+        cookies = {}
+        if session_cookie:
+            cookies['session_id'] = session_cookie
+
+        # Forward data to FastAPI validation endpoint
+        fastapi_url = f"{app.config['API_URL']}/validate"
+        form_data = {
+            "validation_result": validation_result,
+            "comments": comments
+        }
+
+        response = requests.post(
+            fastapi_url,
+            data=form_data,
+            cookies=cookies
+        )
+
+        if response.status_code == 200:
+            result = response.json()
+
+            # If FastAPI sets/updates session_id, update it in our response
+            if 'session_id' in response.cookies:
+                resp = make_response(jsonify(result))
+                resp.set_cookie('session_id', response.cookies['session_id'])
+                return resp
+
+            return jsonify(result)
+        else:
+            return jsonify({
+                "error": f"Error from FastAPI: {response.status_code}",
+                "details": response.text
+            }), response.status_code
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

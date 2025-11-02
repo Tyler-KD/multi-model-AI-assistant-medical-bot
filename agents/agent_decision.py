@@ -441,6 +441,14 @@ def create_agent_graph():
             "output": processed_response,
             "agent_name": involved_agents
         }
+
+    # Define Routing Logic
+    def confidence_based_routing(state: AgentState) -> Dict[str, str]:
+        """Route based on RAG confidence score."""
+        if state.get("retrieval_confidence", 0.0) < config.rag.min_retrieval_confidence:
+            print("Re-routed to Web Search Agent due to low confidence...")
+            return "WEB_SEARCH_PROCESSOR_AGENT"  # Correct format
+        return "check_validation"  # No transition needed if confidence is high
     
     def run_brain_tumor_agent(state: AgentState) -> AgentState:
         """Handle brain MRI image analysis."""
@@ -515,37 +523,58 @@ def create_agent_graph():
         return {"agent_state": state, "next": END}
     
     def perform_human_validation(state: AgentState) -> AgentState:
-        """Simulate human validation process."""
-
+        """Handle human validation process."""
         print(f"Selected agent: HUMAN_VALIDATION")
 
-        if state['agent_name'] != None:
-            involved_agents = f"{state['agent_name']}, HUMAN_VALIDATION"
-        else:
-            involved_agents = "HUMAN_VALIDATION"
-        
-        response = AIMessage(content=f"[HUMAN VALIDATED]: {state['output'].content}")
+        # Append validation request to the existing output
+        validation_prompt = f"{state['output'].content}\n\n**Human Validation Required:**\n- If you're a healthcare professional: Please validate the output. Select **Yes** or **No**. If No, provide comments.\n- If you're a patient: Simply click Yes to confirm."
+
+        # Create an AI message with the validation prompt
+        validation_message = AIMessage(content=validation_prompt)
 
         return {
             **state,
-            "output": response,
-            "agent_name": involved_agents
+            "output": validation_message,
+            "agent_name": f"{state['agent_name']}, HUMAN_VALIDATION"
         }
-    
-    # Define Routing Logic
-    def confidence_based_routing(state: AgentState) -> Dict[str, str]:
-        """Route based on RAG confidence score."""
-        if state.get("retrieval_confidence", 0.0) < config.rag.min_retrieval_confidence:
-            print("Re-routed to Web Search Agent due to low confidence...")
-            return "WEB_SEARCH_PROCESSOR_AGENT"  # Correct format
-        return "check_validation"  # No transition needed if confidence is high
 
     # Check output through guardrails
     def apply_output_guardrails(state: AgentState) -> AgentState:
         """Apply output guardrails to the generated response."""
-        # output = state["messages"][-1]
         output = state["output"]
         current_input = state["current_input"]
+
+        # Check if output is valid
+        if not output or not isinstance(output, (str, AIMessage)):
+            return state
+        
+        # If the last message was a human validation message
+        if "Human Validation Required" in output.content:
+            # Check if the current input is a human validation response
+            validation_input = ""
+            if isinstance(current_input, str):
+                validation_input = current_input
+            elif isinstance(current_input, dict):
+                validation_input = current_input.get("text", "")
+            
+            # If validation input exists
+            if validation_input.lower().startswith(('yes', 'no')):
+                # Add the validation result to the conversation history
+                validation_response = HumanMessage(content=f"Validation Result: {validation_input}")
+                
+                # If validation is 'No', modify the output
+                if validation_input.lower().startswith('no'):
+                    fallback_message = AIMessage(content="The previous medical analysis requires further review. A healthcare professional has flagged potential inaccuracies.")
+                    return {
+                        **state,
+                        "messages": [validation_response, fallback_message],
+                        "output": fallback_message
+                    }
+                
+                return {
+                    **state,
+                    "messages": validation_response
+                }
         
         # Get the original input text
         input_text = ""
@@ -554,23 +583,19 @@ def create_agent_graph():
         elif isinstance(current_input, dict):
             input_text = current_input.get("text", "")
         
-        # Skip guardrails for non-text outputs
-        if not output or not isinstance(output, (str, AIMessage)):
-            return state
-        
-        # Extract content from AIMessage if needed
         output_text = output if isinstance(output, str) else output.content
         
-        # Apply guardrails
+        # Apply output sanitization
         sanitized_output = guardrails.check_output(output_text, input_text)
         
-        # Update the output with the sanitized version
-        if isinstance(output, str):
-            return {**state,
-                    "messages": sanitized_output}
-        else:
-            return {**state,
-                    "messages": AIMessage(content=sanitized_output)}
+        # For non-validation cases, add the sanitized output to messages
+        sanitized_message = AIMessage(content=sanitized_output) if isinstance(output, AIMessage) else sanitized_output
+        
+        return {
+            **state,
+            "messages": sanitized_message,
+            "output": sanitized_message
+        }
 
     
     # Create the workflow graph

@@ -178,3 +178,6 @@ cython_debug/
 # ignore locally saved audio
 *.mp3
 *.webm
+
+# ignore below since it gets updated on every local run
+uploads/skin_lesion_output/segmentation_plot.png

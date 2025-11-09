@@ -1,0 +1,121 @@
+=== STDOUT ===
+Initializing RAG system...
+
+
+Processing query: What tables are in the document?
+Response: Based on the provided context, the document contains the following tables:
+
+1. **Table 1**: COVID-19 radiography database distribution.
+2. **Table 6**: Comparison of proposed method with the relevant researches.
+
+Both tables are sourced from the document titled "covid_chest_xray_2.pdf".
+
+Table sources in response: 2
+  1. {'title': 'covid_chest_xray_2.pdf (Table 1)', 'section': 'paragraph', 'publication_date': '', 'content_type': 'table'}
+  2. {'title': 'covid_chest_xray_2.pdf (Table 6)', 'section': 'paragraph', 'publication_date': '', 'content_type': 'table'}
+
+================================================================================
+
+
+Processing query: Show me information from Table 1
+Response: I don't have enough information to answer this question based on the provided context.
+
+Table sources in response: 2
+  1. {'title': 'covid_chest_xray_2.pdf (Table 1)', 'section': 'paragraph', 'publication_date': '', 'content_type': 'table'}
+  2. {'title': 'covid_chest_xray_2.pdf (Table 6)', 'section': 'paragraph', 'publication_date': '', 'content_type': 'table'}
+
+================================================================================
+
+
+Processing query: Tell me about the content in any tables in the document
+Response: Based on the provided context, the document "covid_chest_xray_2.pdf" contains at least two tables:
+
+1. **Table 1**: COVID-19 radiography database distribution.
+2. **Table 6**: Comparison of the proposed method with relevant researches.
+
+Unfortunately, the specific content or data points within these tables are not provided in the context. Therefore, I cannot interpret or summarize the data from these tables.
+
+I don't have enough information to answer this question based on the provided context.
+
+Table sources in response: 2
+  1. {'title': 'covid_chest_xray_2.pdf (Table 6)', 'section': 'paragraph', 'publication_date': '', 'content_type': 'table'}
+  2. {'title': 'covid_chest_xray_2.pdf (Table 1)', 'section': 'paragraph', 'publication_date': '', 'content_type': 'table'}
+
+================================================================================
+
+
+Processing query: What data is presented in Table 6?
+Response: I don't have enough information to answer this question based on the provided context.
+
+Table sources in response: 2
+  1. {'title': 'covid_chest_xray_2.pdf (Table 6)', 'section': 'paragraph', 'publication_date': '', 'content_type': 'table'}
+  2. {'title': 'covid_chest_xray_2.pdf (Table 1)', 'section': 'paragraph', 'publication_date': '', 'content_type': 'table'}
+
+================================================================================
+
+
+=== STDERR ===
+2025-03-31 16:02:50,498 - agents.rag_agent - INFO - Loading embedding model: client=<openai.resources.embeddings.Embeddings object at 0x00000230E4E54E90> async_client=<openai.resources.embeddings.AsyncEmbeddings object at 0x00000230E4E619D0> model='text-embedding-ada-002' dimensions=None deployment='zenlabdata' openai_api_version='2023-05-15' openai_api_base=None openai_api_type='azure' openai_proxy=None embedding_ctx_length=8191 openai_api_key=SecretStr('**********') openai_organization=None allowed_special=None disallowed_special=None chunk_size=2048 max_retries=2 request_timeout=None headers=None tiktoken_enabled=True tiktoken_model_name=None show_progress_bar=False model_kwargs={} skip_empty=False default_headers=None default_query=None retry_min_seconds=4 retry_max_seconds=20 http_client=None http_async_client=None check_embedding_ctx_length=True azure_endpoint='https://zenlabopenai.openai.azure.com/' azure_ad_token=None azure_ad_token_provider=None azure_ad_async_token_provider=None validate_base_url=True
+2025-03-31 16:02:50,498 - root - INFO - Connecting to local Qdrant at: ./data/qdrant_db
+2025-03-31 16:02:50,527 - root - INFO - Initialized Qdrant client singleton
+2025-03-31 16:02:50,527 - agents.rag_agent.vector_store - INFO - Collection medical_assistance_rag already exists
+2025-03-31 16:02:50,527 - agents.rag_agent.document_processor - INFO - Using chunking strategy: hybrid
+2025-03-31 16:02:50,530 - agents.rag_agent.reranker - INFO - Loading reranker model: cross-encoder/ms-marco-TinyBERT-L-6
+2025-03-31 16:02:52,793 - sentence_transformers.cross_encoder.CrossEncoder - INFO - Use pytorch device: cpu
+2025-03-31 16:02:52,794 - agents.rag_agent.data_ingestion - INFO - MedicalDataIngestion initialized
+2025-03-31 16:02:52,794 - agents.rag_agent - INFO - Medical RAG system initialized successfully
+2025-03-31 16:02:52,794 - agents.rag_agent - INFO - Processing query: What tables are in the document?
+2025-03-31 16:02:53,913 - httpx - INFO - HTTP Request: POST https://zenlabopenai.openai.azure.com/openai/deployments/zenlabdata/embeddings?api-version=2023-05-15 "HTTP/1.1 200 OK"
+2025-03-31 16:02:53,917 - agents.rag_agent.query_processor - INFO - Processed query with filters: {'query_id': '0812b028-a0bf-434c-a432-8642088cb5a5', 'timestamp': '2025-03-31T16:02:53.917595', 'query_intent': 'general_information'}
+2025-03-31 16:02:53,917 - agents.rag_agent.vector_store - INFO - Retrieving documents with filters: {}
+2025-03-31 16:02:53,917 - agents.rag_agent.vector_store - INFO - Retrieved 5 documents
+2025-03-31 16:02:53,917 - agents.rag_agent - INFO - Retrieved 5 documents
+2025-03-31 16:02:53,917 - agents.rag_agent - INFO - Doc 0: Score 0.7957180686858993, Content: Dataset...
+2025-03-31 16:02:53,917 - agents.rag_agent - INFO - Doc 1: Score 0.7957164519185218, Content: Table 1. COVID-19 radiography database distribution....
+2025-03-31 16:02:53,917 - agents.rag_agent - INFO - Doc 2: Score 0.7912431158062164, Content: Table 6. Comparison of proposed method with the relevant researches....
+
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|##########| 1/1 [00:00<00:00,  5.71it/s]
+Batches: 100%|##########| 1/1 [00:00<00:00,  5.71it/s]
+2025-03-31 16:02:56,333 - httpx - INFO - HTTP Request: POST https://zenlabopenai.openai.azure.com/openai/deployments/zenlabvision/chat/completions?api-version=2024-10-21 "HTTP/1.1 200 OK"
+2025-03-31 16:02:56,340 - agents.rag_agent - INFO - Processing query: Show me information from Table 1
+2025-03-31 16:02:56,592 - httpx - INFO - HTTP Request: POST https://zenlabopenai.openai.azure.com/openai/deployments/zenlabdata/embeddings?api-version=2023-05-15 "HTTP/1.1 200 OK"
+2025-03-31 16:02:56,592 - agents.rag_agent.query_processor - INFO - Processed query with filters: {'query_id': '8ce5aee3-8c54-4d5c-a7d8-fe2791f325cb', 'timestamp': '2025-03-31T16:02:56.592750', 'query_intent': 'general_information'}
+2025-03-31 16:02:56,592 - agents.rag_agent.vector_store - INFO - Retrieving documents with filters: {}
+2025-03-31 16:02:56,597 - agents.rag_agent.vector_store - INFO - Retrieved 5 documents
+2025-03-31 16:02:56,597 - agents.rag_agent - INFO - Retrieved 5 documents
+2025-03-31 16:02:56,597 - agents.rag_agent - INFO - Doc 0: Score 0.8000092011017873, Content: 1...
+2025-03-31 16:02:56,597 - agents.rag_agent - INFO - Doc 1: Score 0.7978290782539117, Content: Experimental results...
+2025-03-31 16:02:56,597 - agents.rag_agent - INFO - Doc 2: Score 0.7941746794279525, Content: Dataset...
+
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|##########| 1/1 [00:00<00:00, 18.49it/s]
+2025-03-31 16:02:57,138 - httpx - INFO - HTTP Request: POST https://zenlabopenai.openai.azure.com/openai/deployments/zenlabvision/chat/completions?api-version=2024-10-21 "HTTP/1.1 200 OK"
+2025-03-31 16:02:57,140 - agents.rag_agent - INFO - Processing query: Tell me about the content in any tables in the document
+2025-03-31 16:02:57,455 - httpx - INFO - HTTP Request: POST https://zenlabopenai.openai.azure.com/openai/deployments/zenlabdata/embeddings?api-version=2023-05-15 "HTTP/1.1 200 OK"
+2025-03-31 16:02:57,456 - agents.rag_agent.query_processor - INFO - Processed query with filters: {'query_id': '1983866b-41ad-41e6-a400-cc5f94fa9c82', 'timestamp': '2025-03-31T16:02:57.456343', 'query_intent': 'general_information'}
+2025-03-31 16:02:57,456 - agents.rag_agent.vector_store - INFO - Retrieving documents with filters: {}
+2025-03-31 16:02:57,457 - agents.rag_agent.vector_store - INFO - Retrieved 5 documents
+2025-03-31 16:02:57,457 - agents.rag_agent - INFO - Retrieved 5 documents
+2025-03-31 16:02:57,457 - agents.rag_agent - INFO - Doc 0: Score 0.7962085736935511, Content: Dataset...
+2025-03-31 16:02:57,457 - agents.rag_agent - INFO - Doc 1: Score 0.7699788569083186, Content: Table 6. Comparison of proposed method with the relevant researches....
+2025-03-31 16:02:57,457 - agents.rag_agent - INFO - Doc 2: Score 0.7658724154971669, Content: Experimental results...
+
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|##########| 1/1 [00:00<00:00,  5.08it/s]
+Batches: 100%|##########| 1/1 [00:00<00:00,  5.08it/s]
+2025-03-31 16:02:59,167 - httpx - INFO - HTTP Request: POST https://zenlabopenai.openai.azure.com/openai/deployments/zenlabvision/chat/completions?api-version=2024-10-21 "HTTP/1.1 200 OK"
+2025-03-31 16:02:59,167 - agents.rag_agent - INFO - Processing query: What data is presented in Table 6?
+2025-03-31 16:02:59,420 - httpx - INFO - HTTP Request: POST https://zenlabopenai.openai.azure.com/openai/deployments/zenlabdata/embeddings?api-version=2023-05-15 "HTTP/1.1 200 OK"
+2025-03-31 16:02:59,425 - agents.rag_agent.query_processor - INFO - Processed query with filters: {'query_id': '4a9bc525-573d-4309-9ccb-86a3c8f95ebe', 'timestamp': '2025-03-31T16:02:59.425859', 'query_intent': 'general_information'}
+2025-03-31 16:02:59,425 - agents.rag_agent.vector_store - INFO - Retrieving documents with filters: {}
+2025-03-31 16:02:59,426 - agents.rag_agent.vector_store - INFO - Retrieved 5 documents
+2025-03-31 16:02:59,426 - agents.rag_agent - INFO - Retrieved 5 documents
+2025-03-31 16:02:59,426 - agents.rag_agent - INFO - Doc 0: Score 0.8501713218068965, Content: Table 6. Comparison of proposed method with the relevant researches....
+2025-03-31 16:02:59,426 - agents.rag_agent - INFO - Doc 1: Score 0.8120089826468868, Content: 6
+www.nature.com/scientificreports/...
+2025-03-31 16:02:59,426 - agents.rag_agent - INFO - Doc 2: Score 0.8092605866544345, Content: Table 1. COVID-19 radiography database distribution....
+
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|##########| 1/1 [00:00<00:00, 15.03it/s]
+2025-03-31 16:03:00,056 - httpx - INFO - HTTP Request: POST https://zenlabopenai.openai.azure.com/openai/deployments/zenlabvision/chat/completions?api-version=2024-10-21 "HTTP/1.1 200 OK"

@@ -101,7 +101,7 @@ class RAGConfig:
         self.metrics_save_path = "./logs/rag_metrics.json"  # ADD THIS LINE
 
         # ADJUST ACCORDING TO ASSISTANT'S BEHAVIOUR BASED ON THE DATA INGESTED:
-        self.min_retrieval_confidence = 0.4  #the auto routing from RAG agent to WEB_SEARCH agent is dependent on this value
+        self.min_retrieval_confidence = 0.8  #the auto routing from RAG agent to WEB_SEARCH agent is dependent on this value
 
         self.context_limit = 20     # include last 20 messsages (10 Q&A pairs) in history
 

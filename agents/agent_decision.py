@@ -58,7 +58,7 @@ class AgentConfig:
 
     Available agents:
     1. CONVERSATION_AGENT - For general chat, greetings, and non-medical questions.
-    2. RAG_AGENT - For specific medical knowledge questions that can be answered from established medical literature.
+    2. RAG_AGENT - For specific medical knowledge questions that can be answered from established medical literature. Currently ingested medical knowledge involves 'introduction to brain tumor', 'deep learning techniques to diagnose and detect brain tumors', 'deep learning techniques to diagnose and detect covid / covid-19 from chest x-ray'.
     3. WEB_SEARCH_PROCESSOR_AGENT - For questions about recent medical developments, current outbreaks, or time-sensitive medical information.
     4. BRAIN_TUMOR_AGENT - For analysis of brain MRI images to detect and segment tumors.
     5. CHEST_XRAY_AGENT - For analysis of chest X-ray images to detect abnormalities.
@@ -93,6 +93,7 @@ class AgentState(MessagesState):
     needs_human_validation: bool  # Whether human validation is required
     retrieval_confidence: float  # Confidence in retrieval (for RAG agent)
     bypass_routing: bool  # Flag to bypass agent routing for guardrails
+    insufficient_info: bool  # Flag indicating RAG response has insufficient information
 
 
 class AgentDecision(TypedDict):
@@ -326,7 +327,7 @@ def create_agent_graph():
 
         print(f"Selected agent: RAG_AGENT")
 
-        rag_agent = MedicalRAG(config, config.rag.llm, config.rag.embedding_model)
+        rag_agent = MedicalRAG(config)
         
         messages = state["messages"]
         query = state["current_input"]
@@ -347,6 +348,37 @@ def create_agent_graph():
         print(f"Retrieval Confidence: {retrieval_confidence}")
         print(f"Sources: {len(response['sources'])}")
 
+        # Check if response indicates insufficient information
+        insufficient_info = False
+        response_content = response["response"]
+        
+        # Extract the content properly based on type
+        if hasattr(response_content, 'content'):
+            # If it's an AIMessage or similar object with a content attribute
+            response_text = response_content.content
+        else:
+            # If it's already a string
+            response_text = response_content
+            
+        print(f"Response text type: {type(response_text)}")
+        print(f"Response text preview: {response_text[:100]}...")
+        
+        if isinstance(response_text, str) and (
+            "I don't have enough information to answer this question based on the provided context" in response_text or 
+            "I don't have enough information" in response_text or 
+            "don't have enough information" in response_text.lower() or
+            "not enough information" in response_text.lower() or
+            "insufficient information" in response_text.lower() or
+            "cannot answer" in response_text.lower() or
+            "unable to answer" in response_text.lower()
+            ):
+            
+            print("RAG response indicates insufficient information")
+            print(f"Response text that triggered insufficient_info: {response_text[:100]}...")
+            insufficient_info = True
+
+        print(f"Insufficient info flag set to: {insufficient_info}")
+
         # Store RAG output ONLY if confidence is high
         if retrieval_confidence >= config.rag.min_retrieval_confidence:
             temp_output = response["response"]
@@ -358,7 +390,8 @@ def create_agent_graph():
             "output": temp_output,
             "needs_human_validation": False,  # Assuming no validation needed for RAG responses
             "retrieval_confidence": retrieval_confidence,
-            "agent_name": "RAG_AGENT"
+            "agent_name": "RAG_AGENT",
+            "insufficient_info": insufficient_info
         }
 
     # Web Search Processor Node
@@ -401,11 +434,17 @@ def create_agent_graph():
 
     # Define Routing Logic
     def confidence_based_routing(state: AgentState) -> Dict[str, str]:
-        """Route based on RAG confidence score."""
-        if state.get("retrieval_confidence", 0.0) < config.rag.min_retrieval_confidence:
-            print("Re-routed to Web Search Agent due to low confidence...")
+        """Route based on RAG confidence score and response content."""
+        # Debug prints
+        print(f"Routing check - Retrieval confidence: {state.get('retrieval_confidence', 0.0)}")
+        print(f"Routing check - Insufficient info flag: {state.get('insufficient_info', False)}")
+        
+        # Redirect if confidence is low or if response indicates insufficient info
+        if (state.get("retrieval_confidence", 0.0) < config.rag.min_retrieval_confidence or 
+            state.get("insufficient_info", False)):
+            print("Re-routed to Web Search Agent due to low confidence or insufficient information...")
             return "WEB_SEARCH_PROCESSOR_AGENT"  # Correct format
-        return "check_validation"  # No transition needed if confidence is high
+        return "check_validation"  # No transition needed if confidence is high and info is sufficient
     
     def run_brain_tumor_agent(state: AgentState) -> AgentState:
         """Handle brain MRI image analysis."""
@@ -637,7 +676,8 @@ def init_agent_state() -> AgentState:
         "output": None,
         "needs_human_validation": False,
         "retrieval_confidence": 0.0,
-        "bypass_routing": False
+        "bypass_routing": False,
+        "insufficient_info": False
     }
 
 

@@ -31,9 +31,7 @@ args = parser.parse_args()
 # Load configuration
 config = Config()
 
-llm = config.rag.llm
-embedding_model = config.rag.embedding_model
-rag = MedicalRAG(config, llm, embedding_model = embedding_model)
+rag = MedicalRAG(config)
 
 # document ingestion
 def data_ingestion():

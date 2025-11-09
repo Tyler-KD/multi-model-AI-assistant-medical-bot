@@ -4,8 +4,8 @@ import logging
 from pathlib import Path
 import pandas as pd
 from typing import List, Dict, Any, Optional, Union
-# from unstructured.partition.pdf import partition_pdf
-# from unstructured.chunking.title import chunk_by_title
+from unstructured.partition.pdf import partition_pdf
+from unstructured.chunking.title import chunk_by_title
 from PyPDF2 import PdfReader
 
 # Set up logging
@@ -16,7 +16,7 @@ class MedicalDataIngestion:
     """
     Handles ingestion of various medical data formats into the RAG system.
     """
-    def __init__(self, config_path: Optional[str] = None):
+    def __init__(self):
         """
         Initialize the data ingestion pipeline.
         
@@ -272,147 +272,9 @@ class MedicalDataIngestion:
             logger.error(f"Error ingesting JSON file: {e}")
             return {"success": False, "error": str(e)}
     
-    # def _ingest_pdf_file(self, file_path: Path) -> Dict[str, Any]:
-    #     """
-    #     Ingest a PDF file.
-        
-    #     Args:
-    #         file_path: Path to the PDF file
-            
-    #     Returns:
-    #         Dictionary with ingestion results
-    #     """
-    #     try:
-    #         # For simplicity, we'll just log that we would extract text
-    #         logger.info(f"Would extract text from PDF: {file_path}")
-            
-    #         # In a real implementation, you would use a library like PyPDF2 or pdfplumber
-    #         # For now, we'll just create a placeholder document
-    #         document = {
-    #             "content": f"[PDF content would be extracted from {file_path.name}]",
-    #             "metadata": {
-    #                 "source": file_path.name,
-    #                 "file_type": "pdf"
-    #             }
-    #         }
-            
-    #         logger.info(f"Successfully processed PDF file: {file_path}")
-    #         self.stats["documents_ingested"] += 1
-            
-    #         return {"success": True, "document": document}
-            
-    #     except Exception as e:
-    #         logger.error(f"Error ingesting PDF file: {e}")
-    #         return {"success": False, "error": str(e)}
-
-    # def _ingest_pdf_file(self, file_path: Path) -> Dict[str, Any]:
-    #     """
-    #     Ingest a PDF file using unstructured.io, which provides advanced document parsing capabilities.
-        
-    #     Args:
-    #         file_path: Path to the PDF file
-            
-    #     Returns:
-    #         Dictionary with ingestion results
-    #     """
-    #     try:
-    #         # # Try to import unstructured
-    #         # try:
-    #         #     from unstructured.partition.pdf import partition_pdf
-    #         #     from unstructured.chunking.title import chunk_by_title
-    #         # except ImportError:
-    #         #     logger.error("unstructured is not installed. Please install it using: pip install unstructured")
-    #         #     return {"success": False, "error": "unstructured library not found"}
-                
-    #         # Extract elements from PDF
-    #         elements = partition_pdf(
-    #             file_path,
-    #             # Additional parameters:
-    #             extract_images_in_pdf=False,  # Set to True to extract images
-    #             extract_tables=True,  # Extract tables from the PDF
-    #             infer_table_structure=True,  # Try to infer structure of tables
-    #             chunking_strategy="by_title"  # Chunk elements by title hierarchy
-    #         )
-            
-    #         # Process different element types
-    #         content_parts = []
-    #         tables = []
-    #         images = []
-    #         metadata_parts = {}
-            
-    #         for element in elements:
-    #             if hasattr(element, "category"):
-    #                 # Add text with category context
-    #                 element_text = str(element)
-    #                 element_category = element.category
-                    
-    #                 if element_category == "Title":
-    #                     content_parts.append(f"\n## {element_text}\n")
-    #                 elif element_category == "NarrativeText":
-    #                     content_parts.append(element_text)
-    #                 elif element_category == "ListItem":
-    #                     content_parts.append(f"- {element_text}")
-    #                 elif element_category == "Table":
-    #                     content_parts.append(f"\n[TABLE]\n{element_text}\n[/TABLE]\n")
-    #                     if hasattr(element, "metadata") and element.metadata:
-    #                         tables.append({
-    #                             "text": element_text,
-    #                             "metadata": element.metadata.__dict__ if hasattr(element.metadata, "__dict__") else element.metadata
-    #                         })
-    #                 elif element_category == "Image":
-    #                     content_parts.append(f"\n[IMAGE: {element_text}]\n")
-    #                     if hasattr(element, "metadata") and element.metadata:
-    #                         images.append({
-    #                             "text": element_text,
-    #                             "metadata": element.metadata.__dict__ if hasattr(element.metadata, "__dict__") else element.metadata
-    #                         })
-    #                 else:
-    #                     content_parts.append(element_text)
-                    
-    #                 # Collect metadata from elements
-    #                 if hasattr(element, "metadata") and element.metadata:
-    #                     metadata = element.metadata.__dict__ if hasattr(element.metadata, "__dict__") else element.metadata
-    #                     for key, value in metadata.items():
-    #                         if key not in metadata_parts:
-    #                             metadata_parts[key] = value
-            
-    #         # Combine content parts
-    #         content = "\n".join(content_parts)
-            
-    #         # Create consolidated metadata
-    #         metadata = {
-    #             "source": file_path.name,
-    #             "file_type": "pdf",
-    #             "has_tables": len(tables) > 0,
-    #             "table_count": len(tables),
-    #             "has_images": len(images) > 0,
-    #             "image_count": len(images)
-    #         }
-            
-    #         # Add extracted metadata
-    #         metadata.update(metadata_parts)
-            
-    #         # Create document object with structured elements
-    #         document = {
-    #             "content": content,
-    #             "metadata": metadata,
-    #             "tables": tables,
-    #             "images": images,
-    #             "elements": [{"category": getattr(e, "category", "Unknown"), "text": str(e)} for e in elements]
-    #         }
-            
-    #         logger.info(f"Successfully ingested PDF file using unstructured.io: {file_path}")
-    #         self.stats["documents_ingested"] += 1
-            
-    #         return {"success": True, "document": document}
-                
-    #     except Exception as e:
-    #         logger.error(f"Error ingesting PDF file with unstructured.io: {e}")
-    #         return {"success": False, "error": str(e)}
-
     def _ingest_pdf_file(self, file_path: Path) -> Dict[str, Any]:
         """
-        Ingest a PDF file using PyPDF2.
+        Ingest a PDF file using unstructured.io, which provides advanced document parsing capabilities.
         
         Args:
             file_path: Path to the PDF file
@@ -420,55 +282,172 @@ class MedicalDataIngestion:
         Returns:
             Dictionary with ingestion results
         """
+        logger.info(f"Processing PDF with: {file_path}")
+
         try:
-            # # Try to import PyPDF2
-            # try:
-            #     from PyPDF2 import PdfReader
-            # except ImportError:
-            #     logger.error("PyPDF2 is not installed. Please install it using: pip install PyPDF2")
-            #     return {"success": False, "error": "PyPDF2 library not found"}
-                
-            # Open the PDF file
-            reader = PdfReader(file_path)
+            # Extract elements from PDF
+            elements = partition_pdf(
+                file_path,
+                # Additional parameters:
+                extract_images_in_pdf=False,  # Set to True to extract images
+                extract_tables=True,  # Extract tables from the PDF
+                infer_table_structure=True,  # Try to infer structure of tables
+                chunking_strategy="by_title"  # Chunk elements by title hierarchy
+            )
             
-            # Extract text from all pages
-            content = ""
-            for page_num, page in enumerate(reader.pages):
-                page_text = page.extract_text()
-                if page_text:
-                    content += f"--- Page {page_num + 1} ---\n{page_text}\n\n"
+            # Process different element types
+            content_parts = []
+            tables = []
+            images = []
+            metadata_parts = {}
             
-            # Extract metadata from the document info
+            for element in elements:
+                if hasattr(element, "category"):
+                    # Add text with category context
+                    element_text = str(element)
+                    element_category = element.category
+                    
+                    if element_category == "Title":
+                        content_parts.append(f"\n## {element_text}\n")
+                    elif element_category == "NarrativeText":
+                        content_parts.append(element_text)
+                    elif element_category == "ListItem":
+                        content_parts.append(f"- {element_text}")
+                    elif element_category == "Table":
+                        # Format the table as markdown table for better structure
+                        formatted_table_text = self._format_table_as_markdown(element_text)
+                        content_parts.append(f"\n{formatted_table_text}\n")
+                        
+                        if hasattr(element, "metadata") and element.metadata:
+                            # Collect table metadata and save the table separately
+                            table_metadata = element.metadata.__dict__ if hasattr(element.metadata, "__dict__") else element.metadata
+                            tables.append({
+                                "text": formatted_table_text,
+                                "raw_text": element_text,
+                                "metadata": table_metadata
+                            })
+                    elif element_category == "Image":
+                        content_parts.append(f"\n[IMAGE: {element_text}]\n")
+                        if hasattr(element, "metadata") and element.metadata:
+                            images.append({
+                                "text": element_text,
+                                "metadata": element.metadata.__dict__ if hasattr(element.metadata, "__dict__") else element.metadata
+                            })
+                    else:
+                        content_parts.append(element_text)
+                    
+                    # Collect metadata from elements
+                    if hasattr(element, "metadata") and element.metadata:
+                        metadata = element.metadata.__dict__ if hasattr(element.metadata, "__dict__") else element.metadata
+                        for key, value in metadata.items():
+                            if key not in metadata_parts:
+                                metadata_parts[key] = value
+            
+            # Combine content parts
+            content = "\n".join(content_parts)
+            
+            # Create consolidated metadata
             metadata = {
                 "source": file_path.name,
                 "file_type": "pdf",
-                "num_pages": len(reader.pages)
+                "has_tables": len(tables) > 0,
+                "table_count": len(tables),
+                "has_images": len(images) > 0,
+                "image_count": len(images)
             }
             
-            # Try to extract additional metadata from the PDF
-            if reader.metadata:
-                for key, value in reader.metadata.items():
-                    if key and value and isinstance(value, str):
-                        # Remove the leading slash in metadata keys (e.g., "/Author" → "Author")
-                        clean_key = key[1:] if key.startswith("/") else key
-                        metadata[clean_key.lower()] = value
+            # Add extracted metadata
+            metadata.update(metadata_parts)
             
-            # Create document object
+            # Create document object with structured elements
             document = {
                 "content": content,
-                "metadata": metadata
+                "metadata": metadata,
+                "tables": tables,
+                "images": images,
+                "elements": [{"category": getattr(e, "category", "Unknown"), "text": str(e)} for e in elements]
             }
             
-            logger.info(f"Successfully ingested PDF file with {len(reader.pages)} pages: {file_path}")
+            logger.info(f"Successfully ingested PDF file using unstructured.io: {file_path}")
             self.stats["documents_ingested"] += 1
-
-            # print("########### PRINTED FROM data_ingestion/_ingest_pdf_file: document:", document)
             
             return {"success": True, "document": document}
-            
+                
         except Exception as e:
-            logger.error(f"Error ingesting PDF file: {e}")
+            logger.error(f"Error ingesting PDF file with unstructured.io: {e}")
             return {"success": False, "error": str(e)}
+
+    def _format_table_as_markdown(self, table_text: str) -> str:
+        """
+        Format a table as markdown for better structure and readability.
+        
+        Args:
+            table_text: Raw table text extracted from unstructured.io
+            
+        Returns:
+            Formatted markdown table
+        """
+        try:
+            lines = table_text.strip().split('\n')
+            if not lines:
+                return table_text
+            
+            # Check if this is already formatted or just raw text
+            if '|' in table_text:
+                # Try to detect and clean up an existing table structure
+                rows = [line.strip() for line in lines]
+                
+                # Add headers if missing
+                if not rows[0].startswith('|'):
+                    rows[0] = '| ' + rows[0] + ' |'
+                
+                # Add separator row after header if missing
+                if len(rows) > 1 and not rows[1].startswith('|---'):
+                    cols = rows[0].count('|') - 1
+                    separator = '|' + '|'.join(['---' for _ in range(cols)]) + '|'
+                    rows.insert(1, separator)
+                
+                # Format all rows consistently
+                for i in range(len(rows)):
+                    if i > 1 and not rows[i].startswith('|'):
+                        rows[i] = '| ' + rows[i] + ' |'
+                
+                return '\n'.join(rows)
+            else:
+                # This seems to be raw text, try to infer table structure
+                # Split by whitespace and hope for the best
+                rows = []
+                for line in lines:
+                    if line.strip():
+                        rows.append(line.split())
+                
+                if not rows:
+                    return table_text
+                
+                # Determine the number of columns based on the first row
+                num_cols = len(rows[0]) if rows else 0
+                if num_cols == 0:
+                    return table_text
+                
+                # Normalize all rows to have the same number of columns
+                for i in range(len(rows)):
+                    while len(rows[i]) < num_cols:
+                        rows[i].append('')
+                    rows[i] = rows[i][:num_cols]  # Truncate if too long
+                
+                # Build markdown table
+                header = '| ' + ' | '.join(rows[0]) + ' |'
+                separator = '|' + '|'.join(['---' for _ in range(num_cols)]) + '|'
+                
+                formatted_rows = [header, separator]
+                for row in rows[1:]:
+                    formatted_rows.append('| ' + ' | '.join(row) + ' |')
+                
+                return '\n'.join(formatted_rows)
+        except Exception as e:
+            logger.warning(f"Error formatting table as markdown: {e}")
+            # Return original text if formatting fails
+            return f"Table:\n{table_text}"
     
     def _identify_content_column(self, df: pd.DataFrame) -> str:
         """

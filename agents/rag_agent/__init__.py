@@ -1,8 +1,11 @@
 import logging
 import time
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple, Set, Union
 import os
 from pathlib import Path
+import json
+import datetime
+import uuid
 # from sentence_transformers import SentenceTransformer
 
 from .vector_store import QdrantRetriever
@@ -17,93 +20,98 @@ class MedicalRAG:
     """
     Medical Retrieval-Augmented Generation system that integrates all components.
     """
-    def __init__(self, config, llm, embedding_model = None):
+    def __init__(self, config):
         """
-        Initialize the Medical RAG system.
+        Initialize the RAG Agent.
         
         Args:
-            config: Configuration object
-            llm: Language model for response generation
+            config: Configuration object with RAG settings
         """
-        self.logger = logging.getLogger(__name__)
         self.config = config
-        self.llm = llm
-        
-        # Initialize embedding model
-        self.logger.info(f"Loading embedding model: {config.rag.embedding_model}")
-        # self.embedding_model = SentenceTransformer(config.rag.embedding_model, use_auth_token=config.rag.huggingface_token)
-        self.embedding_model = embedding_model
         
         # Initialize components
-        self.retriever = QdrantRetriever(config)
-        self.document_processor = MedicalDocumentProcessor(config, self.embedding_model)
-        self.query_processor = QueryProcessor(config, self.embedding_model)
-        self.reranker = Reranker(config)
-        self.response_generator = ResponseGenerator(config, llm)
-        self.data_ingestion = MedicalDataIngestion(config_path=getattr(config, 'data_ingestion_config_path', None))
-        # self.evaluator = RAGEvaluator(config)
-        
-        self.logger.info("Medical RAG system initialized successfully")
+        self._initialize()
+
+
+    def _initialize(self):
+        """Initialize the RAG components and load documents."""
+        try:
+            # Set up logging
+            self.logger = logging.getLogger(f"{self.__module__}")
+            self.logger.info("Initializing Medical RAG system")
+            
+            # Initialize LLM
+            self.llm = self.config.rag.llm
+            self.logger.info(f"Using LLM: {type(self.llm).__name__}")
+            
+            # Initialize embedding model
+            self.embedding_model = self.config.rag.embedding_model
+            self.logger.info(f"Using embedding model: {type(self.embedding_model).__name__}")
+            
+            # Initialize query processor
+            self.query_processor = QueryProcessor(self.config, self.embedding_model)
+            
+            # Initialize document processor
+            self.document_processor = MedicalDocumentProcessor(self.config, self.embedding_model)
+            
+            # Initialize vector store - using the QdrantRetriever class for consistency
+            self.retriever = QdrantRetriever(self.config)
+            
+            # Initialize response generator with LLM
+            self.response_generator = ResponseGenerator(self.config, self.llm)
+            
+            # Initialize reranker if configured
+            self.reranker = None
+            if hasattr(self.config.rag, "use_reranker") and self.config.rag.use_reranker:
+                self.reranker = Reranker(self.config)
+                self.logger.info("Using reranker for result refinement")
+            
+            # Verify vector store has documents
+            total_docs = self.retriever.count_documents()
+            self.logger.info(f"Vector store contains {total_docs} documents")
+            if total_docs == 0:
+                self.logger.warning("No documents in vector store. Results may be limited.")
+                
+            # Set default parameters
+            self.top_k = getattr(self.config.rag, "top_k", 5)  # Default to 5 if not specified
+            self.similarity_threshold = getattr(self.config.rag, "similarity_threshold", 0.0)
+            
+            # Initialize data ingestion component
+            self.data_ingestion = MedicalDataIngestion()
+            
+            # Log initialization success
+            self.logger.info("Medical RAG system successfully initialized")
+            
+        except Exception as e:
+            self.logger.error(f"Error initializing RAG system: {e}")
+            import traceback
+            self.logger.error(traceback.format_exc())
+            raise
 
     def process_query(self, query: str, chat_history: Optional[List[Dict[str, str]]] = None) -> Dict[str, Any]:
         """
-        Process a user query and generate a response.
-        """
-        start_time = time.time()
-
-        self.logger.info(f"Processing query: {query}")
+        Process a query with the RAG system.
         
-        try:
-            # Process query
-            query_vector, filters = self.query_processor.process_query(query)
-
-            # print("####### PRINTED from rag_agent/__init__.py: query_vector:", query_vector)
+        Args:
+            query: The query string
+            chat_history: Optional chat history for context
             
-            # Temporarily disable filters until your documents have proper metadata
-            filters = {}  # Comment this line out once you have documents with proper metadata
-            
-            # Retrieve documents
-            retrieval_start = time.time()
-            retrieved_docs = self.retriever.retrieve(query_vector, filters)
-            retrieval_time = time.time() - retrieval_start
-            
-            # print("####### PRINTED from rag_agent/__init__.py: retrieved_docs:", retrieved_docs)
-
-            # Debug output
-            self.logger.info(f"Retrieved {len(retrieved_docs)} documents")
-            for i, doc in enumerate(retrieved_docs[:3]):  # Log first 3 docs
-                self.logger.info(f"Doc {i}: Score {doc['score']}, Content: {doc['content'][:100]}...")
-            
-            # Rest of your code remains the same
-            if retrieved_docs:
-                reranked_docs = self.reranker.rerank(query, retrieved_docs)
-            else:
-                reranked_docs = []
-            
-            response_start = time.time()
-            response = self.response_generator.generate_response(query, reranked_docs, chat_history)
-            response_time = time.time() - response_start
-            
-            response["processing_time"] = time.time() - start_time
-            response["num_docs_retrieved"] = len(retrieved_docs)  # Add this for debugging
-            
-            return response
-            
-        except Exception as e:
-            self.logger.error(f"Error processing query: {e}")
-            return {
-                "response": "I apologize, but I encountered an error while processing your query. Please try again or rephrase your question.",
-                "sources": [],
-                "confidence": 0.0,
-                "processing_time": time.time() - start_time
-            }
+        Returns:
+            Response dictionary
+        """
+        self.logger.info(f"RAG Agent processing query: {query}")
+        
+        # Process query and return result, passing chat_history
+        result = self.query(query, chat_history)
+        
+        return result
     
     def ingest_documents(self, documents: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
         Ingest documents into the RAG system.
         
         Args:
-            documents: List of dictionaries with 'content' and 'metadata' keys
+            documents: List of document dictionaries with content and metadata
             
         Returns:
             Dictionary with ingestion results
@@ -112,49 +120,104 @@ class MedicalRAG:
         self.logger.info(f"Ingesting {len(documents)} documents")
         
         try:
-            # Process documents
-            processed_docs = []
-            for doc in documents:
-                chunks = self.document_processor.process_document(doc["content"], doc["metadata"])
-                processed_docs.extend(chunks)
+            # Process each document using the document processor
+            processed_documents = []
+            document_ids = []
             
-            # Generate embeddings
-            embedding_start = time.time()
-            chunk_texts = [chunk["content"] for chunk in processed_docs]
-            embeddings = self.embedding_model.embed_documents(chunk_texts)
-            embedding_time = time.time() - embedding_start
+            for document in documents:
+                content = document.get("content", "")
+                metadata = document.get("metadata", {})
+                
+                # Add a unique ID if not present
+                if "id" not in metadata:
+                    metadata["id"] = str(uuid.uuid4())
+                
+                # Process the document
+                processed_chunks = self.document_processor.process_document(content, metadata)
+                
+                if processed_chunks:
+                    processed_documents.extend(processed_chunks)
+                    for chunk in processed_chunks:
+                        document_ids.append(chunk["id"])
+                        
+                        # Save processed document to the processed folder
+                        processed_dir = Path("data/processed")
+                        processed_dir.mkdir(exist_ok=True, parents=True)
+                        
+                        # Save as JSON file with document ID as name
+                        doc_path = processed_dir / f"{chunk['id']}.json"
+                        with open(doc_path, 'w', encoding='utf-8') as f:
+                            # Ensure chunk is JSON serializable
+                            json_safe_chunk = self._ensure_json_serializable(chunk)
+                            json.dump(json_safe_chunk, f, indent=2)
             
-            # Add embeddings to processed documents
-            for i, chunk in enumerate(processed_docs):
-                chunk["embedding"] = embeddings[i]#.tolist()
+            if not processed_documents:
+                return {
+                    "success": False,
+                    "error": "No documents were successfully processed",
+                    "processing_time": time.time() - start_time
+                }
             
-            # Store documents in vector database
-            storage_start = time.time()
-            insertion_result = self.retriever.upsert_documents(processed_docs)
-            storage_time = time.time() - storage_start
+            # Prepare document embedding batch
+            document_batch = []
+            for doc in processed_documents:
+                # Embed the content
+                document_embedding = self.embedding_model.embed_documents([doc["content"]])[0]
+                
+                # Create document record for vector store
+                document_record = {
+                    "id": doc["id"],
+                    "content": doc["content"],
+                    "embedding": document_embedding,
+                    "metadata": doc["metadata"]
+                }
+                
+                document_batch.append(document_record)
             
-            # Log metrics
-            metrics = {
-                "documents_ingested": len(documents),
-                "chunks_created": len(processed_docs),
-                "embedding_time": embedding_time,
-                "storage_time": storage_time,
-                "total_processing_time": time.time() - start_time
-            }
+            # Upsert into vector store
+            self.retriever.upsert_documents(document_batch)
             
             return {
                 "success": True,
-                "metrics": metrics,
-                "insertion_details": insertion_result
+                "documents_ingested": len(documents),
+                "chunks_processed": len(processed_documents),
+                "document_ids": document_ids,
+                "processing_time": time.time() - start_time
             }
             
         except Exception as e:
             self.logger.error(f"Error ingesting documents: {e}")
+            import traceback
+            self.logger.error(traceback.format_exc())
+            
             return {
                 "success": False,
                 "error": str(e),
+                "documents_processed": 0,
+                "chunks_created": 0,
+                "chunks_inserted": 0,
                 "processing_time": time.time() - start_time
             }
+    
+    def _ensure_json_serializable(self, obj):
+        """
+        Recursively convert objects to JSON-serializable types.
+        
+        Args:
+            obj: Object to convert
+            
+        Returns:
+            JSON-serializable version of the object
+        """
+        if isinstance(obj, dict):
+            return {k: self._ensure_json_serializable(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [self._ensure_json_serializable(item) for item in obj]
+        elif isinstance(obj, (str, int, float, bool, type(None))):
+            return obj
+        else:
+            # Convert non-serializable objects to string
+            return str(obj)
     
     def ingest_file(self, file_path: str) -> Dict[str, Any]:
         """
@@ -581,5 +644,90 @@ class MedicalRAG:
             return {
                 "success": False,
                 "error": str(e),
+                "processing_time": time.time() - start_time
+            }
+
+    def _retrieve_documents(self, query_embedding, filters, query):
+        """
+        Retrieve documents from vector store with enhanced filtering.
+        
+        Args:
+            query_embedding: The query embedding vector
+            filters: Metadata filters from query processing
+            query: The original query text
+            
+        Returns:
+            List of retrieved documents
+        """
+        # For debug: temporarily disable all filters while fixing the system
+        # filters = {}
+        
+        self.logger.info(f"Retrieving documents with filters: {filters}")
+        
+        # Retrieve documents using vector search
+        retrieved_docs = self.retriever.retrieve(
+            query_vector=query_embedding, 
+            filters=filters
+        )
+        
+        self.logger.info(f"Retrieved {len(retrieved_docs)} documents")
+        return retrieved_docs
+
+    def query(self, query: str, chat_history: Optional[List[Dict[str, str]]] = None) -> Dict[str, Any]:
+        """
+        Process a query and generate a response using RAG.
+        
+        Args:
+            query: User query
+            chat_history: Optional chat history for context
+            
+        Returns:
+            Dictionary with response and metadata
+        """
+        start_time = time.time()
+        self.logger.info(f"Processing query: {query}")
+        
+        try:
+            # Process the query
+            query_embedding, filters = self.query_processor.process_query(query)
+            
+            # Retrieve relevant documents
+            retrieved_docs = self._retrieve_documents(query_embedding, filters, query)
+            
+            # Apply similarity threshold filtering
+            if self.similarity_threshold > 0:
+                retrieved_docs = [doc for doc in retrieved_docs if doc.get('score', 0) >= self.similarity_threshold]
+                self.logger.info(f"After similarity threshold: {len(retrieved_docs)} documents")
+            
+            # Rerank if we have a reranker and enough documents
+            if self.reranker and len(retrieved_docs) > 1:
+                reranked_docs = self.reranker.rerank(query, retrieved_docs)
+                self.logger.info(f"After reranking: {len(reranked_docs)} documents")
+            else:
+                reranked_docs = retrieved_docs
+            
+            # Generate response with the original method signature
+            response = self.response_generator.generate_response(
+                query=query, 
+                retrieved_docs=reranked_docs,
+                chat_history=chat_history
+            )
+            
+            # Add timing information
+            processing_time = time.time() - start_time
+            response["processing_time"] = processing_time
+            
+            return response
+            
+        except Exception as e:
+            self.logger.error(f"Error processing query: {e}")
+            import traceback
+            self.logger.error(traceback.format_exc())
+            
+            # Return error response
+            return {
+                "response": f"I encountered an error while processing your query: {str(e)}",
+                "sources": [],
+                "confidence": 0.0,
                 "processing_time": time.time() - start_time
             }

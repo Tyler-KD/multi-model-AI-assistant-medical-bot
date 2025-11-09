@@ -10,6 +10,7 @@ import nltk
 from nltk.tokenize import sent_tokenize
 from collections import Counter
 import numpy as np
+import json
 
 # Ensure NLTK data is available
 try:
@@ -187,7 +188,7 @@ class MedicalDocumentProcessor:
                     "id": chunk_id,
                     "content": chunk_text,
                     "embedding": embedding,
-                    "metadata": chunk_metadata
+                    "metadata": self.make_serializable(chunk_metadata)
                 })
             
             # Save processed chunks to disk for potential reuse
@@ -633,8 +634,6 @@ class MedicalDocumentProcessor:
             chunks: List of processed chunks
         """
         try:
-            import json
-            
             # Create filename
             filename = f"{doc_id}_processed.json"
             filepath = self.processed_docs_dir / filename
@@ -676,3 +675,33 @@ class MedicalDocumentProcessor:
                 continue
         
         return all_processed_chunks
+    
+    def make_serializable(self, metadata: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Convert non-serializable objects in metadata to a serializable format.
+        
+        Args:
+            metadata: Metadata dictionary.
+        
+        Returns:
+            A JSON-serializable metadata dictionary.
+        """
+        serializable_metadata = {}
+        for key, value in metadata.items():
+            try:
+                json.dumps(value)  # Test if value is serializable
+                serializable_metadata[key] = value
+            except TypeError:
+                # Handle non-serializable objects
+                if isinstance(value, Header):
+                    serializable_metadata[key] = str(value)  # Convert Header to string
+                else:
+                    serializable_metadata[key] = str(value)  # Convert other non-serializable objects to string
+        return serializable_metadata
+
+class Header:
+    def __init__(self, text):
+        self.text = text
+    
+    def __str__(self):
+        return self.text

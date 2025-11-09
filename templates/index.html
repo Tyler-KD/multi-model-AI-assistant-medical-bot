@@ -184,6 +184,33 @@
                 margin-bottom: 15px;
             }
         }
+        
+        /* Table styling for markdown tables */
+        .message table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+        
+        .message th, .message td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .message th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .message tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .message tr:hover {
+            background-color: #f0f0f0;
+        }
     </style>
 </head>
 <body>
@@ -210,6 +237,35 @@
                             <li><i class="fas fa-brain me-2"></i> Brain Tumor Detection</li>
                             <li><i class="fas fa-lungs me-2"></i> Chest X-ray Covid-19 Classification</li>
                             <li><i class="fas fa-allergies me-2"></i> Skin Lesion Segmentation</li>
+                        </ul>
+                    </div>
+                    <div class="agent-info">
+                        <h6>Agent Capabilities</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>Medical RAG Agent:</strong>
+                                <ul>
+                                    <li>Unstructured.io parsing to extract and embed text along with tables from PDFs</li>
+                                    <li>Semantic chunking with structural boundaries</li>
+                                    <li>Qdrant hybrid search</li>
+                                    <li>Query expansion with related terms</li>
+                                    <li>Metadata enrichment for better context</li>
+                                    <li>Input-output guardrails for safe responses</li>
+                                    <li>Confidence-based handoff to Web Search to prevent hallucinations</li>
+                                </ul>
+                            </li>
+                            <li><strong>Human-in-the-loop Verification:</strong>
+                                <ul>
+                                    <li>Human verification for CV agents</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="agent-info">
+                        <h6>Multi-Agent Orchestration</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-project-diagram me-2"></i> Coordinated interaction between agents</li>
+                            <li><i class="fas fa-tasks me-2"></i> Dynamic task allocation based on capabilities</li>
+                            <li><i class="fas fa-sync-alt me-2"></i> Seamless integration of agent responses</li>
                         </ul>
                     </div>
                     <button id="clear-chat" class="btn btn-outline-danger w-100 mt-3">

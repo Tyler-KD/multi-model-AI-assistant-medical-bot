@@ -116,21 +116,16 @@ class ResponseGenerator:
         Returns:
             Complete prompt string
         """
-        # Add chat history if provided
-        history_text = ""
-        if chat_history and len(chat_history) > 0:
-            history_parts = []
-            for exchange in chat_history[-3:]:  # Include last 3 exchanges at most
-                if "user" in exchange and "assistant" in exchange:
-                    history_parts.append(f"User: {exchange['user']}\nAssistant: {exchange['assistant']}")
-            history_text = "\n\n".join(history_parts)
-            history_text = f"Chat History:\n{history_text}\n\n"
             
         # Build the prompt
         prompt = f"""You are a medical assistant providing accurate information based on verified medical sources.
+
+        Here are the last few messages from our conversation:
         
-        {history_text}The user has asked the following question:
-        "{query}"
+        {chat_history}
+
+        The user has asked the following question:
+        {query}
 
         I've retrieved the following information to help answer this question:
 
@@ -141,6 +136,8 @@ class ResponseGenerator:
         Based on the provided information, please answer the user's question thoroughly but concisely. If the information doesn't contain the answer, acknowledge the limitations of the available information.
 
         Medical Assistant Response:"""
+
+        print("RAG Prompt:", prompt)
 
         return prompt
     

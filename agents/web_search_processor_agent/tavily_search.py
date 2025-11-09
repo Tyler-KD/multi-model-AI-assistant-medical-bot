@@ -14,10 +14,10 @@ class TavilySearchAgent:
         """
         pass
 
-    def search_tavily(self, tavily_api_key, query: str) -> str:
+    def search_tavily(self, query: str) -> str:
         """Perform a general web search using Tavily API."""
 
-        tavily_search = TavilySearchResults(max_results = 3)
+        tavily_search = TavilySearchResults(max_results = 5)
 
         # url = "https://api.tavily.com/search"
         # params = {
@@ -28,6 +28,9 @@ class TavilySearchAgent:
         
         try:
             # response = requests.get(url, params=params)
+            # Strip any surrounding quotes from the query
+            query = query.strip('"\'')
+            # print("Printing query:", query)
             search_docs = tavily_search.invoke(query)
             # data = response.json()
             # if "results" in data:

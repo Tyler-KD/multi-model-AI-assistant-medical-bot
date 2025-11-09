@@ -2,7 +2,6 @@ import os
 import json
 import base64
 from mimetypes import guess_type
-from langchain_openai import AzureChatOpenAI
 
 from typing import TypedDict
 from langchain_core.output_parsers import JsonOutputParser
@@ -16,15 +15,8 @@ class ClassificationDecision(TypedDict):
 class ImageClassifier:
     """Uses GPT-4o Vision to analyze images and determine their type."""
     
-    def __init__(self):
-        self.vision_model = AzureChatOpenAI(
-            deployment_name = os.getenv("deployment_name"),
-            model_name = os.getenv("model_name"),
-            azure_endpoint = os.getenv("azure_endpoint"),
-            openai_api_key = os.getenv("openai_api_key"),
-            openai_api_version = os.getenv("openai_api_version"),
-            temperature = 0.1  # Keep deterministic for classification tasks
-            )
+    def __init__(self, vision_model):
+        self.vision_model = vision_model
         self.json_parser = JsonOutputParser(pydantic_object=ClassificationDecision)
         
     def local_image_to_data_url(self, image_path: str) -> str:

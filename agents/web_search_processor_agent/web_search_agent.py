@@ -11,7 +11,6 @@ class WebSearchAgent:
     
     def __init__(self, config):
         self.tavily_search_agent = TavilySearchAgent()
-        self.tavily_api_key = config.tavily_api_key
         
         # self.pubmed_search_agent = PubmedSearchAgent()
         # self.pubmed_api_url = config.pubmed_api_url
@@ -22,7 +21,7 @@ class WebSearchAgent:
         """
         # print(f"[WebSearchAgent] Searching for: {query}")
         
-        tavily_results = self.tavily_search_agent.search_tavily(tavily_api_key=self.tavily_api_key, query=query)
+        tavily_results = self.tavily_search_agent.search_tavily(query=query)
         # pubmed_results = self.pubmed_search_agent.search_pubmed(self.pubmed_api_url, query)
         
         return f"Tavily Results:\n{tavily_results}\n"

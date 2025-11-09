@@ -11,7 +11,6 @@ from langchain_core.messages import HumanMessage, AIMessage, SystemMessage, Base
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.runnables import RunnablePassthrough
-from langchain_openai import AzureChatOpenAI
 from langgraph.graph import MessagesState, StateGraph, END
 import os, getpass
 from dotenv import load_dotenv
@@ -25,9 +24,9 @@ from langgraph.checkpoint.memory import MemorySaver
 import cv2
 import numpy as np
 
-load_dotenv()
-
 from config import Config
+
+load_dotenv()
 
 # Load configuration
 config = Config()
@@ -45,7 +44,6 @@ class AgentConfig:
     
     # Decision model
     DECISION_MODEL = "gpt-4o"  # or whichever model you prefer
-    DECISION_TEMPERATURE = 0.1
     
     # Vision model for image analysis
     VISION_MODEL = "gpt-4o"
@@ -81,11 +79,7 @@ class AgentConfig:
     }}
     """
 
-    llm = config.rag.llm
-    embedding_model = config.rag.embedding_model
-    max_conversation_history = config.max_conversation_history
-
-    image_analyzer = ImageAnalysisAgent()
+    image_analyzer = ImageAnalysisAgent(config=config)
 
 
 class AgentState(MessagesState):
@@ -112,16 +106,10 @@ def create_agent_graph():
     """Create and configure the LangGraph for agent orchestration."""
 
     # Initialize guardrails with the same LLM used elsewhere
-    guardrails = LocalGuardrails(AgentConfig.llm)
+    guardrails = LocalGuardrails(config.rag.llm)
 
     # LLM
-    decision_model = AzureChatOpenAI(
-        deployment_name = os.getenv("deployment_name"),
-        model_name = AgentConfig.DECISION_MODEL,
-        azure_endpoint = os.getenv("azure_endpoint"),
-        openai_api_key = os.getenv("openai_api_key"),
-        openai_api_version = os.getenv("openai_api_version"),
-        temperature = AgentConfig.DECISION_TEMPERATURE)
+    decision_model = config.agent_decision.llm
     
     # Initialize the output parser
     json_parser = JsonOutputParser(pydantic_object=AgentDecision)
@@ -201,7 +189,7 @@ def create_agent_graph():
         
         # Create context from recent conversation history (last 3 messages)
         recent_context = ""
-        for msg in messages[-6:]:  # Get last 3 exchanges (6 messages)
+        for msg in messages[-6:]:  # Get last 3 exchanges (6 messages)  # Not provided control from config
             if isinstance(msg, HumanMessage):
                 recent_context += f"User: {msg.content}\n"
             elif isinstance(msg, AIMessage):
@@ -254,9 +242,9 @@ def create_agent_graph():
         elif isinstance(current_input, dict):
             input_text = current_input.get("text", "")
         
-        # Create context from recent conversation history (last 3 messages)
+        # Create context from recent conversation history
         recent_context = ""
-        for msg in messages[-6:]:  # Get last 3 exchanges (6 messages)
+        for msg in messages:#[-20:]:  # Get last 10 exchanges (20 messages)  # currently considering complete history - limit control from config
             if isinstance(msg, HumanMessage):
                 # print("######### DEBUG 1:", msg)
                 recent_context += f"User: {msg.content}\n"
@@ -318,11 +306,11 @@ def create_agent_graph():
 
         Conversational LLM Response:"""
 
-        response = AgentConfig.llm.invoke(conversation_prompt)
+        # print("Conversation Prompt:", conversation_prompt)
 
-        # print("######### DEBUG 3:", response)
+        response = config.conversation.llm.invoke(conversation_prompt)
 
-        # print("########### DEBUGGING #########: reponse from conversation agent llm:", response)
+        # print("Conversation respone:", response)
 
         # response = AIMessage(content="This would be handled by the conversation agent.")
 
@@ -338,22 +326,22 @@ def create_agent_graph():
 
         print(f"Selected agent: RAG_AGENT")
 
-        rag_agent = MedicalRAG(config, AgentConfig.llm, AgentConfig.embedding_model)
+        rag_agent = MedicalRAG(config, config.rag.llm, config.rag.embedding_model)
         
-        # Process the query
+        messages = state["messages"]
         query = state["current_input"]
+        rag_context_limit = config.rag.context_limit
 
-        # chat_history = [{"role": "user", "content": msg.content} if isinstance(msg, HumanMessage) else {"role": "assistant", "content": msg.content} for msg in state["messages"]]
-        chat_history = []
-        for msg in state["messages"]:
-            if isinstance(msg, dict):
-                # If it's a dictionary, add it directly (assuming it has the right structure)
-                chat_history.append(msg)
-            else:
-                # Otherwise, assume it's a HumanMessage or similar object
-                role_type = "user" if isinstance(msg, HumanMessage) else "assistant"
-                chat_history.append({"role": role_type, "content": msg.content})
-        response = rag_agent.process_query(query, chat_history)
+        recent_context = ""
+        for msg in messages[-rag_context_limit:]:# limit controlled from config
+            if isinstance(msg, HumanMessage):
+                # print("######### DEBUG 1:", msg)
+                recent_context += f"User: {msg.content}\n"
+            elif isinstance(msg, AIMessage):
+                # print("######### DEBUG 2:", msg)
+                recent_context += f"Assistant: {msg.content}\n"
+
+        response = rag_agent.process_query(query, chat_history=recent_context)
         retrieval_confidence = response.get("confidence", 0.0)  # Default to 0.0 if not provided
 
         print(f"Retrieval Confidence: {retrieval_confidence}")
@@ -372,38 +360,6 @@ def create_agent_graph():
             "retrieval_confidence": retrieval_confidence,
             "agent_name": "RAG_AGENT"
         }
-    
-    def _build_prompt_for_web_search(self, query: str, chat_history: List[Dict[str, str]] = None) -> str:
-        """
-        Build the prompt for the web search.
-        
-        Args:
-            query: User query
-            chat_history: chat history
-            
-        Returns:
-            Complete prompt string
-        """
-        # Add chat history if provided
-        history_text = ""
-        if chat_history and len(chat_history) > 0:
-            history_parts = []
-            for exchange in chat_history[-3:]:  # Include last 3 exchanges at most
-                if "user" in exchange and "assistant" in exchange:
-                    history_parts.append(f"User: {exchange['user']}\nAssistant: {exchange['assistant']}")
-            history_text = "\n\n".join(history_parts)
-            history_text = f"Chat History:\n{history_text}\n\n"
-            
-        # Build the prompt
-        prompt = f"""Here is the last three messages from our conversation:
-        {history_text}
-        The user asked the following question:
-        "{query}"
-        Summarize them into a single, well-formed question that can be used for a web search.
-        Keep it concise and ensure it captures the key intent behind the discussion.
-        """
-
-        return prompt
 
     # Web Search Processor Node
     def run_web_search_processor_agent(state: AgentState) -> AgentState:
@@ -411,21 +367,22 @@ def create_agent_graph():
 
         print(f"Selected agent: WEB_SEARCH_PROCESSOR_AGENT")
         print("[WEB_SEARCH_PROCESSOR_AGENT] Processing Web Search Results...")
+        
+        messages = state["messages"]
+        web_search_context_limit = config.web_search.context_limit
 
-        chat_history = []
-        for msg in state["messages"]:
-            if isinstance(msg, dict):
-                # If it's a dictionary, add it directly (assuming it has the right structure)
-                chat_history.append(msg)
-            else:
-                # Otherwise, assume it's a HumanMessage or similar object
-                role_type = "user" if isinstance(msg, HumanMessage) else "assistant"
-                chat_history.append({"role": role_type, "content": msg.content})
+        recent_context = ""
+        for msg in messages[-web_search_context_limit:]: # limit controlled from config
+            if isinstance(msg, HumanMessage):
+                # print("######### DEBUG 1:", msg)
+                recent_context += f"User: {msg.content}\n"
+            elif isinstance(msg, AIMessage):
+                # print("######### DEBUG 2:", msg)
+                recent_context += f"Assistant: {msg.content}\n"
 
         web_search_processor = WebSearchProcessorAgent(config)
-        web_search_query_prompt = _build_prompt_for_web_search(state["current_input"], chat_history)
-        web_search_query = AgentConfig.llm.invoke(web_search_query_prompt)
-        processed_response = web_search_processor.process_web_search_results(query=web_search_query)
+
+        processed_response = web_search_processor.process_web_search_results(query=state["current_input"], chat_history=recent_context)
 
         # print("######### DEBUG WEB SEARCH:", processed_response)
         
@@ -724,8 +681,8 @@ def process_query(query: Union[str, Dict], conversation_history: List[BaseMessag
     # state["messages"] = [result["messages"][-1].content]
 
     # Keep history to reasonable size (ANOTHER OPTION: summarize and store before truncating history)
-    if len(result["messages"]) > AgentConfig.max_conversation_history:  # Keep last config.max_conversation_history messages
-        result["messages"] = result["messages"][-AgentConfig.max_conversation_history:]
+    if len(result["messages"]) > config.max_conversation_history:  # Keep last config.max_conversation_history messages
+        result["messages"] = result["messages"][-config.max_conversation_history:]
 
     # visualize conversation history in console
     for m in result["messages"]:

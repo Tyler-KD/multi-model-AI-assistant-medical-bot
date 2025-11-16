@@ -1552,26 +1552,26 @@
     ],
     "last_modified": "2025-03-31T01:37:36",
     "page_number": 1,
-    "orig_elements": "[<unstructured.documents.elements.Header object at 0x00000223828BE150>, <unstructured.documents.elements.Title object at 0x00000223ED01D650>, <unstructured.documents.elements.Text object at 0x000002238B3D4D50>, <unstructured.documents.elements.NarrativeText object at 0x000002238D72C390>, <unstructured.documents.elements.Title object at 0x00000223827D1E50>, <unstructured.documents.elements.Title object at 0x000002238B06DE90>, <unstructured.documents.elements.NarrativeText object at 0x00000223827D2AD0>]",
-    "_known_field_names": "frozenset({'text_as_html', 'languages', 'image_mime_type', 'page_number', 'link_start_indexes', 'page_name', 'sent_from', 'link_texts', 'signature', 'email_message_id', 'subject', 'emphasized_text_contents', 'image_path', 'attached_to_filename', 'orig_elements', 'category_depth', 'bcc_recipient', 'link_urls', 'cc_recipient', 'url', 'file_directory', 'emphasized_text_tags', 'filetype', 'detection_origin', 'sent_to', 'image_base64', 'header_footer_type', 'filename', 'key_value_pairs', 'last_modified', 'parent_id', 'coordinates', 'data_source', 'is_continuation', 'detection_class_prob', 'table_as_cells', 'links'})",
+    "orig_elements": "[<unstructured.documents.elements.Header object at 0x000001A3DB808BD0>, <unstructured.documents.elements.Title object at 0x000001A3D15FC450>, <unstructured.documents.elements.Text object at 0x000001A3DA824690>, <unstructured.documents.elements.NarrativeText object at 0x000001A3D15FD250>, <unstructured.documents.elements.Title object at 0x000001A3D15FCE90>, <unstructured.documents.elements.Title object at 0x000001A3DA152090>, <unstructured.documents.elements.NarrativeText object at 0x000001A3D15FCF10>]",
+    "_known_field_names": "frozenset({'url', 'image_path', 'bcc_recipient', 'subject', 'image_mime_type', 'emphasized_text_tags', 'attached_to_filename', 'file_directory', 'link_start_indexes', 'email_message_id', 'key_value_pairs', 'languages', 'link_urls', 'page_number', 'is_continuation', 'parent_id', 'sent_from', 'emphasized_text_contents', 'coordinates', 'detection_class_prob', 'filename', 'link_texts', 'sent_to', 'detection_origin', 'header_footer_type', 'cc_recipient', 'filetype', 'table_as_cells', 'image_base64', 'links', 'data_source', 'page_name', 'last_modified', 'signature', 'text_as_html', 'category_depth', 'orig_elements'})",
     "file_directory": "data\\raw",
     "filename": "covid_chest_xray_2024.pdf",
     "is_continuation": true,
     "text_as_html": "<table><tbody></tbody></table>",
-    "id": "feab06bd-12cc-4e71-816c-4eb2f0a60e5b",
+    "id": "9f89927f-7f39-4c1c-b98d-b596bbb7c276",
     "medical_entities": {
       "diseases": [
-        "diabetes",
         "covid-19",
         "cancer",
-        "pneumonia"
+        "pneumonia",
+        "diabetes"
       ],
       "anatomy": [
         "lung"
       ]
     },
     "document_type": "research_paper",
-    "processing_timestamp": "2025-04-01T02:37:32.169215",
+    "processing_timestamp": "2025-04-07T21:31:54.515879",
     "chunk_number": 85,
     "total_chunks": 210,
     "section": "paragraph",

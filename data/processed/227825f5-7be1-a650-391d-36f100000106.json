@@ -1552,23 +1552,23 @@
     ],
     "last_modified": "2025-03-31T02:09:04",
     "page_number": 1,
-    "orig_elements": "[<unstructured.documents.elements.Header object at 0x000002238CFDB650>, <unstructured.documents.elements.Title object at 0x000002238CFDB010>, <unstructured.documents.elements.Text object at 0x00000223EC095210>, <unstructured.documents.elements.NarrativeText object at 0x000002238CFDB6D0>, <unstructured.documents.elements.Title object at 0x000002238CFD8FD0>, <unstructured.documents.elements.Title object at 0x00000223823CD890>, <unstructured.documents.elements.Title object at 0x000002238B45C550>]",
-    "_known_field_names": "frozenset({'text_as_html', 'languages', 'image_mime_type', 'page_number', 'link_start_indexes', 'page_name', 'sent_from', 'link_texts', 'signature', 'email_message_id', 'subject', 'emphasized_text_contents', 'image_path', 'attached_to_filename', 'orig_elements', 'category_depth', 'bcc_recipient', 'link_urls', 'cc_recipient', 'url', 'file_directory', 'emphasized_text_tags', 'filetype', 'detection_origin', 'sent_to', 'image_base64', 'header_footer_type', 'filename', 'key_value_pairs', 'last_modified', 'parent_id', 'coordinates', 'data_source', 'is_continuation', 'detection_class_prob', 'table_as_cells', 'links'})",
+    "orig_elements": "[<unstructured.documents.elements.Header object at 0x000001A3D8AB6CD0>, <unstructured.documents.elements.Title object at 0x000001A3D9EBAF90>, <unstructured.documents.elements.Text object at 0x000001A3D9FF4210>, <unstructured.documents.elements.NarrativeText object at 0x000001A3DA800910>, <unstructured.documents.elements.Title object at 0x000001A3DA803810>, <unstructured.documents.elements.Title object at 0x000001A3D0276810>, <unstructured.documents.elements.Title object at 0x000001A3DA330950>]",
+    "_known_field_names": "frozenset({'url', 'image_path', 'bcc_recipient', 'subject', 'image_mime_type', 'emphasized_text_tags', 'attached_to_filename', 'file_directory', 'link_start_indexes', 'email_message_id', 'key_value_pairs', 'languages', 'link_urls', 'page_number', 'is_continuation', 'parent_id', 'sent_from', 'emphasized_text_contents', 'coordinates', 'detection_class_prob', 'filename', 'link_texts', 'sent_to', 'detection_origin', 'header_footer_type', 'cc_recipient', 'filetype', 'table_as_cells', 'image_base64', 'links', 'data_source', 'page_name', 'last_modified', 'signature', 'text_as_html', 'category_depth', 'orig_elements'})",
     "file_directory": "data\\raw",
     "filename": "brain_tumor_2024.pdf",
     "is_continuation": true,
     "text_as_html": "<table><thead><tr><th>Data</th><th>Glioma</th><th>| Meningioma</th><th>| No tumor |</th><th>Pituitary</th><th>| Total</th></tr></thead><tbody><tr><td>Training data</td><td>696</td><td>704</td><td>316</td><td>676</td><td>2452</td></tr><tr><td>Testing data</td><td>92</td><td>93</td><td>49</td><td>90</td><td>324</td></tr><tr><td>Validation data</td><td>138</td><td>140</td><td>75</td><td>135</td><td>488</td></tr></tbody></table>",
-    "id": "66c2659d-19a8-41fd-8d64-107f54dbe198",
+    "id": "3ffc0ef6-f29d-4b5e-b2c8-99ad10fd7217",
     "medical_entities": {
       "anatomy": [
-        "lung",
         "liver",
-        "brain",
-        "pituitary"
+        "lung",
+        "pituitary",
+        "brain"
       ]
     },
     "document_type": "research_paper",
-    "processing_timestamp": "2025-04-01T02:36:52.644620",
+    "processing_timestamp": "2025-04-07T21:30:51.012389",
     "chunk_number": 106,
     "total_chunks": 130,
     "section": "paragraph",

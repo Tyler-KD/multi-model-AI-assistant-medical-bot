@@ -26,6 +26,12 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 class QueryRequest(BaseModel):
     query: str
 
+# Add a health check endpoint
+@app.get("/health")
+def health_check():
+    """Health check endpoint for Docker health checks"""
+    return {"status": "healthy"}
+
 @app.post("/chat")
 def chat(request: QueryRequest, response: Response, request_obj: Request):
     """Process user text query through the multi-agent system."""

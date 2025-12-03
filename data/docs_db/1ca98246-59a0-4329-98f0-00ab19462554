@@ -1,0 +1,18 @@
+## Conclusion and future work
+
+In this research, a framework has been developed for automatically classifying chest X-ray images as COVID-19 positive cases or normal cases. Different techniques such as histeq, CLAHE, and complement have been applied to enhance the original X-ray images and therefore, both the original and enhanced versions have been introduced to the selected CNN pre-trained models. Two pre-trained CNN models which are VGG19 and EfficientNetB0 have been used to train different versions with the last dense layer set to (2/4) according to the number of classification classes.
+
+Two approaches have been utilized to train pre-trained CNN models which are using whole chest X-ray images and using lung segmented images with their enhanced versions. The best binary classification accuracy reached 95% for the model trained using CLAHE full images version utilizing VGG19. The best achieved accuracy for a model trained using a segmented dataset is 91% for the model trained using Histeq version utilizing VGG19. By testing the framework for 4-classes classification, it achieved promising results which reached 0.935 accuracy.
+
+It is obvious from the results that, the proposed framework can be employed in the future to support physicians and decrease the effect of doctors' shortages in the struggle against the disease. However, extra validations are required before applying any system, as more accuracy and more careful experiments are needed when things are related to human life. In the future, the authors are willing to try the proposed model on local data.
+
+
+## Data availability
+
+The used data has been obtained from an available online database and it has been referenced in the manuscript. The link to the database used in the study: https://  www.  kaggle.  com/  tawsi  furra  hman/  covid  19-  radio  graphy-  datab ase
+
+Vol.:(0123456789)
+
+<!-- page_break -->
+
+Received: 7 January 2024; Accepted: 8 May 2024

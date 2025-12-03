@@ -1,0 +1,958 @@
+## 6. Acknowledgements
+
+The authors would like to acknowledge Ben Cardoen and Aditi Jain for help with proofreading the manuscript and with creating the interactive table, respectively. Z. Mirikharaji, K. Abhishek, and G. Hamarneh are partially funded by the BC Cancer Foundation BrainCare BC Fund, the Natural Sciences and Engineering Research Council of Canada (NSERC RGPIN-06752), and the Canadian Institutes of Health Research (CIHR OQI-137993). A. Bissoto is partially funded by FAPESP 2019 19619-7. E. Valle is partially / funded by CNPq 315168 2020-0. / S. Avila is partially funded by CNPq PQ-2 315231 2020-3, and FAPESP 2013 08293-7. / / A. Bissoto and S. Avila are also partially funded by Google LARA 2020. The RECOD.ai lab is supported by projects from FAPESP,
+
+<!-- page_break -->
+
+CNPq, and CAPES. C. Barata is funded by FCT project and multi-year funding [CEECIND 00326 2017] and LARSyS - FCT / / Plurianual funding 2020-2023. M. E. Celebi was supported by the US National Science Foundation under Award No. OIA1946391. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the National Science Foundation.
+
+<!-- page_break -->
+
+Table 3: DL models for skin lesion segmentation. Performance measure reported is the Jaccard index computed on the dataset, shown in boldface. The score is asterisked if it is computed based on the reported Dice index. The following abbreviations are used: Ref.: reference, Arch.: architecture, Seg.: segmentation, J: Jaccard index, CDE : cross-data evaluation. the highlighted dataset and PP : postprocessing, con.: connection and conv.: convolution, CE : cross-entropy, WCE : weighted cross-entropy, DS : deep supervision, EPE : end point error, ' 1: ' 1 norm, ' 2: ' 2 norm and ADV : adversarial loss. Please see the corresponding sections for more details: Section 3.1 for model architectures, Section 3.2 for loss functions, and Section 4 for model evaluation. An interactive version of this table is available online at https://github.com/sfu-mial/skin-lesion-segmentation-survey .
+
+| Ref.                            | Venue                              | Data              | Arch. modules                                         | Seg. loss   | J      |   CDE | Augmentation                                       |   PP |   code |
+|---------------------------------|------------------------------------|-------------------|-------------------------------------------------------|-------------|--------|-------|----------------------------------------------------|------|--------|
+| Jafari et al. (2016)            | peer-reviewed conference           | DermQuest         | image pyramid                                         | -           | -      |     7 | -                                                  |    3 |      7 |
+| He et al. (2017)                | peer-reviewed conference           | ISIC2016 ISIC2017 | residual con. skip con. image pyramid                 | Dice CE DS  | 75.80% |     7 | rotation                                           |    3 |      7 |
+| Bozorgtabar et al. (2017b)      | peer-reviewed journal              | ISIC2016          | -                                                     | -           | 80.60% |     7 | rotation                                           |    7 |      7 |
+| Ramachandram and Taylor (2017)  | peer-reviewed journal              | ISIC2017          | -                                                     | CE          | 79.20% |     7 | rotation, flipping color jittering                 |    7 |      7 |
+| Yu et al. (2017a)               | peer-reviewed journal              | ISIC2016          | skip con. residual con.                               | -           | 82.90% |     7 | rotation,translation random noise cropping         |    7 |      3 |
+| Bi et al. (2017b)               | peer-reviewed journal              | ISIC2016 PH 2     | -                                                     | CE          | 84.64% |     3 | flipping,cropping                                  |    3 |      7 |
+| Jafari et al. (2017)            | peer-reviewed journal              | DermQuest         | image pyramid                                         | -           | -      |     7 | -                                                  |    3 |      7 |
+| Yuan et al. (2017)              | peer-reviewed journal              | ISIC2016 PH 2     | -                                                     | Tanimoto    | 84.7%  |     3 | flipping, rotation scaling,shifting contrast norm. |    3 |      7 |
+| Ramachandram and DeVries (2017) | non peer-reviewed technical report | ISIC2017          | dilated conv.                                         | CE          | 64.20% |     7 | rotation flipping                                  |    3 |      7 |
+| Bozorgtabar et al. (2017a)      | peer-reviewed conference           | ISIC2016          | -                                                     | CE          | 82.90% |     7 | rotations                                          |    3 |      7 |
+| Bi et al. (2017a)               | peer-reviewed conference           | ISIC2016          | parallel m. s.                                        | -           | 86.36% |     7 | crops,flipping                                     |    3 |      7 |
+| Attia et al. (2017)             | peer-reviewed conference           | ISIC2016          | recurrent net.                                        | -           | 93.00% |     7 | -                                                  |    7 |      7 |
+| Deng et al. (2017)              | peer-reviewed conference           | ISIC2016          | parallel m. s.                                        | -           | 84.1%  |     7 | -                                                  |    7 |      7 |
+| Mishra and Daescu (2017)        | peer-reviewed conference           | ISIC2017          | skip con.                                             | Dice        | 84.2%  |     7 | rotation flipping                                  |    3 |      7 |
+| Goyal et al. (2017)             | peer-reviewed conference           | ISIC2017          | -                                                     | CE Dice     | -      |     7 | -                                                  |    7 |      7 |
+| Vesal et al. (2018a)            | peer-reviewed conference           | ISIC2017 PH 2     | dilated conv. dense con. skip con.                    | Dice        | 88.00% |     3 | -                                                  |    7 |      7 |
+| Venkatesh et al. (2018)         | peer-reviewed conference           | ISIC2017          | residual con. skip con.                               | Jaccard     | 76.40% |     7 | rotation,flipping translation, scaling             |    3 |      7 |
+| Yang et al. (2018)              | peer-reviewed conference           | ISIC2017          | skip con. parallel m.s. conv.                         | -           | 74.10% |     7 | rotation,flipping                                  |    7 |      7 |
+| Sarker et al. (2018)            | peer-reviewed conference           | ISIC2016 ISIC2017 | skip con. residual con. dilated conv. pyramid pooling | CE EPE      | 78.20% |     7 | rotation,scaling                                   |    7 |      3 |
+| Al-Masni et al. (2018)          | peer-reviewed journal              | ISIC2017 PH 2     | -                                                     | CE          | 77.10% |     3 | rotation                                           |    7 |      7 |
+| Li et al. (2018b)               | peer-reviewed conference           | ISIC2017          | skip con. residual con.                               | DS          | 77.23% |     7 | flipping, rotation                                 |    7 |      3 |
+| Zeng and Zheng (2018)           | peer-reviewed conference           | ISIC2017          | dense con. skip con. image pyramid                    | CE ' 2 DS   | 78.50% |     7 | flipping, rotation                                 |    3 |      7 |
+| DeVries and Taylor (2018)       | non peer-reviewed technical report | ISIC2017          | skip con.                                             | CE          | 73.00% |     7 | flipping, rotation                                 |    7 |      7 |
+| Izadi et al. (2018)             | peer-reviewed conference           | DermoFit          | skip con.                                             | CE ADV      | 81.20% |     7 | flipping, rotation elastic deformation             |    7 |      3 |
+
+Continued on next page
+
+<!-- page_break -->
+
+| Ref.                            | Venue                              | Data                       | Arch. modules                                     | Seg. loss     | J      |   CDE | Augmentation                                                                                                                   |   PP |   code |
+|---------------------------------|------------------------------------|----------------------------|---------------------------------------------------|---------------|--------|-------|--------------------------------------------------------------------------------------------------------------------------------|------|--------|
+| Li et al. (2018a)               | peer-reviewed journal              | ISIC2016 ISIC2017          | skip con. residual con. dense con.                | Jaccard DS    | 76.50% |     7 | -                                                                                                                              |    7 |      7 |
+| Mirikharaji and Hamarneh (2018) | peer-reviewed conference           | ISIC2017                   | residual con.                                     | CE Star shape | 77.30% |     7 | -                                                                                                                              |    7 |      7 |
+| Pollastri et al. (2018)         | peer-reviewed conference           | ISIC2017                   | -                                                 | Jaccard ' 1   | 78.10% |     7 | GAN                                                                                                                            |    3 |      7 |
+| Vesal et al. (2018b)            | abstract                           | ISIC2017                   | dilated conv. dense con. skip con.                | Dice          | 76.67% |     7 | rotation, flipping, translation, scaling, color shift                                                                          |    7 |      7 |
+| Chen et al. (2018b)             | peer-reviewed conference           | ISIC2017                   | residual con. dilated conv. parallel m.s. conv.   | WCE           | 78.70% |     7 | rotation, flipping cropping, zooming Gaussian noise                                                                            |    3 |      7 |
+| Jahanifar et al. (2018)         | non peer-reviewed technical report | ISIC2016 ISIC2017 ISIC2018 | skip con. pyramid pooling parallel m.s. conv.     | Tanimoto      | 80.60% |     3 | flipping, rotation zooming,translation shearing,color shift intensity scaling adding noises contrast adjust. sharpness adjust. |    3 |      7 |
+| Mirikharaji et al. (2018)       | peer-reviewed conference           | ISIC2016                   | skip con.                                         | CE            | 83.30% |     7 | hair occlusion flipping,rottaion                                                                                               |    7 |      7 |
+| Bi et al. (2018)                | non peer-reviewed technical report | ISIC2018                   | residual con.                                     | CE            | 83.12% |     7 | GAN                                                                                                                            |    7 |      7 |
+| He et al. (2018)                | peer-reviewed journal              | ISIC2016 ISIC2017          | skip con. residual con. image pyramid             | CE Dice DS    | 76.10% |     7 | rotation                                                                                                                       |    3 |      7 |
+| Xue et al. (2018)               | peer-reviewed conference           | ISIC2017                   | skip con. residual con. global conv. GAN          | ' 1 DS ADV    | 78.50% |     7 | cropping color jittering                                                                                                       |    7 |      7 |
+| Ebenezer and Rajapakse (2018)   | non peer-reviewed technical report | ISIC 2018                  | skip con.                                         | Dice          | 75.6%  |     7 | rotation flipping zooming                                                                                                      |    3 |      3 |
+| Goyal et al. (2019b)            | peer-reviewed journal              | ISIC2017 PH 2              | dilated conv. parallel m.s. conv. separable conv. | -             | 79.34% |     3 | -                                                                                                                              |    3 |      7 |
+| Azad et al. (2019)              | peer-reviewed conference           | ISIC2018                   | skip con. dense con. recurrent CNN                | CE            | 74.00% |     7 | -                                                                                                                              |    7 |      3 |
+| Alom et al. (2019)              | peer-reviewed journal              | ISIC2017                   | skip con. residual con. recurrent CNN             | CE            | 75.68% |     7 | -                                                                                                                              |    7 |      7 |
+| Yuan and Lo (2019)              | peer-reviewed journal              | ISIC2017                   | -                                                 | Tanimoto      | 76.50% |     7 | rotation,flipping shifting, scaling random normaliz.                                                                           |    3 |      7 |
+| Goyal et al. (2019a)            | peer-reviewed conference           | ISIC2017 PH 2              | dilated conv. parallel m.s. conv.                 | WCE           | 82.20% |     3 | -                                                                                                                              |    7 |      7 |
+| Bi et al. (2019b)               | peer-reviewed journal              | ISIC2016 ISIC2017 PH 2     | skip con. residual con.                           | CE            | 77.73% |     3 | flipping, cropping                                                                                                             |    3 |      7 |
+| Tschandl et al. (2019)          | peer-reviewed journal              | ISIC2017                   | skip con.                                         | CE Jaccard    | 76.80% |     7 | flipping, rotation                                                                                                             |    3 |      7 |
+| Li et al. (2021c)               | peer-reviewed journal              | ISIC2017                   | skip con. dense con. semi-supervised ensemble     | CE ' 1        | 79.80% |     7 | flipping,rotating scaling                                                                                                      |    3 |      7 |
+| Zhang et al. (2019b)            | peer-reviewed journal              | ISIC2016 ISIC2017          | skip con.                                         | CE            | 72.94% |     7 | -                                                                                                                              |    7 |      7 |
+| Baghersalimi et al. (2019)      | peer-reviewed journal              | ISIC2016 ISIC2017 PH 2     | skip con. residual con. dense con.                | Tanimoto      | 78.30% |     3 | flipping,cropping                                                                                                              |    7 |      7 |
+| Jiang et al. (2019)             | peer-reviewed conference           | ISIC2017                   | residual con. dilated conv. GAN                   | ADV ' 2       | 76.90% |     7 | rotation,flipping                                                                                                              |    7 |      7 |
+| Tang et al. (2019b)             | peer-reviewed conference           | ISIC2016                   | skip con.                                         | Tanimoto DS   | 85.34% |     7 | rotation,flipping                                                                                                              |    7 |      7 |
+| Bi et al. (2019a)               | peer-reviewed conference           | ISIC2017                   | residual con.                                     | CE            | 77.14% |     7 | GAN                                                                                                                            |    7 |      7 |
+
+Continued on next page
+
+<!-- page_break -->
+
+Table3 - continued from previous page
+
+| Ref.                         | Venue                              | Data                       | Arch. modules                                               | Seg. loss                | J               |   CDE | Augmentation                                                  |   PP |   code |
+|------------------------------|------------------------------------|----------------------------|-------------------------------------------------------------|--------------------------|-----------------|-------|---------------------------------------------------------------|------|--------|
+| Abraham and Khan (2019)      | peer-reviewed conference           | ISIC2018                   | skip con. image pyramid attention                           | TV Focal                 | 74.80%          |     7 | -                                                             |    7 |      3 |
+| Cui et al. (2019)            | peer-reviewed conference           | ISIC2018                   | dilated conv. parallel m.s. conv. separable conv.           | -                        | 83.00%          |     7 | -                                                             |    7 |      7 |
+| Song et al. (2019)           | peer-reviewed conference           | ISIC2017                   | skip con. residual con. dense con. attention mod.           | CE Jaccard               | 76.50%          |     7 | -                                                             |    7 |      7 |
+| Singh et al. (2019)          | peer-reviewed journal              | ISIC2016 ISIC2017 ISIC2018 | skip con. residual con. factorized conv. attention mod. GAN | CE ' 1 EPE               | 78.65%          |     7 | -                                                             |    7 |      3 |
+| Tan et al. (2019b)           | peer-reviewed journal              | ISIC2017 DermoFit PH 2     | dilated conv.                                               | Dice                     | 62.29% GLYPH<3> |     3 | -                                                             |    3 |      7 |
+| Kaul et al. (2019)           | peer-reviewed conference           | ISIC2017                   | skip con. residual con. attention mod.                      | Dice                     | 75.60%          |     7 | channel shift                                                 |    7 |      7 |
+| De Angelo et al. (2019)      | peer-reviewed conference           | ISIC2017 Private           | skip con.                                                   | CE Dice                  | 76.07%          |     7 | flipping, shifting rotation color jittering                   |    3 |      7 |
+| Zhang et al. (2019a)         | peer-reviewed journal              | ISIC2017 PH 2              | skip con. residual con. parallel m.s. conv.                 | CE Dice DS               | 78.50%          |     3 | flipping, rotation whitening contrast enhance.                |    3 |      7 |
+| Soudani and Barhoumi (2019)  | peer-reviewed journal              | ISIC2017                   | residual con.                                               | CE                       | 78.60%          |     7 | rotation, flipping                                            |    7 |      7 |
+| Mirikharaji et al. (2019)    | peer-reviewed conference           | ISIC2017                   | skip con.                                                   | WCE                      | 68.91% GLYPH<3> |     7 | -                                                             |    7 |      7 |
+| Nasr-Esfahani et al. (2019)  | peer-reviewed journal              | DermQuest                  | dense con.                                                  | WCE                      | 85.20%          |     7 | rotation,flipping cropping                                    |    7 |      7 |
+| Wang et al. (2019a)          | peer-reviewed conference           | ISIC2017 ISIC2018          | skip con. residual con. parallel m.s. conv. attention mod.  | WDice                    | 77.60%          |     7 | copping, flipping                                             |    7 |      7 |
+| Sarker et al. (2019)         | non peer-reviewed technical report | ISIC2017 ISIC2018          | factrized conv. attention mod. GAN                          | CE Jaccard ' 1 ,ADV      | 77.98%          |     7 | flipping gamma reconst. contrast adjust.                      |    7 |      7 |
+| Tu et al. (2019)             | peer-reviewed journal              | ISIC2017 PH 2              | skip con. residual con. dense con. GAN                      | Jaccard EPE, ' 1 DS, ADV | 76.80%          |     3 | flipping                                                      |    7 |      7 |
+| Wei et al. (2019)            | peer-reviewed journal              | ISIC2016 ISIC2017 PH 2     | skip con. residual con. attention mod. GAN                  | Jaccard ' 1 ADV          | 80.45%          |     3 | rotation,flipping color jittering                             |    7 |      7 |
+| ¨ Unver and Ayan (2019)      | peer-reviewed journal              | ISIC2017 PH 2              | -                                                           | ' 2                      | 74.81%          |     3 | -                                                             |    3 |      7 |
+| Al-masni et al. (2019)       | peer-reviewed conference           | ISIC2017                   | -                                                           | -                        | 77.11%          |     7 | rotation,flipping                                             |    7 |      7 |
+| Canalini et al. (2019)       | peer-reviewed conference           | ISIC2017                   | dilated conv. parallel m.s. conv. separable conv.           | CE Tanimoto              | 85.00%          |     7 | rotating, flipping shifting, shearing scaling color jittering |    3 |      7 |
+| Wang et al. (2019b)          | peer-reviewed conference           | ISIC2017                   | residual con.                                               | WCE                      | 78.10%          |     7 | flipping, scaling                                             |    7 |      7 |
+| Alom et al. (2020)           | peer-reviewed conference           | ISIC2018                   | skip con. residual con. recurrent CNN                       | CE                       | 88.83%          |     7 | flipping                                                      |    7 |      7 |
+| Pollastri et al. (2020)      | peer-reviewed journal              | ISIC2017                   | -                                                           | Tanimoto                 | 78.90%          |     7 | GAN flipping,rotation shifting, scaling color jittering       |    7 |      7 |
+| Liu et al. (2019b)           | peer-reviewed conference           | ISIC2017                   | skip con. dilated conv.                                     | CE                       | 75.20%          |     7 | scaling, cropping rotation, flipping image deformation        |    7 |      7 |
+| Abhishek and Hamarneh (2019) | peer-reviewed conference           | ISIC2017 PH 2              | skip con.                                                   | -                        | 68.69% GLYPH<3> |     3 | rotation,flipping GAN                                         |    7 |      3 |
+| Shahin et al. (2019)         | peer-reviewed conference           | ISIC2018                   | skip con. image pyramid                                     | Generalized Dice         | 73.8%           |     7 | rotation flipping zooming                                     |    7 |      7 |
+
+Continued on next page
+
+<!-- page_break -->
+
+Table3 - continued from previous page
+
+| Ref.                           | Venue                              | Data                              | Arch. modules                                                     | Seg. loss                   | J               |   CDE | Augmentation                                                             |   PP |   code |
+|--------------------------------|------------------------------------|-----------------------------------|-------------------------------------------------------------------|-----------------------------|-----------------|-------|--------------------------------------------------------------------------|------|--------|
+| Adegun and Viriri (2019)       | peer-reviewed conference           | ISIC2017                          | -                                                                 | Dice                        | 83.0%           |     7 | elastic                                                                  |    7 |      7 |
+| Taghanaki et al. (2019)        | peer-reviewed conference           | ISIC 2017                         | skip con.                                                         | Dice ' 1 SSIM               | 69.35% GLYPH<3> |     7 | rotation flipping gradient-based perturbation                            |    7 |      7 |
+| Saini et al. (2019)            | peer-reviewed conference           | ISIC 2017 ISIC 2018 PH2           | skip con. multi-task                                              | Dice                        | 84.9%           |     7 | rotation, flipping shearing, stretch crop, contrast                      |    7 |      7 |
+| Wang et al. (2019c)            | peer-reviewed journal              | ISIC2016 ISIC2017                 | skip con. residual con. dilated conv.                             | WCE                         | 81.47%          |     7 | flipping,scaling                                                         |    7 |      7 |
+| Kamalakannan et al. (2019)     | peer-reviewed journal              | ISIC Archive                      | skip con.                                                         | CE                          | -               |     7 | -                                                                        |    7 |      7 |
+| Hasan et al. (2020)            | peer-reviewed journal              | ISIC2017 PH 2                     | skip con. dense con. separable conv.                              | CE Jaccard                  | 77.50%          |     3 | rotation, zooming shifting, flipping                                     |    7 |      3 |
+| Al Nazi and Abir (2020)        | peer-reviewed conference           | ISIC2018 PH 2                     | skip con.                                                         | Dice                        | 80.00%          |     3 | rotation, zooming flipping,elastic dist. Gaussian dist. histogram equal. |    7 |      3 |
+| Deng et al. (2020)             | peer-reviewed conference           | ISIC2017 PH 2                     | dilated conv. parallel m.s. conv. separable conv. semi-supervised | Dice Narrowband suppression | 83.9%           |     3 | rotation                                                                 |    3 |      7 |
+| Xie et al. (2020b)             | peer-reviewed journal              | ISIC2017 PH 2                     | dilated conv. parallel m.s. conv. separable conv.                 | Dice Rank                   | 80.4%           |     3 | cropping,scaling rotation, shearing shifting,zooming whitening, flipping |    7 |      3 |
+| Zhang et al. (2020a)           | peer-reviewed conference           | SCD ISIC2016 ISIC2017 ISIC2018    | skip con.                                                         | Kappa Loss                  | 84.00% GLYPH<3> |     7 | rotation,shifting shearing,zooming flipping                              |    7 |      3 |
+| Saha et al. (2020)             | peer-reviewed conference           | ISIC2017 ISIC2018                 | skip con. dense con.                                              | CE                          | 81.9%           |     7 | color jittering rotation flipping translation                            |    7 |      7 |
+| Henry et al. (2020)            | peer-reviewed conference           | ISIC2018                          | skip con. parallel m. s. conv. attention mod.                     | -                           | 78.04%          |     7 | color jittering rotation,cropping flipping,shift                         |    7 |      3 |
+| Jafari et al. (2020)           | peer-reviewed conference           | ISIC2018                          | skip con. residual con. dense con.                                | CE                          | 75.5%           |     7 | -                                                                        |    7 |      3 |
+| Li et al. (2020a)              | peer-reviewed conference           | ISIC2018                          | skip con. residual con. ensemble semi-supervised                  | CE Dice                     | 75.5%           |     7 | -                                                                        |    7 |      7 |
+| Guo et al. (2020)              | peer-reviewed conference           | ISIC2018                          | skip con. dilated conv. parallel m. s. conv.                      | Focal Jaccard               | 77.60%          |     7 | -                                                                        |    7 |      3 |
+| Li et al. (2020b)              | peer-reviewed conference           | ISIC2018                          | skip con. residual con. self-supervised                           | MSE KLD                     | 87.74% GLYPH<3> |     7 | -                                                                        |    7 |      7 |
+| Jiang et al. (2020)            | peer-reviewed journal              | ISIC2017 PH 2                     | skip con. residual con. attention mod.                            | CE                          | 73.35%          |     7 | flipping                                                                 |    7 |      7 |
+| Qiu et al. (2020)              | peer-reviewed journal              | ISIC2017 PH 2                     | ensemble                                                          | -                           | 80.02%          |     7 | translation rotation shearing                                            |    3 |      7 |
+| Xie et al. (2020a)             | peer-reviewed journal              | ISIC2016 ISIC2017 PH 2            | attention mod.                                                    | CE                          | 78.3%           |     7 | rotation flipping                                                        |    7 |      7 |
+| Zafar et al. (2020)            | peer-reviewed journal              | ISIC2017 PH 2                     | skip con. residual con.                                           | CE                          | 77.2%           |     7 | rotation                                                                 |    7 |      7 |
+| Azad et al. (2020)             | peer-reviewed conference           | ISIC 2017 ISIC 2018 PH2           | dilated conv. attention mod.                                      | -                           | 96.98%          |     7 | -                                                                        |    7 |      3 |
+| Nathan and Kansal (2020)       | non peer-reviewed technical report | ISIC 2016 ISIC 2017 ISIC 2018 PH2 | skip con. residual con.                                           | CE Dice                     | 78.28%          |     7 | rotation, flipping shearing, zoom                                        |    7 |      7 |
+| Mirikharaji et al. (2021)      | peer-reviewed conference           | ISIC Archive PH2 DermoFit         | skip con. residual con. ensemble                                  | CE                          | 72.11%          |     7 | -                                                                        |    7 |      7 |
+| ¨ Ozt¨rk u and ¨ Ozkaya (2020) | peer-reviewed journal              | ISIC 2017 PH2                     | residual con.                                                     | -                           | 78.34%          |     3 | -                                                                        |    7 |      7 |
+
+Continued on next page
+
+<!-- page_break -->
+
+Table3 - continued from previous page
+
+| Ref.                            | Venue                              | Data                                      | Arch. modules                                                        | Seg. loss                  | J               |   CDE | Augmentation                                                                    |   PP |   code |
+|---------------------------------|------------------------------------|-------------------------------------------|----------------------------------------------------------------------|----------------------------|-----------------|-------|---------------------------------------------------------------------------------|------|--------|
+| Abhishek et al. (2020)          | peer-reviewed conference           | ISIC 2017 DermoFit PH2                    | skip con.                                                            | Dice                       | 75.70%          |     3 | rotation flipping                                                               |    7 |      3 |
+| Kaymak et al. (2020)            | peer-reviewed journal              | ISIC 2017                                 | -                                                                    | -                          | 72.5%           |     7 | -                                                                               |    7 |      7 |
+| Bagheri et al. (2020)           | peer-reviewed journal              | ISIC2017 DermQuest                        | dilated conv. parallel m.s. conv. separable conv.                    | -                          | 79.05%          |     3 | rotation,flipping brightness change resizing                                    |    7 |      7 |
+| Jayapriya and Jacob (2020)      | peer-reviewed journal              | ISIC2016                                  | skip con. parallel m.s. conv.                                        | -                          | 92.42%          |     7 | -                                                                               |    7 |      7 |
+| Wang et al. (2020a)             | non peer-reviewed technical report | ISIC2016 ISIC2017 PH 2                    | residual con. dilated conv. attention mod.                           | CE Dice DS                 | 80.30%          |     3 | flipping, rotation cropping                                                     |    7 |      7 |
+| Wang et al. (2020b)             | non peer-reviewed technical report | ISIC2018 PH 2                             | attention mod. skip con. parallel m.s. conv. recurrent CNN           | Dice Focal Tversky         | 80.6%           |     7 | rotation flipping cropping                                                      |    7 |      7 |
+| Ribeiro et al. (2020)           | peer-reviewed conference           | ISIC Archive PH 2 DermoFit                | skip con. residual con. dilated conv.                                | Soft Jaccard CE            | -               |     3 | Gaussian noise color jittering                                                  |    3 |      3 |
+| Zhu et al. (2020)               | peer-reviewed conference           | ISIC2018                                  | skip con. residual con. dilated conv. attention mod.                 | CE Dice                    | 82.15%          |     7 | flipping                                                                        |    7 |      7 |
+| Gu et al. (2020)                | peer-reviewed journal              | ISIC 2018                                 | residual con. skip con. attention mod.                               | Dice                       | 85.32% GLYPH<3> |     7 | cropping, flipping rotation                                                     |    7 |      3 |
+| Lei et al. (2020)               | peer-reviewed journal              | ISIC 2017 ISIC 2018                       | skip con. dense con. dilated conv. GAN                               | CE ' 1 ADV                 | 77.1%           |     3 | flipping, rotation                                                              |    7 |      7 |
+| Andrade et al. (2020)           | peer-reviewed journal              | DermoFit SMARTSKINS                       | residual con. dilated conv. GAN                                      | Dice                       | 81.03%          |     7 | flipping, brightness saturation, contrast, hue Gaussian hue                     |    7 |      7 |
+| Wu et al. (2020)                | peer-reviewed journal              | ISIC 2017 ISIC 2018                       | residual con. attention mod. multi-scale                             | CE Dice                    | 82.55%          |     7 | flipping, rotation scaling, cropping sharpening, color distribution adj., noise |    7 |      7 |
+| Arora et al. (2021)             | peer-reviewed journal              | ISIC 2018                                 | skip con. attention mod.                                             | Dice Tversky Focal Tversky | 83%             |     7 | flipping                                                                        |    3 |      7 |
+| Jin et al. (2021)               | peer-reviewed journal              | ISIC2017 ISIC2018                         | skip con. residual con. attention mod.                               | Dice Focal                 | 80.00%          |     7 | flipping, rotation a GLYPH<14> ne trans. scaling, cropping                      |    7 |      3 |
+| Hasan et al. (2021)             | peer-reviewed journal              | ISIC 2016 ISIC 2017                       | skip con. residual con. separable conv.                              | Dice CE                    | 66.66% GLYPH<3> |     7 | flipping, rotation shifting, zooming intensity adjust.                          |    7 |      7 |
+| Kosgiker et al. (2021)          | peer-reviewed journal              | ISIC 2017 PH 2                            | -                                                                    | MSE CE                     | 90.25%          |     7 | -                                                                               |    7 |      7 |
+| Bagheri et al. (2021a)          | peer-reviewed journal              | ISIC2016 ISIC2017 ISIC2018 PH 2 DermQuest | parallel m.s. conv. dilated conv.                                    | Dice CE                    | 85.04%          |     3 | rotation flipping color jittering                                               |    7 |      7 |
+| Saini et al. (2021)             | peer-reviewed conference           | ISIC2017 ISIC2018 PH 2                    | pyramid pooling residual con. skip con. dilated conv. attention mod. | Dice                       | 85.00%          |     3 | rotation,shearing color jittering                                               |    7 |      7 |
+| Tong et al. (2021)              | peer-reviewed journal              | ISIC2016 ISIC2017 PH 2                    | skip con. attention mod.                                             | CE                         | 84.2%           |     3 | flipping                                                                        |    7 |      7 |
+| Bagheri et al. (2021b)          | peer-reviewed journal              | DermQuest ISIC2017 PH 2                   | ensemble                                                             | CE Focal                   | 86.53%          |     3 | rotation flipping color jittering                                               |    3 |      7 |
+| Ren et al. (2021)               | peer-reviewed journal              | ISIC2017                                  | dense con. dilated conv. separable conv. attention mod.              | Dice CE                    | 76.92%          |     7 | flipping, rotation                                                              |    7 |      7 |
+| Liu et al. (2021a)              | peer-reviewed journal              | ISIC2017                                  | residual con. dilated conv. pyramid pooling                          | WCE                        | 79.46%          |     7 | flipping, cropping rotation image deformation                                   |    7 |      7 |
+| Khan et al. (2021)              | peer-reviewed journal              | ISIC2018                                  | skip con. image pyramid                                              | Dice                       | 85.10%          |     7 | -                                                                               |    7 |      3 |
+| Redekop and Chernyavskiy (2021) | peer-reviewed conference           | ISIC2017                                  | -                                                                    | -                          | 68.77% GLYPH<3> |     7 | -                                                                               |    7 |      7 |
+
+Continued on next page
+
+<!-- page_break -->
+
+| Ref.                         | Venue                    | Data                              | Arch. modules                                                   | Seg. loss                        | J               |   CDE | Augmentation                                                                |   PP |   code |
+|------------------------------|--------------------------|-----------------------------------|-----------------------------------------------------------------|----------------------------------|-----------------|-------|-----------------------------------------------------------------------------|------|--------|
+| Kaul et al. (2021)           | peer-reviewed conference | ISIC2018                          | skip con. residual con. attention mod.                          | CE Tversky adaptive logarithmic  | 82.71%          |     7 | -                                                                           |    7 |      3 |
+| Abhishek and Hamarneh (2021) | peer-reviewed conference | ISIC2017 PH 2 DermoFit            | skip con.                                                       | MCC                              | 75.18%          |     7 | flipping, rotation                                                          |    7 |      3 |
+| Tang et al. (2021b)          | peer-reviewed journal    | ISIC2018                          | skip con.                                                       | CE                               | 78.25%          |     7 | -                                                                           |    7 |      7 |
+| Xie et al. (2021)            | peer-reviewed conference | ISIC2018                          | dilated conv. semi-supervised                                   | CE KL div.                       | 82.37%          |     7 | scaling,rotation elastic transformation                                     |    7 |      7 |
+| Poudel and Lee (2021)        | peer-reviewed journal    | ISIC2017                          | skip con. attention mod.                                        | CE                               | 87.44%          |     7 | scaling, flipping rotation Gaussian noise median blur                       |    7 |      7 |
+| Sahin ¸ et al. (2021)        | peer-reviewed journal    | ISIC2016 ISIC 2017                | skip con. Gaussian process                                      | -                                | 74.51%          |     7 | resize rotation reflection                                                  |    3 |      7 |
+| Sarker et al. (2021)         | peer-reviewed journal    | ISIC 2017 ISIC 2018               | parallel m.s. conv. attention mod. GAN                          | ' 1 Jaccard                      | 81.98%          |     7 | flipping, contrast gamma reconstruction                                     |    7 |      7 |
+| Wang et al. (2021b)          | peer-reviewed journal    | ISIC 2016 ISIC 2017               | residual con. skip con. lesion-based pooling feature fusion     | CE                               | 82.4%           |     7 | flipping, scaling cropping                                                  |    7 |      7 |
+| Sachin et al. (2021)         | book chapter             | ISIC 2018                         | residual con. skip con.                                         | -                                | 75.96%          |     7 | flipping, scaling color jittering                                           |    7 |      7 |
+| Wibowo et al. (2021)         | peer-reviewed journal    | ISIC 2017 ISIC 2018 PH2           | BConvLSTM separable conv. residual con. skip con.               | Jaccard                          | 80.25%          |     7 | distortion, blur color jittering contrast gamma sharpen                     |    3 |      3 |
+| Gudhe et al. (2021)          | peer-reviewed journal    | ISIC 2018                         | dilated conv. residual con. skip con.                           | CE                               | 91%             |     7 | flipping, scaling shearing, color jittering Gaussian blur Gaussian noise    |    7 |      3 |
+| Khouloud et al. (2021)       | peer-reviewed journal    | ISIC 2016 ISIC 2017 ISIC 2018 PH2 | feature pyramid residual con. skip con. attention mod.          | -                                | 86.92% GLYPH<3> |     7 | -                                                                           |    7 |      7 |
+| Gu et al. (2021)             | peer-reviewed conference | ISIC 2017                         | asymmetric conv. skip con.                                      | DS                               | 79.4%           |     7 | cropping, flipping rotation                                                 |    7 |      7 |
+| Zhao et al. (2021)           | peer-reviewed journal    | ISIC 2018                         | pyramid pooling attention mod. residual con. skip con.          | CE Dice                          | 86.84%          |     7 | cropping                                                                    |    7 |      7 |
+| Tang et al. (2021a)          | peer-reviewed journal    | ISIC 2016 ISIC 2017 ISIC 2018     | attention mod. residual con. skip con. ensemble pyramid pooling | Focal                            | 80.7%           |     7 | copying                                                                     |    7 |      7 |
+| Zunair and Hamza (2021)      | peer-reviewed journal    | ISIC 2018                         | sharpening kernel residual con.                                 | CE                               | 79.78%          |     7 | -                                                                           |    7 |      3 |
+| Li et al. (2021a)            | peer-reviewed conference | ISIC 2017                         | skip con.                                                       | CE KL div.                       | 71.12%*         |     7 | -                                                                           |    7 |      3 |
+| Zhang et al. (2021a)         | peer-reviewed conference | ISIC 2016                         | skip con. residual con. feature fusion semi-supervised          | CE Dice                          | 80.49%          |     7 | flipping, rotation zooming, cropping                                        |    7 |      3 |
+| Xu et al. (2021)             | peer-reviewed conference | ISIC 2018                         | Transformer multi-scale                                         | Dice                             | 89.6%           |     7 | flipping, rotation                                                          |    7 |      7 |
+| Ahn et al. (2021)            | peer-reviewed conference | PH 2                              | self-supervised clustering                                      | CE Spatial loss Consistency loss | 71.53%*         |     7 | -                                                                           |    7 |      3 |
+| Zhang et al. (2021b)         | peer-reviewed conference | ISIC 2017                         | skip con. feature fusion Transformer                            | CE Jaccard                       | 79.5%           |     7 | rotation, flipping color jittering                                          |    7 |      3 |
+| Ji et al. (2021)             | peer-reviewed conference | ISIC 2018                         | skip con. multi-scale Transformer                               | CE Dice                          | 82.4%*          |     7 | flipping                                                                    |    7 |      3 |
+| Wang et al. (2021a)          | peer-reviewed conference | ISIC 2016 ISIC 2018 PH 2          | multi-scale Transformer                                         | CE Dice                          | 84.3%*          |     3 | flipping, scaling                                                           |    7 |      3 |
+| Yang et al. (2021)           | peer-reviewed journal    | ISIC 2018 PH 2                    | skip con. multi-scale feature fusion                            | CE Dice                          | 94.0%           |     7 | rotation, flipping cropping, HSC manipulation, luminance and contrast shift |    7 |      7 |
+
+Continued on next page
+
+<!-- page_break -->
+
+Table3 - continued from previous page
+
+| Ref.                        | Venue                    | Data                               | Arch. modules                                                      | Seg. loss                | J       |   CDE | Augmentation                                                         |   PP |   code |
+|-----------------------------|--------------------------|------------------------------------|--------------------------------------------------------------------|--------------------------|---------|-------|----------------------------------------------------------------------|------|--------|
+| Tao et al. (2021)           | peer-reviewed journal    | ISIC 2017 PH 2                     | skip con. dense con. attention mod. multi-scale                    | -                        | 78.85%  |     7 | rotation                                                             |    7 |      7 |
+| Kim and Lee (2021)          | peer-reviewed journal    | ISIC 2016 PH 2                     | residual con. skip con.                                            | boundary aware loss      | 84.33%* |     7 | -                                                                    |    7 |      7 |
+| Dai et al. (2022)           | peer-reviewed journal    | ISIC2018 PH2                       | residual con. skip con. dilated conv. image pyramid attention mod. | CE Dice SoftDice         | 83.45%  |     3 | cropping, flipping rotation                                          |    7 |      7 |
+| Bi et al. (2022)            | peer-reviewed journal    | ISIC2016 ISIC2017 PH2              | residual con. skip con. attention mod. feature fusion              | CE                       | 83.70%  |     3 | cropping, flipping                                                   |    7 |      7 |
+| Lin et al. (2022)           | peer-reviewed conference | ISIC 2017 ISIC 2018                | attention mod. Transformer                                         | CE Jaccard DS            | 77.81%* |     7 | flipping, rotation                                                   |    7 |      7 |
+| Wu et al. (2022b)           | peer-reviewed conference | PH 2                               | skip con. Transformer multi-scale                                  | CE                       | 70.0%*  |     7 | -                                                                    |    7 |      7 |
+| Valanarasu and Patel (2022) | peer-reviewed conference | ISIC 2018                          | skip con.                                                          | CE Dice                  | 81.7%   |     7 | -                                                                    |    7 |      3 |
+| Basak et al. (2022)         | peer-reviewed journal    | ISIC 2017 PH 2 HAM10000            | residual con. multi-scale attention mod.                           | CE Jaccard DS            | 97.4%   |     7 | -                                                                    |    7 |      3 |
+| Wu et al. (2022a)           | peer-reviewed journal    | ISIC 2016 ISIC 2017 ISIC 2018 PH 2 | skip con. residual con. attention mod. Transformer                 | CE Dice                  | 76.53%  |     7 | flipping, rotation brightness change contrast change change in H,S,V |    7 |      3 |
+| Liu et al. (2022a)          | peer-reviewed journal    | ISIC 2017                          | skip con. residual con. dilated conv. attention mod.               | CE Dice                  | 78.62%  |     7 | flipping, rotation                                                   |    7 |      7 |
+| Wang et al. (2022b)         | peer-reviewed journal    | ISIC 2017                          | skip con. residual con. Transformer                                | -                        | 84.52%  |     7 | flipping, rotation                                                   |    7 |      3 |
+| Zhang et al. (2022a)        | peer-reviewed conference | ISIC 2017                          | skip con. feature fusion                                           | Dice Focal               | 74.54%  |     7 | flipping                                                             |    7 |      7 |
+| Wang et al. (2022d)         | peer-reviewed conference | ISIC 2017 PH 2                     | skip con. residual con. self-supervised                            | Dice                     | 76.5%   |     3 | rotation, flipping color jittering                                   |    7 |      7 |
+| Dong et al. (2022)          | peer-reviewed journal    | ISIC 2016 ISIC 2017 ISIC 2018      | residual con. skip con. Transformer feature fusion                 | CE Dice                  | 74.55%  |     7 | -                                                                    |    7 |      7 |
+| Chen et al. (2022)          | peer-reviewed journal    | ISIC 2017 PH 2                     | skip con. attention mod. recurrent net.                            | CE                       | 80.36%  |     3 | flipping, rotation a GLYPH<14> ne trans. masking, mesh distortion    |    7 |      7 |
+| Kaur et al. (2022b)         | peer-reviewed journal    | ISIC 2016 ISIC 2017 ISIC 2018 PH 2 | dilated conv.                                                      | CE                       | 81.7%   |     3 | scaling, rotation translation                                        |    7 |      7 |
+| Badshah and Ahmad (2022)    | peer-reviewed journal    | ISIC 2018                          | residual con. BConvLSTM                                            | -                        | 94.5%   |     7 | -                                                                    |    7 |      7 |
+| Alam et al. (2022)          | peer-reviewed journal    | HAM10000                           | residual con. separable conv.                                      | Dice                     | 91.1%   |     7 | -                                                                    |    7 |      3 |
+| Yu et al. (2022)            | peer-reviewed journal    | ISIC 2018                          | skip con. attention mod. multi-scale                               | -                        | 87.89%  |     7 | -                                                                    |    7 |      7 |
+| Jiang et al. (2022)         | peer-reviewed journal    | ISIC 2017 ISIC 2018                | skip con. attention mod. ConvLSTM                                  | CE Jaccard               | 80.5%   |     7 | -                                                                    |    7 |      7 |
+| Ramadan et al. (2022)       | peer-reviewed journal    | ISIC 2018                          | skip con. attention mod.                                           | CE Dice sens.-spec. loss | 91.4%   |     7 | -                                                                    |    7 |      7 |
+| Zhang et al. (2022b)        | peer-reviewed journal    | ISIC 2017 ISIC 2018                | skip con. dense con. semi-supervised                               | CE contrastive loss      | 73.89%  |     7 | scaling, flipping color distortion                                   |    7 |      7 |
+| Tran and Pham (2022)        | peer-reviewed journal    | ISIC 2017 PH 2                     | skip con. attention mod.                                           | Focal Tversky fuzzy loss | 79.2%   |     7 | rotation, zooming flipping                                           |    7 |      7 |
+| Wang and Wang (2022)        | peer-reviewed journal    | ISIC 2017                          | skip con. residual con. attention mod.                             | CE Jaccard               | 78.28%  |     7 | rotation, zooming resizing, shifting                                 |    7 |      7 |
+
+Continued on next page
+
+<!-- page_break -->
+
+| Ref.                         | Venue                    | Data                               | Arch. modules                                                                    | Seg. loss   | J       |   CDE | Augmentation               |   PP |   code |
+|------------------------------|--------------------------|------------------------------------|----------------------------------------------------------------------------------|-------------|---------|-------|----------------------------|------|--------|
+| Zhao et al. (2022b)          | peer-reviewed conference | ISIC 2017                          | skip con. self-supervised                                                        | CE Dice     | 67.08%* |     7 | -                          |    7 |      7 |
+| Wang et al. (2022c)          | peer-reviewed conference | PH 2                               | few shot mask avg. pooling                                                       | Dice        | 86.97%* |     7 | -                          |    7 |      7 |
+| Wang et al. (2022a)          | peer-reviewed conference | ISIC 2017 ISIC 2018                | residual con. dilated conv. multi-scale feature fusion Transformer               | CE Jaccard  | 78.76%  |     7 | -                          |    7 |      7 |
+| Liu et al. (2022b)           | peer-reviewed conference | ISIC 2017 ISIC 2018                | skip con. dilated conv. multi-scale pyramid pooling Transformer                  | CE          | 80.19%  |     7 | -                          |    7 |      7 |
+| Gu et al. (2022)             | peer-reviewed journal    | ISIC 2017                          | skip con. global adaptive pooling                                                | CE ' 2      | 80.53%  |     7 | scaling, rotation flipping |    7 |      7 |
+| Khan et al. (2022)           | peer-reviewed journal    | ISIC 2017 PH 2                     | residual con. attention mod. ensemble                                            | CE          | 79.2%   |     7 | -                          |    7 |      7 |
+| Alahmadi and Alghamdi (2022) | peer-reviewed journal    | ISIC 2017 ISIC 2018 PH 2           | skip con. feature fusion semi-supervised Transformer                             | CE Dice ' 2 | 82.78%* |     7 | -                          |    7 |      7 |
+| Li et al. (2022)             | peer-reviewed journal    | ISIC 2018                          | skip con. residual con. dilated conv. attention mod. pyramid pooling multi-scale | CE Dice     | 88.92%  |     7 | flipping, rotation         |    7 |      7 |
+| Kaur et al. (2022a)          | peer-reviewed journal    | ISIC 2016 ISIC 2017 ISIC 2018 PH 2 | -                                                                                | Tversky     | 77.8%   |     3 | rotation, scaling          |    7 |      7 |
+
+
+## References
+
+Abbas, Q., Celebi, M.E., Garcia, I.F., 2011. Hair Removal Methods: A Comparative Study for Dermoscopy Images. Biomedical Signal Processing and Control 6, 395-404.
+
+- Abbasi, N.R., Shaw, H.M., Rigel, D.S., Friedman, R.J., McCarthy, W.H., Osman, I., Kopf, A.W., Polsky, D., 2004. Early diagnosis of cutaneous melanoma: Revisiting the ABCD criteria. Jama 292, 2771-2776.
+- Abdelhalim, I.S.A., Mohamed, M.F., Mahdy, Y.B., 2021. Data Augmentation For Skin Lesion Using Self-Attention Based Progressive Generative Adversarial Network. Expert Systems with Applications 165, 113922.
+- Abhishek, K., 2020. Input Space Augmentation for Skin Lesion Segmentation in Dermoscopic Images. Master's thesis. Applied Sciences: School of Computing Science, Simon Fraser University. https://summit.sfu.ca/item/20247 .
+- Abhishek, K., Hamarneh, G., 2019. Mask2Lesion: Mask-constrained adversarial skin lesion image synthesis, in: International Workshop on Simulation and Synthesis in Medical Imaging, Springer. pp. 71-80.
+- Abhishek, K., Hamarneh, G., 2021. Matthews correlation coe GLYPH&lt;14&gt; cient loss for deep convolutional networks: Application to skin lesion segmentation, in: 2021 IEEE 18th International Symposium on Biomedical Imaging (ISBI), IEEE. pp. 225-229.
+- Abhishek, K., Hamarneh, G., Drew, M.S., 2020. Illumination-based transformations improve skin lesion segmentation in dermoscopic images, in: Proceedings of the IEEE CVF Conference on Computer Vision and Pattern Recognition Workshops, pp. 728-729. /
+- Abhishek, K., Kawahara, J., Hamarneh, G., 2021. Predicting the clinical management of skin lesions using deep learning. Scientific reports 11, 1-14.
+- Abraham, N., Khan, N.M., 2019. A novel focal tversky loss function with improved attention U-Net for lesion segmentation, in: 2019 IEEE 16th International Symposium on Biomedical Imaging (ISBI 2019), IEEE. pp. 683-687.
+- Adegun, A., Viriri, S., 2019. An enhanced deep learning framework for skin lesions segmentation, in: International conference on computational collective intelligence, Springer. pp. 414-425.
+
+Adegun, A., Viriri, S., 2020a. Deep learning techniques for skin lesion analysis and melanoma cancer detection: a survey of state-of-the-art. Artificial Intelligence Review , 1-31URL: https://doi.org/10.1007/s10462-020-09865-y , doi: 10.1007/s10462-020-09865-y .
+
+<!-- page_break -->
+
+| 48 Mirikharaji, Abhishek et al. / Medical Image Analysis (2023)                                                                                                                                                                                                                                                            |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Adegun, A.A., Viriri, S., 2020b. Fcn-based densenet framework for automated detection and classification of skin lesions in dermoscopy images. IEEE Access 8, 150377-150396.                                                                                                                                               |
+| Ahn, E., Feng, D., Kim, J., 2021. A spatial guided self-supervised clustering network for medical image segmentation, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 379-388.                                                                                   |
+| Al-Masni, M.A., Al-antari, M.A., Choi, M.T., Han, S.M., Kim, T.S., 2018. Skin lesion segmentation in dermoscopy images via deep full resolution convolutional networks. Computer methods and programs in biomedicine 162, 221-231.                                                                                         |
+| Al-masni, M.A., Al-antari, M.A., Park, H.M., Park, N.H., Kim, T.S., 2019. A deep learning model integrating FrCN and residual convolutional networks for skin lesion segmentation and classification, in: 2019 IEEE Eurasia Conference on Biomedical Engineering, Healthcare and Sustainability (ECBIOS), IEEE. pp. 95-98. |
+| Al-Masni, M.A., Kim, D.H., Kim, T.S., 2020. Multiple skin lesions diagnostics via integrated deep convolutional networks for segmentation and classification. Computer methods and programs in biomedicine 190, 105351.                                                                                                    |
+| Al Nazi, Z., Abir, T.A., 2020. Automatic skin lesion segmentation and melanoma detection: Transfer learning approach with U-Net and DCNN-SVM, in: Proceed- ings of International Joint Conference on Computational Intelligence, Springer. pp. 371-381.                                                                    |
+| Alahmadi, M.D., Alghamdi, W., 2022. Semi-supervised skin lesion segmentation with coupling cnn and transformer features. IEEE Access 10, 122560-122569.                                                                                                                                                                    |
+| Alam, M.J., Mohammad, M.S., Hossain, M.A.F., Showmik, I.A., Raihan, M.S., Ahmed, S., Mahmud, T.I., 2022. S2C-DeLeNet: A parameter transfer based segmentation-classification integration for detecting skin cancer lesions from dermoscopic images. Computers in Biology and Medicine 150, 106148.                         |
+| Alom, M.Z., Aspiras, T., Taha, T.M., Asari, V.K., 2020. Skin cancer segmentation and classification with improved deep convolutional neural network, in: Proceedings of SPIE Medical Imaging 2020: Imaging Informatics for Healthcare, Research, and Applications, p. 1131814.                                             |
+| Alom, M.Z., Yakopcic, C., Hasan, M., Taha, T.M., Asari, V.K., 2019. Recurrent residual u-net for medical image segmentation. Journal of Medical Imaging 6, 014006.                                                                                                                                                         |
+| American Cancer Society, 2023. Cancer facts and figures 2023. https: // www.cancer.org / content / dam / cancer-org / research / cancer-facts-and-statistics / annual-cancer-facts-and-figures / 2023 / 2023-cancer-facts-and-figures.pdf.                                                                                 |
+| Andrade, C., Teixeira, L.F., Vasconcelos, M.J.M., Rosado, L., 2020. Data augmentation using adversarial image-to-image translation for the segmentation of mobile-acquired dermatological images. Journal of Imaging 7, 2.                                                                                                 |
+| Argenziano, G., Soyer, H.P., De Giorgio, V., Piccolo, D., Carli, P., Delfino, M., Ferrari, A., Hofmann-Wellenhof, R., Massi, D., Mazzocchetti, G., Scalvenzi, M., Wolf, I.H., 2000. Interactive Atlas of Dermoscopy. Edra Medical Publishing and New Media.                                                                |
+| R., Raman, B., Nayyar, K., Awasthi, R., 2021. Automated skin lesion segmentation using attention-based deep convolutional neural network. Biomedical                                                                                                                                                                       |
+| Taghanaki, S., Abhishek, K., Cohen, J.P., Cohen-Adad, J., Hamarneh, G., 2021. Deep semantic segmentation of natural and medical images: a review. Artificial Intelligence Review 54, 137-178.                                                                                                                              |
+| M., Hossny, M., Nahavandi, S., Yazdabadi, A., 2017. Skin melanoma segmentation using recurrent and convolutional neural networks, in: 2017 IEEE 14th International Symposium on Biomedical Imaging (ISBI 2017), IEEE. pp. 292-296.                                                                                         |
+| R., Asadi-Aghbolaghi, M., Fathy, M., Escalera, S., 2020. Attention deeplabv3 + : Multi-level context attention mechanism for skin lesion segmentation, in: European Conference on Computer Vision Workshops, Springer. pp. 251-266.                                                                                        |
+| F., Tarokh, M.J., Ziaratban, M., 2020. Two-stage skin lesion segmentation from dermoscopic images by using deep neural networks. Jorjani Biomedicine Journal 8, 58-72.                                                                                                                                                     |
+| F., Tarokh, M.J., Ziaratban, M., 2021a. Skin lesion segmentation based on mask rcnn, multi atrous full-cnn, and a geodesic method. International of Imaging Systems and Technology .                                                                                                                                       |
+| F., Tarokh, M.J., Ziaratban, M., 2021b. Skin lesion segmentation from dermoscopic images by using mask r-cnn, retina-deeplab, and graph-based Biomedical Signal Processing and Control 67, 102533.                                                                                                                         |
+| S., Bozorgtabar, B., Schmid-Saugeon, P., Ekenel, H.K., Thiran, J.P., 2019. DermoNet: densely linked convolutional neural network for e GLYPH<14> cient                                                                                                                                                                     |
+| Baghersalimi,                                                                                                                                                                                                                                                                                                              |
+| skin                                                                                                                                                                                                                                                                                                                       |
+| Bagheri,                                                                                                                                                                                                                                                                                                                   |
+| Journal                                                                                                                                                                                                                                                                                                                    |
+| Bagheri,                                                                                                                                                                                                                                                                                                                   |
+| Signal Processing and Control 65, 102358.                                                                                                                                                                                                                                                                                  |
+| Arora,                                                                                                                                                                                                                                                                                                                     |
+| Asgari                                                                                                                                                                                                                                                                                                                     |
+| Attia,                                                                                                                                                                                                                                                                                                                     |
+| International Conference on Computer Vision Workshops, pp. 0-0. Azad, Badshah, N., Ahmad, A., 2022. ResBCU-Net: Deep learning approach for segmentation of skin images. Biomedical Signal Processing and Control 71, 103137.                                                                                               |
+| Azad, R., Asadi-Aghbolaghi, M., Fathy, M., Escalera, S., 2019. Bi-directional ConvLSTM U-Net with densley connected convolutions, in: Proceedings of the IEEE                                                                                                                                                              |
+| Bagheri,                                                                                                                                                                                                                                                                                                                   |
+| methods.                                                                                                                                                                                                                                                                                                                   |
+
+<!-- page_break -->
+
+lesion segmentation. EURASIP Journal on Image and Video Processing 2019, 71.
+
+Baldi, P., Brunak, S., Chauvin, Y., Andersen, C.A., Nielsen, H., 2000. Assessing the Accuracy of Prediction Algorithms for Classification: An Overview. Bioinformatics 16, 412-424.
+
+Ballerini, L., Fisher, R.B., Aldridge, B., Rees, J., 2013. A color and texture based hierarchical k-nn approach to the classification of non-melanoma skin lesions, in: Celebi, M.E., Schaefer, G. (Eds.), Color Medical Image Analysis. Springer, pp. 63-86.
+
+- Barata, C., Celebi, M.E., Marques, J.S., 2015a. Improving Dermoscopy Image Classification Using Color Constancy. IEEE Journal of Biomedical and Health Informatics 19, 1146-1152.
+- Barata, C., Celebi, M.E., Marques, J.S., 2015b. Toward a Robust Analysis of Dermoscopy Images Acquired Under Di GLYPH&lt;11&gt; erent Conditions, in: Celebi, M.E., Mendonca,
+- T., Marques, J.S. (Eds.), Dermoscopy Image Analysis. CRC Press, pp. 1-22.
+- Barata, C., Celebi, M.E., Marques, J.S., 2019. A Survey of Feature Extraction in Dermoscopy Image Analysis of Skin Cancer. IEEE Journal of Biomedical and Health Informatics 23, 1096-1109.
+- Barata, C., Ruela, M., Francisco, M., Mendonca, T., Marques, J.S., 2014. Two Systems for the Detection of Melanomas In Dermoscopy Images Using Texture and Color Features. IEEE Systems Journal 8, 965-979.
+- Basak, H., Kundu, R., Sarkar, R., 2022. MFSNet: A multi focus segmentation network for skin lesion segmentation. Pattern Recognition 128, 108673.
+- Baur, C., Albarqouni, S., Navab, N., 2018. Generating Highly Realistic Images of Skin Lesions with GANs, in: Proceedings of the Third ISIC Workshop on Skin Image Analysis, pp. 260-267.
+- Bearman, A., Russakovsky, O., Ferrari, V., Fei-Fei, L., 2016. What's the point: Semantic segmentation with point supervision, in: European Conference on Computer Vision, Springer. pp. 549-565.
+- Bengio, Y., 2012. Practical Recommendations for Gradient-Based Training of Deep Architectures, in: Montavon, G., Orr, G., Muller, K.R. (Eds.), Neural networks: Tricks of the Trade. Second ed.. Springer, pp. 437-478.
+- Bengio, Y., Courville, A., Vincent, P., 2013. Representation Learning: A Review and New Perspectives. IEEE Transactions on Pattern Analysis and Machine Intelligence 35, 1798-1828.
+- Bevan, P.J., Atapour-Abarghouei, A., 2022. Detecting melanoma fairly: Skin tone detection and debiasing for skin lesion classification. arXiv preprint arXiv:2202.02832 .
+- Bi, L., Feng, D., Fulham, M., Kim, J., 2019a. Improving skin lesion segmentation via stacked adversarial learning, in: 2019 IEEE 16th International Symposium on Biomedical Imaging (ISBI 2019), IEEE. pp. 1100-1103.
+- Bi, L., Feng, D., Kim, J., 2018. Improving automatic skin lesion segmentation using adversarial learning based data augmentation. arXiv preprint arXiv:1807.08392
+
+.
+
+- Bi, L., Fulham, M., Kim, J., 2022. Hyper-fusion network for semi-automatic segmentation of skin lesions. Medical Image Analysis 76, 102334.
+- Bi, L., Kim, J., Ahn, E., Feng, D., Fulham, M., 2017a. Semi-automatic skin lesion segmentation via fully convolutional networks, in: 2017 IEEE 14th International Symposium on Biomedical Imaging (ISBI 2017), IEEE. pp. 561-564.
+- Bi, L., Kim, J., Ahn, E., Kumar, A., Feng, D., Fulham, M., 2019b. Step-wise integration of deep class-specific learning for dermoscopic image segmentation. Pattern recognition 85, 78-89.
+- Bi, L., Kim, J., Ahn, E., Kumar, A., Fulham, M., Feng, D., 2017b. Dermoscopic image segmentation via multistage fully convolutional networks. IEEE Transactions on Biomedical Engineering 64, 2065-2074.
+- Biancardi, A.M., Jirapatnakul, A.C., Reeves, A.P., 2010. A Comparison of Ground Truth Estimation Methods. International Journal of Computer Assisted Radiology and Surgery 5, 295-305.
+- Binder, M., Schwarz, M., Winkler, A., Steiner, A., Kaider, A., Wol GLYPH&lt;11&gt; , K., Pehamberger, H., 1995. Epiluminescence microscopy. a useful tool for the diagnosis of pigmented skin lesions for formally trained dermatologists. Archives of Dermatology 131, 286-291.
+
+Binney, N., Hyde, C., Bossuyt, P.M., 2021. On the origin of sensitivity and specificity. Annals of Internal Medicine 174, 401-407.
+
+- Birkenfeld, J.S., Tucker-Schwartz, J.M., Soenksen, L.R., Avil´ es-Izquierdo, J.A., Marti-Fuster, B., 2020. Computer-aided classification of suspicious pigmented
+
+lesions using wide-field images. Computer methods and programs in biomedicine 195, 105631.
+
+Bissoto, A., Barata, C., Valle, E., Avila, S., 2022. Artifact-based domain generalization of skin lesion models. arXiv preprint arXiv:2208.09756 .
+
+Bissoto, A., Fornaciali, M., Valle, E., Avila, S., 2019. (de)constructing bias on skin lesion datasets, in: Proceedings of the IEEE CVF Conference on Computer /
+
+<!-- page_break -->
+
+Vision and Pattern Recognition (CVPR) Workshops, pp. 0-0.
+
+Bissoto, A., Perez, F., Valle, E., Avila, S., 2018. Skin lesion synthesis with generative adversarial networks, in: OR 2.0 context-aware operating theaters, computer assisted robotic endoscopy, clinical image-based procedures, and skin image analysis, pp. 294-302.
+
+- Bissoto, A., Valle, E., Avila, S., 2021. Gan-based data augmentation and anonymization for skin-lesion analysis: A critical review, in: Proceedings of the IEEE CVF / Conference on Computer Vision and Pattern Recognition (CVPR) Workshops, pp. 1847-1856.
+- Bogo, F., Peruch, F., Fortina, A.B., Peserico, E., 2015. Where's the Lesion? Variability in Human and Automated Segmentation of Dermoscopy Images of Melanocytic Skin Lesions, in: Celebi, M.E., Mendonca, T., Marques, J.S. (Eds.), Dermoscopy Image Analysis. CRC Press, pp. 67-95.
+- Bogo, F., Romero, J., Peserico, E., Black, M.J., 2014. Automated detection of new or evolving melanocytic lesions using a 3D body model, in: International Conference on Medical Image Computing and Computer Assisted Intervention, pp. 593-600.
+- Boughorbel, S., Jarray, F., El-Anbari, M., 2017. Optimal Classifier for Imbalanced Data Using Matthews Correlation Coe GLYPH&lt;14&gt; cient Metric. PLOS One 12, e0177678. Bozorgtabar, B., Ge, Z., Chakravorty, R., Abedini, M., Demyanov, S., Garnavi, R., 2017a. Investigating deep side layers for skin lesion segmentation, in: 2017 IEEE 14th International Symposium on Biomedical Imaging (ISBI 2017), IEEE. pp. 256-260.
+- Bozorgtabar, B., Sedai, S., Roy, P.K., Garnavi, R., 2017b. Skin lesion segmentation using deep convolution networks guided by local unsupervised learning. IBM Journal of Research and Development 61, 6-1.
+- Busin, L., Vandenbroucke, N., Macaire, L., 2008. Color Spaces and Image Segmentation, in: Hawkes, P.W. (Ed.), Advances in Imaging and Electron Physics. Academic Press. volume 151, pp. 65-168.
+- Buslaev, A., Iglovikov, V.I., Khvedchenya, E., Parinov, A., Druzhinin, M., Kalinin, A.A., 2020. Albumentations: Fast and Flexible Image Augmentations. Information 11, 125.
+- Ca GLYPH&lt;11&gt; ery, L.J., Clunie, D., Curiel-Lewandrowski, C., Malvehy, J., Soyer, H.P., Halpern, A.C., 2018. Transforming Dermatologic Imaging for the Digital Era: Metadata and Standards. Journal of Digital Imaging 31, pages568-577.
+- Canalini, L., Pollastri, F., Bolelli, F., Cancilla, M., Allegretti, S., Grana, C., 2019. Skin lesion segmentation ensemble with diverse training strategies, in: International Conference on Computer Analysis of Images and Patterns, Springer. pp. 89-101.
+- Cao, H., Wang, Y., Chen, J., Jiang, D., Zhang, X., Tian, Q., Wang, M., 2021. Swin-Unet: Unet-like pure transformer for medical image segmentation. arXiv preprint arXiv:2105.05537 .
+- Cassidy, B., Kendrick, C., Brodzicki, A., Jaworek-Korjakowska, J., Yap, M.H., 2022. Analysis of the ISIC image datasets: Usage, benchmarks and recommendations. Medical Image Analysis 75, 102305.
+- Celebi, M.E., Aslandogan, A., Stoecker, W.V., 2007a. Unsupervised Border Detection in Dermoscopy Images. Skin Research and Technology 13, 454-462.
+- Celebi, M.E., Codella, N., Halpern, A., 2019. Dermoscopy Image Analysis: Overview and Future Directions. IEEE Journal of Biomedical and Health Informatics 23, 474-478.
+- Celebi, M.E., Iyatomi, H., Schaefer, G., Stoecker, W.V., 2009a. Approximate Lesion Localization in Dermoscopy Images. Skin Research and Technology 15, 314-322.
+- Celebi, M.E., Iyatomi, H., Schaefer, G., Stoecker, W.V., 2009b. Lesion Border Detection in Dermoscopy Images. Computerized Medical Imaging and Graphics 33, 148-153.
+- Celebi, M.E., Iyatomi, H., Stoecker, W.V., Moss, R.H., Rabinovitz, H.S., Argenziano, G., Soyer, H.P., 2008. Automatic Detection of Blue-White Veil and Related Structures in Dermoscopy Images. Computerized Medical Imaging and Graphics 32, 670-677.
+- Celebi, M.E., Kingravi, H., Uddin, B., Iyatomi, H., Aslandogan, A., Stoecker, W.V., Moss, R.H., 2007b. A Methodological Approach to the Classification of Dermoscopy Images. Computerized Medical Imaging and Graphics 31, 362-373.
+- Celebi, M.E., Mendonca, T., Marques, J.S. (Eds.), 2015a. Dermoscopy Image Analysis. CRC Press.
+- Celebi, M.E., Schaefer, G., Iyatomi, H., Stoecker, W.V., Malters, J.M., Grichnik, J.M., 2009c. An Improved Objective Evaluation Measure for Border Detection in Dermoscopy Images. Skin Research and Technology 15, 444-450.
+
+Celebi, M.E., Wen, Q., Hwang, S., Iyatomi, H., Schaefer, G., 2013. Lesion Border Detection in Dermoscopy Images Using Ensembles of Thresholding Methods. Skin Research and Technology 19, e252-e258.
+
+Celebi, M.E., Wen, Q., Iyatomi, H., Shimizu, K., Zhou, H., Schaefer, G., 2015b. A State-of-the-Art Survey on Lesion Border Detection in Dermoscopy Images, in: Celebi, M.E., Mendonca, T., Marques, J.S. (Eds.), Dermoscopy Image Analysis. CRC Press, pp. 97-129.
+
+<!-- page_break -->
+
+- Chabrier, S., Emile, B., Rosenberger, C., Laurent, H., 2006. Unsupervised Performance Evaluation of Image Segmentation. EURASIP Journal on Advances in Signal Processing 2006, 1-12.
+- Chalana, V., Kim, Y., 1997. A Methodology for Evaluation of Boundary Detection Algorithms on Medical Images. IEEE Transactions on Medical Imaging 16, 642-652.
+- Chen, J., Lu, Y., Yu, Q., Luo, X., Adeli, E., Wang, Y., Lu, L., Yuille, A.L., Zhou, Y., 2021. TransUNet: Transformers make strong encoders for medical image segmentation. arXiv preprint arXiv:2102.04306 .
+- Chen, L.C., Papandreou, G., Kokkinos, I., Murphy, K., Yuille, A.L., 2017a. DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs. IEEE Transactions on Pattern Analysis and Machine Intelligence 40, 834-848.
+- Chen, L.C., Papandreou, G., Schro GLYPH&lt;11&gt; , F., Adam, H., 2017b. Rethinking atrous convolution for semantic image segmentation. arXiv preprint arXiv:1706.05587 .
+- Encoder-decoder with atrous separable convolution for semantic image segmentation, in:
+- Chen, L.C., Zhu, Y., Papandreou, G., Schro GLYPH&lt;11&gt; , F., Adam, H., 2018a. Proceedings of the European conference on computer vision (ECCV), pp. 801-818.
+- Chen, P., Huang, S., Yue, Q., 2022. Skin lesion segmentation using recurrent attentional convolutional networks. IEEE Access 10, 94007-94018.
+- Chen, S., Wang, Z., Shi, J., Liu, B., Yu, N., 2018b. A multi-task framework with feature passing module for skin lesion classification and segmentation, in: 2018 IEEE 15th international symposium on biomedical imaging (ISBI 2018), IEEE. pp. 1126-1129.
+- Chen, S.E., Parent, R.E., 1989. Shape Averaging and its Applications to Industrial Design. IEEE Computer Graphics and Applications 9, 47-54.
+- Chicco, D., Jurman, G., 2020. The Advantages of the Matthews Correlation Coe GLYPH&lt;14&gt; cient (MCC) over F1 Score and Accuracy in Binary Classification Evaluation. BMC Genomics 21.
+- Chollet, F., 2017. Xception: Deep learning with depthwise separable convolutions, in: Proceedings of the IEEE conference on computer vision and pattern recognition, pp. 1251-1258.
+- Chou, P.Y., Fasman, G.D., 1978. Prediction of the Secondary Structure of Proteins from Their Amino Acid Sequence, in: Meister, A. (Ed.), Advances in Enzymology and Related Areas of Molecular Biology. John Wiley &amp; Sons. volume 47, pp. 45-148.
+- Codella, N., Cai, J., Abedini, M., Garnavi, R., Halpern, A., Smith, J.R., 2015. Deep Learning, Sparse Coding, and SVM for Melanoma Recognition in Dermoscopy Images, in: Proceedings of the International Workshop on Machine Learning in Medical Imaging, pp. 118-126.
+- Codella, N., Rotemberg, V., Tschandl, P., Celebi, M.E., Dusza, S., Gutman, D., Helba, B., Kalloo, A., Liopyris, K., Marchetti, M., Kittler, H., Halpern, A., 2019. Skin Lesion Analysis Toward Melanoma Detection 2018: A Challenge Hosted by the International Skin Imaging Collaboration (ISIC). https: // arxiv.org abs / / 1902.03368.
+- Codella, N.C., Nguyen, Q.B., Pankanti, S., Gutman, D.A., Helba, B., Halpern, A.C., Smith, J.R., 2017. Deep Learning Ensembles for Melanoma Recognition in Dermoscopy Images. IBM Journal of Research and Development 61, 5:1-5:15.
+- Codella, N.C.F., Gutman, D., Celebi, M.E., Helba, B., Marchetti, M.A., Dusza, S.W., Kalloo, A., Liopyris, K., Mishra, N., Kittler, H., Halpern, A., 2018. Skin Lesion Analysis Toward Melanoma Detection: A Challenge at the 2017 International Symposium on Biomedical Imaging (ISBI), Hosted by the International Skin Imaging Collaboration (ISIC), in: Proceedings of the 2018 IEEE International Symposium on Biomedical Imaging (ISBI 2018), pp. 168-172.
+- Cohen, J., 1960. A Coe GLYPH&lt;14&gt; cient of Agreement for Nominal Scales. Educational and Psychological Measurement 20, 37-46.
+- Colliot, O., Thibeau-Sutre, E., Burgos, N., 2022. Reproducibility in machine learning for medical imaging. arXiv preprint arXiv:2209.05097 .
+- Combalia, M., Codella, N.C., Rotemberg, V., Helba, B., Vilaplana, V., Reiter, O., Carrera, C., Barreiro, A., Halpern, A.C., Puig, S., Malvehy, J., 2019. BCN20000: Dermoscopic lesions in the wild. arXiv preprint arXiv:1908.02288 .
+- Cordonnier, J.B., Loukas, A., Jaggi, M., 2019. On the relationship between self-attention and convolutional layers. arXiv preprint arXiv:1911.03584 .
+- Creswell, A., White, T., Dumoulin, V., Arulkumaran, K., Sengupta, B., Bharath, A.A., 2018. Generative Adversarial Networks: An Overview. IEEE Signal Processing Magazine 35, 53-65.
+- Crum, W.R., Camara, O., Hill, D.L., 2006. Generalized Overlap Measures for Evaluation and Validation in Medical Image Analysis. IEEE Transactions on Medical Imaging 25, 1451-1461.
+- Cui, Z., Wu, L., Wang, R., Zheng, W.S., 2019. Ensemble transductive learning for skin lesion segmentation, in: Chinese Conference on Pattern Recognition and Computer Vision (PRCV), Springer. pp. 572-581.
+- Curiel-Lewandrowski, C., Novoa, R.A., Berry, E., Celebi, M.E., Codella, N., Giuste, F., Gutman, D., Halpern, A., Leachman, S., Liu, Y., Liu, Y., Reiter, O., Tschandl, P., 2019. Artificial Intelligence Approach in Melanoma, in: Fisher, D.E., Bastian, B.C. (Eds.), Melanoma. Spriner, pp. 599-628.
+
+<!-- page_break -->
+
+| Dai, D., Dong, C., Xu, S., Yan, Q., Li, Z., Zhang, C., Luo, N., 2022. Ms red: A novel multi-scale residual encoding and decoding network for skin lesion segmentation. Medical Image Analysis 75, 102293.                                                                                                                 |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Dai, J., He, K., Sun, J., 2015. BoxSup: Exploiting Bounding Boxes to Supervise Convolutional Networks for Semantic Segmentation, in: Proceedings of the IEEE International Conference on Computer Vision, pp. 1635-1643.                                                                                                  |
+| Daneshjou, R., Barata, C., Betz-Stablein, B., Celebi, M.E., Codella, N., Combalia, M., Guitera, P., Gutman, D., Halpern, A., Helba, B., Kittler, H., Kose, K., Liopyris, K., Malvehy, J., Seog, H.S., Soyer, H.P., Tkaczyk, E.R., Tschandl, P., Rotemberg, V., 2022. Evaluation of Image-Based AI Artificial Intelligence |
+| Reports in Dermatology: CLEAR Derm Consensus Guidelines from the International Skin Imaging Collaboration Artificial Intelligence Working Group. JAMA Dermatology 158, 90-96.                                                                                                                                             |
+| Daneshjou, R., Smith, M.P., Sun, M.D., Rotemberg, V., Zou, J., 2021a. Lack of transparency and potential bias in artificial intelligence data sets and algorithms: A scoping review. JAMA Dermatology 157, 1362-1369.                                                                                                     |
+| Daneshjou, R., Vodrahalli, K., Liang, W., Novoa, R.A., Jenkins, M., Rotemberg, V., Ko, J., Swetter, S.M., Bailey, E.E., Gevaert, O., Mukherjee, P., Phung, M.,                                                                                                                                                            |
+| Yekrang, K., Fong, B., Sahasrabudhe, R., Zou, J., Chiou, A., 2021b. Disparities in dermatology AI: Assessments using diverse clinical images. arXiv preprint arXiv:2111.08006 .                                                                                                                                           |
+| De Angelo, G.G., Pacheco, A.G., Krohling, R.A., 2019. Skin lesion segmentation using deep learning for images acquired from smartphones, in: 2019 International Joint Conference on Neural Networks (IJCNN), IEEE. pp. 1-8.                                                                                               |
+| Deng, J., Dong, W., Socher, R., Li, L.J., Li, K., Fei-Fei, L., 2009. ImageNet: A large-scale hierarchical image database, in: 2009 IEEE Conference on Computer Vision and Pattern Recognition, IEEE. pp. 248-255.                                                                                                         |
+| Deng, Z., Fan, H., Xie, F., Cui, Y., Liu, J., 2017. Segmentation of dermoscopy images based on fully convolutional neural network, in: 2017 IEEE International Conference on Image Processing (ICIP), IEEE. pp. 1732-1736.                                                                                                |
+| Deng, Z., Xin, Y., Qiu, X., Chen, Y., 2020. Weakly and semi-supervised deep level set network for automated skin lesion segmentation, in: Innovation in Medicine and Healthcare. Springer, pp. 145-155.                                                                                                                   |
+| Denton, E., Chintala, S., Szlam, A., Fergus, R., 2015. Deep generative image models using a laplacian pyramid of adversarial networks, in: Proceedings of the 28th International Conference on Neural Information Processing Systems-Volume 1, pp. 1486-1494.                                                             |
+| Depeweg, S., Hernandez-Lobato, J.M., Doshi-Velez, F., Udluft, S., 2018. Decomposition of uncertainty in bayesian deep learning for e GLYPH<14> cient and risk-sensitive learning, in: International Conference on Machine Learning, PMLR. pp. 1184-1193.                                                                  |
+| Der Kiureghian, A., Ditlevsen, O., 2009. Aleatory or epistemic? does it matter? Structural safety 31, 105-112.                                                                                                                                                                                                            |
+| DermIS, 2012. Dermatology Information System. https: // www.dermis.net / . [Online. Accessed January 26, 2022].                                                                                                                                                                                                           |
+| DermQuest, 2012. Dermquest. http: // www.dermquest.com. Cited: 2020-04-28. DeVries, T., Taylor, G.W., 2018. Leveraging uncertainty estimates for predicting segmentation quality. arXiv preprint arXiv:1807.00502 .                                                                                                       |
+| Dhawan, A.P., Gordon, R., , Rangayyan, R.M., 1984. Nevoscopy: Three-dimensional computed tomography of nevi and                                                                                                                                                                                                           |
+| melanomas in situ by transillumination. IEEE Transactions on Medical Imaging 3, 54-61.                                                                                                                                                                                                                                    |
+| Dice, L.R., 1945. Measures of the Amount of Ecologic Association Between Species. Ecology 26, 297-302. Ding, S., Zheng, J., Liu, Z., Zheng, Y., Chen, Y., Xu, X., Lu, J., Xie, J., 2021. High-Resolution Dermoscopy                                                                                                       |
+| Image Synthesis with Conditional Generative Adversarial Networks. Biomedical Signal Processing and Control 64, 102224. Dodge, S., Karam, L., 2016. Understanding How Image Quality A GLYPH<11> ects Deep Neural Networks, in: Proceedings of the 2016 International Conference on Quality                                 |
+| of Multimedia Experience, pp. 1-6. Dong, Y., Wang, L., Li, Y., 2022. TC-Net: Dual coding network of Transformer and CNN for skin lesion segmentation. Plos one 17, e0277578.                                                                                                                                              |
+| Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner, T., Dehghani, M., Minderer, M., Heigold, G., Gelly, S., et al., 2020. An image is worth 16x16 words: Transformers for image recognition at scale. arXiv preprint arXiv:2010.11929 .                                                   |
+| Du, S., Hers, B., Bayasi, N., Hamarneh, G., Garbi, R., 2022. FairDisCo: Fairer AI in dermatology via disentanglement contrastive learning. arXiv preprint arXiv:2208.10013 .                                                                                                                                              |
+| Ebenezer, J.P., Rajapakse, J.C., 2018. Automatic segmentation of skin lesions using deep learning. arXiv preprint arXiv:1807.04893 .                                                                                                                                                                                      |
+| El Jurdi, R., Petitjean, C., Honeine, P., Cheplygina, V., Abdallah, F., 2021. High-level prior-based loss functions for medical image segmentation: A Computer Vision and Image Understanding 210, 103248.                                                                                                                |
+| survey.                                                                                                                                                                                                                                                                                                                   |
+
+<!-- page_break -->
+
+Elsken, T., Metzen, J.H., Hutter, F., 2019. Neural Architecture Search: A Survey. Journal of Machine Learning Research 20, 1-21.
+
+En, Q., Guo, Y., 2022. Annotation by clicks: A point-supervised contrastive variance method for medical semantic segmentation. arXiv preprint arXiv:2212.08774
+
+.
+
+- Engasser, H.C., Warshaw, E.M., 2010. Dermatoscopy use by us dermatologists: a cross-sectional survey. Journal of the American Academy of Dermatology 63, 412-419.
+- Erkol, B., Moss, R.H., Stanley, R.J., Stoecker, W.V., Hvatum, E., 2005. Automatic Lesion Boundary Detection in Dermoscopy Images Using Gradient Vector Flow Snakes. Skin Research and Technology 11, 17-26.
+- Ferreira, P.M., Mendonca, T., Rozeira, J., Rocha, P., 2012. An Annotation Tool for Dermoscopic Image Segmentation, in: Proceedings of the 1st International Workshop on Visual Interfaces for Ground Truth Collection in Computer Vision Applications, pp. 1-6.
+- Foncubierta-Rodriguez, A., Muller, H., 2012. Ground Truth Generation in Medical Imaging: A Crowdsourcing-Based Iterative Approach, in: Proceedings of the ACM Multimedia 2012 Workshop on Crowdsourcing for Multimedia, pp. 9-14.
+- Fortina, A.B., Peserico, E., Silletti, A., Zattra, E., 2012. Where's the Naevus? Inter-Operator Variability in the Localization of Melanocytic Lesion Border. Skin Research and Technology 18, 311-315.
+- Friedman, R.J., Rigel, D.S., Kopf, A.W., 1985. Early detection of malignant melanoma: The role of physician examination and self-examination of the skin. CA: A Cancer Journal for Clinicians 35, 130-151.
+- Fu, J., Liu, J., Tian, H., Li, Y ., Bao, Y ., Fang, Z., Lu, H., 2019. Dual attention network for scene segmentation, in: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp. 3146-3154.
+- Gachon, J., Beaulieu, P., Sei, J.F., Gouvernet, J., Claudel, J.P., Lemaitre, M., Richard, M.A., Grob, J.J., 2005. First prospective study of the recognition process of melanoma in dermatological practice. Archives of dermatology 141, 434-438.
+- Gal, Y., 2016. Uncertainty in deep learning. Ph.D. thesis. Department of Engineering, University of Cambridge. https: // mlg.eng.cam.ac.uk yarin thesis thesis.pdf. / / /
+- Garnavi, R., Aldeen, M., 2011. Optimized Weighted Performance Index for Objective Evaluation of Border-Detection Methods in Dermoscopy Images. IEEE Transactions on Information Technology in Biomedicine 15, 908-917.
+- Garnavi, R., Aldeen, M., Celebi, M.E., 2011a. Weighted Performance Index for Objective Evaluation of BorderDetection Methods in Dermoscopy Images. Skin Research and Technology 17, 35-44.
+- Garnavi, R., Aldeen, M., Celebi, M.E., Varigos, G., Finch, S., 2011b. Border Detection in Dermoscopy Images Using Hybrid Thresholding on Optimized Color Channels. Computerized Medical Imaging and Graphics 35, 105-115.
+- Gidaris, S., Singh, P., Komodakis, N., 2018. Unsupervised representation learning by predicting image rotations, in: International Conference on Learning Representations (ICLR), pp. 1-16. URL: https: // openreview.net forum?id / = S1v4N2l0-.
+- Giotis, I., Molders, N., Land, S., Biehl, M., Jonkman, M.F., Petkov, N., 2015. MED-NODE: A computer-assisted melanoma diagnosis system using non-dermoscopic images. Expert Systems with Applications 42, 6578-6585.
+- Gish, S.L., Blanz, W.E., 1989. Comparing the Performance of Connectionist and Statistical Classifiers on an Image Segmentation Problem, in: Proceedings of the Second International Conference on Neural Information Processing Systems, pp. 614-621.
+- Glaister, J.L., 2013. Automatic segmentation of skin lesions from dermatological photographs. https: // uwaterloo.ca vision-image-processing-lab research-demos / / / skin-cancer-detection. Cited: 2022-1-31.
+- Goel, S., Sharma, Y., Jauer, M.L., Deserno, T.M., 2020. WeLineation: Crowdsourcing Delineations for Reliable Ground Truth Estimation, in: Proceedings of the Medical Imaging 2020: Imaging Informatics for Healthcare, Research, and Applications, pp. 113180C-1-113180C-8.
+- G´ omez, D.D., Butako GLYPH&lt;11&gt; , C., Ersboll, B.K., Stoecker, W., 2007. Independent histogram pursuit for segmentation of skin lesions. IEEE transactions on biomedical engineering 55, 157-161.
+- Gonzalez-Diaz, I., 2018. Dermaknet: Incorporating the knowledge of dermatologists to convolutional neural networks for skin lesion diagnosis. IEEE journal of biomedical and health informatics 23, 547-559.
+- Goodfellow, I., Pouget-Abadie, J., Mirza, M., Xu, B., Warde-Farley, D., Ozair, S., Courville, A., Bengio, Y., 2020. Generative Adversarial Networks. Communications of the ACM 63, 139-144.
+- Goyal, M., Ng, J., Oakley, A., Yap, M.H., 2019a. Skin lesion boundary segmentation with fully automated deep extreme cut methods, in: Medical Imaging 2019: Biomedical Applications in Molecular, Structural, and Functional Imaging, International Society for Optics and Photonics. p. 109530Q.
+
+<!-- page_break -->
+
+- Goyal, M., Oakley, A., Bansal, P., Dancey, D., Yap, M.H., 2019b. Skin lesion segmentation in dermoscopic images with ensemble deep learning methods. IEEE Access 8, 4171-4181.
+- Goyal, M., Yap, M.H., Hassanpour, S., 2017. Multi-class semantic segmentation of skin lesions via fully convolutional networks, in: Proceedings of the 13th International Joint Conference on Biomedical Engineering Systems and Technologies, Comp2Clinic Workshop, pp. 290-295.
+- Grau, V., Mewes, A.U.J., Alcaniz, M., Kikinis, R., Warfield, S.K., 2004. Improved Watershed Transform for Medical Image Segmentation Using Prior Information. IEEE Transactions on Medical Imaging 23, 447-458.
+- Green, A., Martin, N., Pfitzner, J., O'Rourke, M., Knight, N., 1994. Computer image analysis in the diagnosis of melanoma. Journal of the American Academy of Dermatology 31, 958-964.
+- Groh, M., Harris, C., Soenksen, L., Lau, F., Han, R., Kim, A., Koochek, A., Badri, O., 2021. Evaluating deep neural networks trained on clinical images in dermatology with the Fitzpatrick 17k dataset, in: Proceedings of the IEEE CVF Conference on Computer Vision and Pattern Recognition, pp. 1820-1828. /
+- Gu, P., Zheng, H., Zhang, Y., Wang, C., Chen, D.Z., 2021. kCBAC-Net: Deeply supervised complete bipartite networks with asymmetric convolutions for medical image segmentation, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 337-347.
+- Gu, R., Wang, G., Song, T., Huang, R., Aertsen, M., Deprest, J., Ourselin, S., Vercauteren, T., Zhang, S., 2020. CA-Net: Comprehensive attention convolutional neural networks for explainable medical image segmentation. IEEE transactions on medical imaging 40, 699-711.
+- Gu, R., Wang, L., Zhang, L., 2022. DE-Net: A deep edge network with boundary information for automatic skin lesion segmentation. Neurocomputing 468, 71-84. Gudhe, N.R., Behravan, H., Sudah, M., Okuma, H., Vanninen, R., Kosma, V.M., Mannermaa, A., 2021. Multi-level dilated residual network for biomedical image segmentation. Scientific Reports 11, 1-18.
+- Guillod, J., Schmid-Saugeon, P., Guggisberg, D., Cerottini, J.P., Braun, R., Krischer, J., Saurat, J.H., Kunt, M., 2002. Validation of Segmentation Techniques for Digital Dermoscopy. Skin Research and Technology 8, 240-249.
+- Gulzar, Y., Khan, S.A., 2022. Skin lesion segmentation based on vision transformers and convolutional neural networks-a comparative study. Applied Sciences 12, 5990.
+- Guo, X., Chen, Z., Yuan, Y., 2020. Complementary network with adaptive receptive fields for melanoma segmentation, in: 2020 IEEE 17th International Symposium on Biomedical Imaging (ISBI), IEEE. pp. 2010-2013.
+- Gurari, D., Theriault, D., Sameki, M., Isenberg, B., Pham, T.A., Purwada, A., Solski, P., Walker, M., Zhang, C., Wong, J.Y., Betke, M., 2015. How to Collect Segmentations for Biomedical Images? A Benchmark Evaluating the Performance of Experts, Crowdsourced Non-Experts, and Algorithms, in: 2015 IEEE Winter Conference on Applications of Computer Vision, pp. 1169-1176.
+- Gutman, D., Codella, N.C.F., Celebi, M.E., Helba, B., Marchetti, M., Mishra, N., Halpern, A., 2016. Skin Lesion Analysis Toward Melanoma Detection: A Challenge at the International Symposium on Biomedical Imaging (ISBI) 2016, hosted by the International Skin Imaging Collaboration (ISIC). http: // arxiv.org / abs 1605.01397. /
+- Guy Jr, G.P., Machlin, S.R., Ekwueme, D.U., Yabro GLYPH&lt;11&gt; , K.R., 2015. Prevalence and costs of skin cancer treatment in the us, 2002- 2006 and 2007- 2011. American Journal of Preventive Medicine 48, 183-187.
+- Halpern, A.C., 2003. Total body skin imaging as an aid to melanoma detection., in: Seminars in Cutaneous Medicine and Surgery, pp. 2-8.
+- Hance, G.A., Umbaugh, S.E., Moss, R.H., Stoecker, W.V., 1996. Unsupervised Color Image Segmentation with Application to Skin Tumor Borders. IEEE Engineering in Medicine and Biology Magazine 15, 104-111.
+- Hasan, M., Roy, S., Mondal, C., Alam, M., Elahi, M., Toufick, E., Dutta, A., Raju, S., Ahmad, M., et al., 2021. Dermo-doctor: A framework for concurrent skin lesion detection and recognition using a deep convolutional neural network with end-to-end dual encoders. Biomedical Signal Processing and Control 68, 102661.
+- Hasan, M.K., Dahal, L., Samarakoon, P.N., Tushar, F.I., Mart´ ı, R., 2020. DSNet: Automatic dermoscopic skin lesion segmentation. Computers in Biology and Medicine , 103738.
+- He, K., Gan, C., Li, Z., Rekik, I., Yin, Z., Ji, W., Gao, Y., Wang, Q., Zhang, J., Shen, D., 2022. Transformers in medical image analysis: A review. Intelligent Medicine URL: https: // www.sciencedirect.com science article pii S2667102622000717, doi: / / / / https://doi.org/10.1016/j.imed.2022.07.002 .
+- He, K., Zhang, X., Ren, S., Sun, J., 2016. Deep residual learning for image recognition, in: Proceedings of the IEEE conference on computer vision and pattern recognition, pp. 770-778.
+
+He, X., Yu, Z., Wang, T., Lei, B., 2017. Skin lesion segmentation via deep RefineNet, in: Deep Learning in Medical Image Analysis and Multimodal Learning for
+
+<!-- page_break -->
+
+Clinical Decision Support. Springer, pp. 303-311.
+
+He, X., Yu, Z., Wang, T., Lei, B., Shi, Y., 2018. Dense deconvolution net: Multi path fusion and dense deconvolution for high resolution skin lesion segmentation. Technology and Health Care 26, 307-316.
+
+- Henry, H.Y., Feng, X., Wang, Z., Sun, H., 2020. Mixmodule: Mixed cnn kernel module for medical image segmentation, in: 2020 IEEE 17th International Symposium on Biomedical Imaging (ISBI), IEEE. pp. 1508-1512.
+- Hornung, A., Steeb, T., Wessely, A., Brinker, T.J., Breakell, T., Erdmann, M., Berking, C., Heppt, M.V., 2021. The value of total body photography for the early detection of melanoma: A systematic review. International Journal of Environmental Research and Public Health 18, 1726.
+- Howard, A., Sandler, M., Chu, G., Chen, L.C., Chen, B., Tan, M., W., W., Zhu, Y., Pang, R., Vasudevan, V., Le, Q.V., Adam, H., 2019. Searching for MobileNetV3, in: Proceedings of the IEEE CVF International Conference on Computer Vision, pp. 1314-1324. /
+- Hu, H., Zhang, Z., Xie, Z., Lin, S., 2019. Local relation networks for image recognition, in: Proceedings of the IEEE CVF International Conference on Computer / Vision, pp. 3464-3473.
+- Hu, J., Shen, L., Sun, G., 2018. Squeeze-and-excitation networks, in: Proceedings of the IEEE conference on computer vision and pattern recognition, pp. 7132-7141.
+- Huang, G., Liu, Z., Van Der Maaten, L., Weinberger, K.Q., 2017. Densely connected convolutional networks, in: Proceedings of the IEEE conference on computer vision and pattern recognition, pp. 4700-4708.
+- Huang, W.L., Liu, S., Kang, J., Gandjbakhche, A., Armand, M., 2022. DICOM file for total body photography: a work item proposal, in: Photonics in Dermatology and Plastic Surgery 2022, SPIE. pp. 64-74.
+- Huttenlocher, D.P., Klanderman, G.A., Rucklidge, W.J., 1993. Comparing Images Using the Hausdor GLYPH&lt;11&gt; Distance. IEEE Transactions on Pattern Analysis and Machine Intelligence 15, 850-863.
+- ISIC, 2018. ISIC Live Leaderboards: 2018.1: Lesion Boundary Segmentation. https: // challenge.isic-archive.com leaderboards live . [Online. Accessed January 17, / / / 2023].
+- ISIC, 2023. International Skin Imaging Collaboration: Melanoma Project. https: // www.isic-archive.com . [Online. Accessed January 17, 2023]. /
+- Isola, P., Zhu, J.Y., Zhou, T., Efros, A.A., 2017. Image-to-image translation with conditional adversarial networks, in: Proceedings of the IEEE conference on computer vision and pattern recognition, pp. 1125-1134.
+- Iyatomi, H., Oka, H., Celebi, M.E., Hashimoto, M., Hagiwara, M., Tanaka, M., Ogawa, K., 2008. An Improved Internet-Based Melanoma Screening System with Dermatologist-Like Tumor Area Extraction Algorithm. Computerized Medical Imaging and Graphics 32, 566-579.
+- Iyatomi, H., Oka, H., Saito, M., Miyake, A., Kimoto, M., Yamagami, J., Kobayashi, S., Tanikawa, A., Hagiwara, M., Ogawa, K., Argenziano, G., Soyer, H.P., Tanaka, M., 2006. Quantitative Assessment of Tumor Extraction from Dermoscopy Images and Evaluation of Computer-Based Extraction Methods for Automatic Melanoma Diagnostic System. Melanoma Research 16, 183-190.
+- Izadi, S., Mirikharaji, Z., Kawahara, J., Hamarneh, G., 2018. Generative adversarial networks to segment skin lesions, in: 2018 IEEE 15th International Symposium on Biomedical Imaging (ISBI 2018), IEEE. pp. 881-884.
+- Jaccard, P., 1901. Distribution de la Flore Alpine dans le Bassin des Dranses et dans Quelques Regions Voisines. Bulletin de la Societe Vaudoise des Sciences Naturelles 37, 241-272.
+
+Jaccard, P., 1912. The distribution of the flora in the alpine zone. New Phytologist 11, 37-50.
+
+- Jafari, M., Auer, D., Francis, S., Garibaldi, J., Chen, X., 2020. Dru-net: An e GLYPH&lt;14&gt; cient deep convolutional neural network for medical image segmentation, in: 2020 IEEE 17th International Symposium on Biomedical Imaging (ISBI), IEEE. pp. 1144-1148.
+- Jafari, M.H., Karimi, N., Nasr-Esfahani, E., Samavi, S., Soroushmehr, S.M.R., Ward, K., Najarian, K., 2016. Skin lesion segmentation in clinical images using deep learning, in: 2016 23rd International conference on pattern recognition (ICPR), IEEE. pp. 337-342.
+- Jafari, M.H., Nasr-Esfahani, E., Karimi, N., Soroushmehr, S.R., Samavi, S., Najarian, K., 2017. Extraction of skin lesions from non-dermoscopic images for surgical excision of melanoma. International journal of computer assisted radiology and surgery 12, 1021-1030.
+- Jahanifar, M., Tajeddin, N.Z., Koohbanani, N.A., Gooya, A., Rajpoot, N., 2018. Segmentation of skin lesions and their attributes using multi-scale convolutional neural networks and domain specific augmentations. arXiv preprint arXiv:1809.10243 .
+
+Japkowicz, N., Shah, M., 2011. Evaluating Learning Algorithms: A Classification Perspective. Cambridge University Press.
+
+Jaworek-Korjakowska, J., Brodzicki, A., Cassidy, B., Kendrick, C., Yap, M.H., 2021. Interpretability of a deep learning based approach for the classification of skin
+
+<!-- page_break -->
+
+lesions into main anatomic body sites. Cancers 13, 6048.
+
+- Jayapriya, K., Jacob, I.J., 2020. Hybrid fully convolutional networks-based skin lesion segmentation and melanoma detection using deep feature. International Journal of Imaging Systems and Technology 30, 348-357.
+- Jensen, J.D., Elewski, B.E., 2015. The ABCDEF rule: combining the 'ABCDE rule' and the 'ugly duckling sign' in an e GLYPH&lt;11&gt; ort to improve patient self-screening examinations. The Journal of Clinical and Aesthetic Dermatology 8, 15.
+- Ji, X., Henriques, J.F., Vedaldi, A., 2019. Invariant Information Clustering for Unsupervised Image Classification and Segmentation, in: Proceedings of the IEEE CVF International Conference on Computer Vision, pp. 9865-9874. /
+- Ji, Y ., Zhang, R., Wang, H., Li, Z., Wu, L., Zhang, S., Luo, P., 2021. Multi-compound Transformer for accurate biomedical image segmentation, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 326-336.
+- Jiang, F., Zhou, F., Qin, J., Wang, T., Lei, B., 2019. Decision-augmented generative adversarial network for skin lesion segmentation, in: 2019 IEEE 16th International Symposium on Biomedical Imaging (ISBI 2019), IEEE. pp. 447-450.
+- Jiang, X., Jiang, J., Wang, B., Yu, J., Wang, J., 2022. SEACU-Net: Attentive ConvLSTM U-Net with squeeze-and-excitation layer for skin lesion segmentation. Computer Methods and Programs in Biomedicine 225, 107076.
+- Jiang, Y., Cao, S., Tao, S., Zhang, H., 2020. Skin lesion segmentation based on multi-scale attention convolutional neural network. IEEE Access 8, 122811-122825. Jin, Q., Cui, H., Sun, C., Meng, Z., Su, R., 2021. Cascade knowledge di GLYPH&lt;11&gt; usion network for skin lesion diagnosis and segmentation. Applied Soft Computing 99, 106881.
+- Kahn, R.L., 1942. Serology in Syphilis Control: Principles of Sensitivity and Specificity with an Appendix for Health O GLYPH&lt;14&gt; cers and Industrial Physicians. American Journal of Clinical Pathology 12, 446-446. URL: https: // doi.org 10.1093 ajcp 12.8.446d, / / / doi: 10.1093/ajcp/12.8.446d , arXiv:https://academic.oup.com/ajcp/article-pdf/12/8/446/24886161/ajcpath12-0446d.pdf .
+- Kamalakannan, A., Ganesan, S.S., Rajamanickam, G., 2019. Self-learning ai framework for skin lesion image segmentation and classification. International Journal of Computer Science and Information Technology 11, 29-38.
+- Kapoor, S., Narayanan, A., 2022. Leakage and the reproducibility crisis in ML-based science. arXiv preprint arXiv:2207.07048 .
+- Karimi, D., Dou, H., Warfield, S.K., Gholipour, A., 2020. Deep learning with noisy labels: Exploring techniques and remedies in medical image analysis. Medical Image Analysis 65, 101759.
+- Karras, T., Aila, T., Laine, S., Lehtinen, J., 2018. Progressive growing of GANs for improved quality, stability, and variation, in: International Conference on Learning Representations, pp. 1-26. URL: https: // openreview.net forum?id / = Hk99zCeAb.
+- Kats, E., Goldberger, J., Greenspan, H., 2019. A soft staple algorithm combined with anatomical knowledge, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 510-517.
+- Katsch, F., Rinner, C., Tschandl, P., 2022. Comparison of convolutional neural network architectures for robustness against common artefacts in dermatoscopic images. Dermatology Practical &amp; Conceptual , e2022126-e2022126.
+- Katz, W.T., Merickel, M.B., 1989. Translation-Invariant Aorta Segmentation from Magnetic Resonance Images, in: Proceedings of the 1989 International Joint Conference on Neural Networks, pp. 327-333.
+- Kaul, C., Manandhar, S., Pears, N., 2019. FocusNet: an attention-based fully convolutional network for medical image segmentation, in: 2019 IEEE 16th International Symposium on Biomedical Imaging (ISBI 2019), IEEE. pp. 455-458.
+- Kaul, C., Pears, N., Dai, H., Murray-Smith, R., Manandhar, S., 2021. Focusnet ++ : Attentive aggregated transformations for e GLYPH&lt;14&gt; cient and accurate medical image segmentation, in: 2021 IEEE 18th International Symposium on Biomedical Imaging (ISBI), IEEE. pp. 1042-1046.
+- Kaur, R., GholamHosseini, H., Sinha, R., 2022a. Skin lesion segmentation using an improved framework of encoder-decoder based convolutional neural network. International Journal of Imaging Systems and Technology .
+- Kaur, R., GholamHosseini, H., Sinha, R., Lind´ en, M., 2022b. Automatic lesion segmentation using atrous convolutional deep neural networks in dermoscopic skin cancer images. BMC Medical Imaging 22, 1-13.
+- Kawahara, J., Daneshvar, S., Argenziano, G., Hamarneh, G., 2019. Seven-Point Checklist and Skin Lesion Classification Using Multitask Multimodal Neural Nets. IEEE Journal of Biomedical and Health Informatics 23, 538-546.
+
+Kawahara, J., Hamarneh, G., 2018. Fully convolutional neural networks to detect clinical dermoscopic features. IEEE journal of biomedical and health informatics 23, 578-585.
+
+<!-- page_break -->
+
+- Kaymak, R., Kaymak, C., Ucar, A., 2020. Skin lesion segmentation using fully convolutional networks: A comparative experimental study. Expert Systems with Applications 161, 113742.
+- Kazeminia, S., Baur, C., Kuijper, A., van Ginneken, B., Navab, N., Albarqouni, S., Mukhopadhyay, A., 2020. GANs for Medical Image Analysis. Artificial Intelligence in Medicine 109, 101938.
+- Kent, A., Berry, M.M., Luehrs Jr, F.U., Perry, J.W., 1955. Machine literature searching: VIII. Operational criteria for designing information retrieval systems. American Documentation (pre-1986) 6, 93-101.
+
+Khan, A., Kim, H., Chua, L., 2021. Pmed-net: Pyramid based multi-scale encoder-decoder network for medical image segmentation. IEEE Access 9, 55988-55998. Khan, A.H., Awang Iskandar, D.N., Al-Asad, J.F., Mewada, H., Sherazi, M.A., 2022. Ensemble learning of deep learning and traditional machine learning approaches for skin lesion segmentation and classification. Concurrency and Computation: Practice and Experience 34, e6907.
+
+- Khouloud, S., Ahlem, M., Fadel, T., Amel, S., 2021. W-net and inception residual network for skin lesion segmentation and classification. Applied Intelligence , 1-19.
+- Kim, M., Lee, B.D., 2021. A simple generic method for e GLYPH&lt;11&gt; ective boundary extraction in medical image segmentation. IEEE Access 9, 103875-103884. Kittler, H., Pehamberger, H., Wol GLYPH&lt;11&gt; , K., Binder, M., 2002. Diagnostic accuracy of dermoscopy. The lancet oncology 3, 159-165.
+- Korotkov, K., Quintana, J., Campos, R., Jes´s-Silva, A., Iglesias, P., Puig, S., Malvehy, J., Garcia, R., 2019. An improved skin lesion matching scheme in total body u photography. IEEE Journal of Biomedical and Health Informatics 23, 586-598.
+- Kosgiker, G.M., Deshpande, A., Kauser, A., 2021. Segcaps: An e GLYPH&lt;14&gt; cient segcaps network-based skin lesion segmentation in dermoscopic images. International Journal of Imaging Systems and Technology 31, 874-894.
+- Kovashka, A., Russakovsky, O., Fei-Fei, L., Grauman, K., 2016. Crowdsourcing in Computer Vision. Foundations and Trends in Computer Graphics and Vision 10, 177-243.
+- Krahenbuhl, P., Koltun, V., 2011. E GLYPH&lt;14&gt; cient Inference in Fully Connected CRFs with Gaussian Edge Potentials, in: Proceedings of the 24th International Conference on Neural Information Processing Systems, pp. 109-117.
+- Kubat, M., Holte, R.C., Matwin, S., 1998. Machine Learning for the Detection of Oil Spills in Satellite Radar Images. Machine Learning 30, 195-215.
+- Kwon, Y., Won, J.H., Kim, B.J., Paik, M.C., 2020. Uncertainty quantification using bayesian neural networks in classification: Application to biomedical image segmentation. Computational Statistics &amp; Data Analysis 142, 106816.
+- Lampert, T.A., Stumpf, A., Gancarski, P., 2016. An Empirical Study into Annotator Agreement, Ground Truth Estimation, and Algorithm Evaluation. IEEE Transactions on Image Processing 25, 2557-2572.
+- Langerak, T.R., van der Heide, U.A., Kotte, A.N.T.J., Viergever, M.A., Van Vulpen, M., Pluim, J.P.W., 2010. Label Fusion in Atlas-Based Segmentation Using a Selective and Iterative Method for Performance Level Estimation (SIMPLE). IEEE Transactions on Medical Imaging 29, 2000-2008.
+
+LeCun, Y., Bengio, Y., Hinton, G., 2015. Deep Learning. Nature 521, 436-444.
+
+- LeCun, Y., Bottou, L., Bengio, Y., Ha GLYPH&lt;11&gt; ner, P., 1998. Gradient-Based Learning Applied to Document Recognition. Proceedings of the IEEE 86, 2278-2324.
+- Lee, T.K., McLean, D.I., Atkins, M.S., 2003. Irregularity Index: A New Border Irregularity Measure for Cutaneous Melanocytic Lesions. Medical Image Analysis 7, 47-64.
+- Lei, B., Xia, Z., Jiang, F., Jiang, X., Ge, Z., Xu, Y ., Qin, J., Chen, S., Wang, T., Wang, S., 2020. Skin lesion segmentation via generative adversarial networks with dual discriminators. Medical Image Analysis 64, 101716.
+- Lemay, A., Gros, C., Naga Karthik, E., Cohen-Adad, J., 2022. Label fusion and training methods for reliable representation of inter-rater uncertainty. Machine Learning for Biomedical Imaging 1, 1-27. URL: https: // melba-journal.org 2022:031. /
+- Li, H., He, X., Zhou, F., Yu, Z., Ni, D., Chen, S., Wang, T., Lei, B., 2018a. Dense deconvolutional network for skin lesion segmentation. IEEE journal of biomedical and health informatics 23, 527-537.
+- Li, R., Wagner, C., Chen, X., Auer, D., 2020a. A generic ensemble based deep convolutional neural network for semi-supervised medical image segmentation, in: 2020 IEEE 17th International Symposium on Biomedical Imaging (ISBI), IEEE. pp. 1168-1172.
+- Li, S., Gao, Z., He, X., 2021a. Superpixel-guided iterative learning from noisy labels for medical image segmentation, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 525-535.
+- Li, W., Raj, A.N.J., Tjahjadi, T., Zhuang, Z., 2021b. Digital hair removal by deep learning for skin lesion segmentation. Pattern Recognition 117, 107994.
+- Li, X., Yu, L., Chen, H., Fu, C.W., Xing, L., Heng, P.A., 2021c. Transformation-consistent self-ensembling model for semi-supervised medical image segmentation.
+
+<!-- page_break -->
+
+IEEE Transactions on Neural Networks and Learning Systems 32, 523-534.
+
+- Li, X., Yu, L., Fu, C.W., Heng, P.A., 2018b. Deeply supervised rotation equivariant network for lesion segmentation in dermoscopy images, in: OR 2.0 ContextAware Operating Theaters, Computer Assisted Robotic Endoscopy, Clinical Image-Based Procedures, and Skin Image Analysis. Springer, pp. 235-243.
+- Li, Y., Chen, J., Zheng, Y., 2020b. A multi-task self-supervised learning framework for scopy images, in: 2020 IEEE 17th International Symposium on Biomedical Imaging (ISBI), IEEE. pp. 2005-2009.
+- Li, Y., Esteva, A., Kuprel, B., Novoa, R., Ko, J., Thrun, S., 2017. Skin cancer detection and tracking using data synthesis and deep learning, in: AAAI Conference on Artificial Intelligence Joint Workshop on Health Intelligence, pp. 1-4.
+- Li, Y., Shen, L., 2018. Skin lesion analysis towards melanoma detection using deep learning network. Sensors 18, 556.
+- Li, Y., Xu, C., Han, J., An, Z., Wang, D., Ma, H., Liu, C., 2022. MHAU-Net: Skin lesion segmentation based on multi-scale hybrid residual attention network. Sensors 22, 8701.
+- Lin, A., Xu, J., Li, J., Lu, G., 2022. ConTrans: Improving Transformer with convolutional attention for medical image segmentation, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 297-307.
+- Lin, H., Upchurch, P., Bala, K., 2019. Block annotation: Better image annotation with sub-image decomposition, in: Proceedings of the IEEE CVF International / Conference on Computer Vision, pp. 5290-5300.
+- Lin, T.Y., Goyal, P., Girshick, R., He, K., Doll´r, P., 2017. a Focal loss for dense object detection, in: Proceedings of the IEEE international conference on computer vision, pp. 2980-2988.
+- Litjens, G., Kooi, T., Bejnordi, B.E., Setio, A.A.A., Ciompi, F., Ghafoorian, M., van der Laak, J.A.W.M., van Ginneken, B., Sanchez, C.I., 2017. A Survey on Deep Learning in Medical Image Analysis. Medical Image Analysis 42, 60-88.
+- Liu, C., Chen, L.C., Schro GLYPH&lt;11&gt; , F., Adam, H., Hua, W., Yuille, A.L., Fei-Fei, L., 2019a. Auto-DeepLab: Hierarchical Neural Architecture Search for Semantic Image Segmentation, in: Proceedings of the 2019 IEEE CVF Conference on Computer Vision and Pattern Recognition, pp. 82-92. /
+- Liu, L., Mou, L., Zhu, X.X., Mandal, M., 2019b. Skin lesion segmentation based on improved U-Net, in: 2019 IEEE Canadian Conference of Electrical and Computer Engineering (CCECE), IEEE. pp. 1-4.
+- Liu, L., Tsui, Y .Y ., Mandal, M., 2021a. Skin lesion segmentation using deep learning with auxiliary task. Journal of Imaging 7, 67.
+- Liu, Q., Wang, J., Zuo, M., Cao, W., Zheng, J., Zhao, H., Xie, J., 2022a. NCRNet: Neighborhood context refinement network for skin lesion segmentation. Computers in Biology and Medicine 146, 105545.
+- Liu, X., Fan, W., Zhou, D., 2022b. Skin lesion segmentation via intensive atrous spatial Transformer, in: International Conference on Wireless Algorithms, Systems, and Applications, Springer. pp. 15-26.
+- Liu, Z., Lin, Y., Cao, Y., Hu, H., Wei, Y., Zhang, Z., Lin, S., Guo, B., 2021b. Swin transformer: Hierarchical vision transformer using shifted windows, in: Proceedings of the IEEE CVF International Conference on Computer Vision, pp. 10012-10022. /
+- Long, J., Shelhamer, E., Darrell, T., 2015. Fully convolutional networks for semantic segmentation, in: Proceedings of the IEEE conference on computer vision and pattern recognition, pp. 3431-3440.
+- Lui, H., et al., 2009. DermWeb, Department of Dermatology and Skin Science, the University of British Columbia. http: // www.dermweb.com . [Online. Accessed / January 26, 2022].
+- Luque, A., Carrasco, A., Martin, A., de las Heras, A., 2020. The Impact of Class Imbalance in Classification Performance Metrics Based on the Binary Confusion Matrix. Pattern Recognition 91, 216-231.
+
+Ma, J., Chen, J., Ng, M., Huang, R., Li, Y., Li, C., Yang, X., Martel, A.L., 2021. Loss odyssey in medical image segmentation. Medical Image Analysis 71, 102035. Mahbod, A., Tschandl, P., Langs, G., Ecker, R., Ellinger, I., 2020. The e GLYPH&lt;11&gt; ects of skin lesion segmentation on the performance of dermatoscopic image classification. Computer Methods and Programs in Biomedicine 197, 105725.
+
+- Maier-Hein, L., Mersmann, S., Kondermann, D., Bodenstedt, S., Sanchez, A., Stock, C., Kenngott, H.G., Eisenmann, M., Speidel, S., 2014. Can masses of nonexperts train highly accurate image classifiers?, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 438-445.
+
+Marchetti, M.A., Codella, N.C.F., Dusza, S.W., Gutman, D.A., Helba, B., Kalloo, A., Mishra, N., Carrera, C., Celebi, M.E., DeFazio, J.L., Jaimes, N., Marghoob, A.A., Quigley, E., Scope, A., Yelamos, O., Halpern, A.C., 2018. Results of the 2016 International Skin Imaging Collaboration International Symposium on Biomedical Imaging Challenge: Comparison of the Accuracy of Computer Algorithms to Dermatologists for the Diagnosis of Melanoma from Dermoscopic
+
+<!-- page_break -->
+
+Images. Journal of the American Academy of Dermatology 78, 270-277.
+
+- Maron, R.C., Hekler, A., Kriegho GLYPH&lt;11&gt; -Henning, E., Schmitt, M., Schlager, J.G., Utikal, J.S., Brinker, T.J., 2021a. Reducing the impact of confounding factors on skin cancer classification via image segmentation: Technical model study. Journal of Medical Internet Research 23, e21695.
+
+Maron, R.C., Schlager, J.G., Haggenm¨ uller, S., von Kalle, C., Utikal, J.S., Meier, F., Gellrich, F.F., Hobelsberger, S., Hauschild, A., French, L., Heinzerling, L., Schlaak, M., Ghoreschi, K., Hilke, F.J., Poch, G., Heppt, M.V., Berking, C., Haferkamp, S., Sondermann, W., Schadendorf, D., Schilling, B., Goebeler, M., Kriegho GLYPH&lt;11&gt; -Henning, E., Hekler, A., Fr¨hling, S., Lipka, D.B., Kather, J.N., Brinker, T.J., 2021b. o A benchmark for neural network robustness in skin cancer classification. European Journal of Cancer 155, 191-199.
+
+Matthews, B.W., 1975. Comparison of the Predicted and Observed Secondary Structure of T4 Phage Lysozyme. Biochimica et Biophysica Acta 405, 442-451.
+
+- Mendonca, T., Ferreira, P.M., Marques, J.S., Marcal, A.R.S., Rozeira, J., 2013. PH 2 -A Dermoscopic Image Database for Research and Benchmarking, in: Proceedings of the 35th Annual International Conference of the IEEE Engineering in Medicine and Biology Society, pp. 5437-5440.
+
+Mendonca, T.F., Ferreira, P.M., Marcal, A.R.S., Barata, C., Marques, J.S., Rocha, J., Rozeira, J., 2015. PH 2 -A Dermoscopic Image Database for Research and Benchmarking, in: Celebi, M.E., Mendonca, T., Marques, J.S. (Eds.), Dermoscopy Image Analysis. CRC Press, pp. 419-439.
+
+Menzies, S.W., Crotty, K.A., Ingwar, C., McCarthy, W.H., 2003. An Atlas of Surface Microscopy of Pigmented Skin Lesions: Dermoscopy. Second ed., McGrawHill.
+
+- Miller, G.A., Nicely, P.E., 1955. An analysis of perceptual confusions among some english consonants. The Journal of the Acoustical Society of America 27, 338-352.
+- Mirikharaji, Z., Abhishek, K., Izadi, S., Hamarneh, G., 2021. D-LEMA: Deep learning ensembles from multiple annotations-application to skin lesion segmentation, in: Proceedings of the IEEE CVF Conference on Computer Vision and Pattern Recognition, pp. 1837-1846. /
+- Mirikharaji, Z., Hamarneh, G., 2018. Star shape prior in fully convolutional networks for skin lesion segmentation, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 737-745.
+- Mirikharaji, Z., Izadi, S., Kawahara, J., Hamarneh, G., 2018. Deep auto-context fully convolutional neural network for skin lesion segmentation, in: 2018 IEEE 15th International Symposium on Biomedical Imaging (ISBI 2018), IEEE. pp. 877-880.
+- Mirikharaji, Z., Yan, Y., Hamarneh, G., 2019. Learning to segment skin lesions from noisy annotations, in: Domain Adaptation and Representation Transfer and Medical Image Learning with Less Labels and Imperfect Data. Springer, pp. 207-215.
+
+Mirzaalian, H., Lee, T.K., Hamarneh, G., 2016. Skin lesion tracking using structured graphical models. Medical Image Analysis 27, 84-92.
+
+- Mishra, R., Daescu, O., 2017. Deep learning for skin lesion segmentation, in: 2017 IEEE International Conference on Bioinformatics and Biomedicine (BIBM), IEEE. pp. 1189-1194.
+
+Nachbar, F., Stolz, W., Merkle, T., Cognetta, A.B., Vogt, T., Landthaler, M., Bilek, P., Braun-Falco, O., Plewig, G., 1994. The ABCD rule of dermatoscopy: High prospective value in the diagnosis of doubtful melanocytic skin lesions. Journal of the American Academy of Dermatology 30, 551-559.
+
+Nasr-Esfahani, E., Rafiei, S., Jafari, M.H., Karimi, N., Wrobel, J.S., Samavi, S., Soroushmehr, S.R., 2019. Dense pooling layers in fully convolutional network for skin lesion segmentation. Computerized Medical Imaging and Graphics 78, 101658.
+
+Nathan, S., Kansal, P., 2020. Lesion net-skin lesion segmentation using coordinate convolution and deep residual units. arXiv preprint arXiv:2012.14249 .
+
+- Ning, F., Delhomme, D., LeCun, Y., Piano, F., Bottou, L., Barbano, P.E., 2005. Toward Automatic Phenotyping of Developing Embryos from Videos. IEEE Transactions on Image Processing 14, 1360-1371.
+
+Norton, K.A., Iyatomi, H., Celebi, M.E., Ishizaki, S., Sawada, M., Suzaki, R., Kobayashi, K., Tanaka, M., Ogawa, K., 2012. Three-Phase General Border Detection Method for Dermoscopy Images Using Non-Uniform Illumination Correction. Skin Research and Technology 18, 290-300.
+
+Nosrati, M.S., Hamarneh, G., 2016. Incorporating prior knowledge in medical image segmentation: a survey. arXiv preprint arXiv:1607.01092 .
+
+Oakley, A., et al., 1995. DermNet New Zealand Trust. https: // dermnetnz.org . [Online. Accessed January 26, 2022]. /
+
+Oktay, O., Schlemper, J., Folgoc, L.L., Lee, M., Heinrich, M., Misawa, K., Mori, K., McDonagh, S., Hammerla, N.Y., Kainz, B., et al., 2018. Attention U-Net: Learning where to look for the pancreas. arXiv preprint arXiv:1804.03999 .
+
+¨ zt¨rk, S., Ozkaya, U., 2020. Skin lesion segmentation with improved convolutional neural network. Journal of digital imaging 33, 958-970. O u ¸ ¨
+
+Pacheco, A.G., Lima, G.R., Salom˜ ao, A.S., Krohling, B., Biral, I.P., de Angelo, G.G., Alves Jr, F.C., Esgario, J.G., Simora, A.C., Castro, P.B., et al., 2020. PAD-UFES-20: A skin lesion dataset composed of patient data and clinical images collected from smartphones. Data in Brief 32, 106221.
+
+Pakzad, A., Abhishek, K., Hamarneh, G., 2022. CIRCLe: Color invariant representation learning for unbiased classification of skin lesions. arXiv preprint
+
+<!-- page_break -->
+
+arXiv:2208.13528 .
+
+- Papadopoulos, D.P., Uijlings, J.R., Keller, F., Ferrari, V ., 2017. Extreme clicking for e GLYPH&lt;14&gt; cient object annotation, in: Proceedings of the IEEE International Conference on Computer Vision, pp. 4930-4939.
+- Papandreou, G., Chen, L.C., Murphy, K.P., Yuille, A.L., 2015. Weakly- and Semi-Supervised Learning of a Deep Convolutional Network for Semantic Image Segmentation, in: Proceedings of the IEEE International Conference on Computer Vision, pp. 1742-1750.
+- Parmar, N., Vaswani, A., Uszkoreit, J., Kaiser, L., Shazeer, N., Ku, A., Tran, D., 2018. Image transformer, in: International Conference on Machine Learning, PMLR. pp. 4055-4064.
+- Pearson, K., 1904. On the theory of contingency and its relation to association and normal correlation. volume 1. Dulau and Company London, UK.
+- Peng, B., Li, T., 2013. A Probabilistic Measure for Quantitative Evaluation of Image Segmentation. IEEE Signal Processing Letters 20, 689-692.
+- Peng, B., Wang, X., Yang, Y., 2016. Region Based Exemplar References for Image Segmentation Evaluation. IEEE Signal Processing Letters 23, 459-462.
+- Peng, B., Zhang, L., Mou, X., Yang, M.H., 2017a. Evaluation of Segmentation Quality via Adaptive Composition of Reference Segmentations. IEEE Transactions on Pattern Analysis and Machine Intelligence 39, 1929-1941.
+- Peng, C., Zhang, X., Yu, G., Luo, G., Sun, J., 2017b. Large kernel matters-improve semantic segmentation by global convolutional network, in: Proceedings of the IEEE conference on computer vision and pattern recognition, pp. 4353-4361.
+- Peng, Y., Wang, N., Wang, Y., Wang, M., 2019. Segmentation of dermoscopy image using adversarial networks. Multimedia Tools and Applications 78, 1096510981.
+- Perez, F., Vasconcelos, C., Avila, S., Valle, E., 2018. Data Augmentation for Skin Lesion Analysis, in: Proceedings of the Third ISIC Workshop on Skin Image Analysis, pp. 303-311.
+
+Peserico, E., Silletti, A., 2010. Is (N)PRI Suitable for Evaluating Automated Segmentation of Cutaneous Lesions? Pattern Recognition Letters 31, 2464-2467.
+
+- Pinheiro, P.H., Collobert, R., 2014. Recurrent convolutional neural networks for scene labeling, in: 31st International Conference on Machine Learning (ICML),
+
+
+## PMLR. pp. 82-90.
+
+- Pollastri, F., Bolelli, F., Palacios, R.P., Grana, C., 2018. Improving skin lesion segmentation with generative adversarial networks, in: 2018 IEEE 31st International Symposium on Computer-Based Medical Systems (CBMS), IEEE. pp. 442-443.
+- Pollastri, F., Bolelli, F., Paredes, R., Grana, C., 2020. Augmenting Data with GANs to Segment Melanoma Skin Lesions. Multimedia Tools and Applications 79, 15575-15592.
+
+Poudel, S., Lee, S.W., 2021. Deep multi-scale attentional features for medical image segmentation. Applied Soft Computing 109, 107445.
+
+- Pour, M.P., Seker, H., 2020. Transform Domain Representation-Driven Convolutional Neural Networks for Skin Lesion Segmentation. Expert Systems with Applications 144, 113129.
+
+Qiu, Y., Cai, J., Qin, X., Zhang, J., 2020. Inferring skin lesion deep convolutional neural networks. IEEE Access 8, 144246-144258.
+
+- Rajchl, M., Lee, M.C., Schrans, F., Davidson, A., Passerat-Palmbach, J., Tarroni, G., Alansary, A., Oktay, O., Kainz, B., Rueckert, D., 2016. Learning under distributed weak supervision. arXiv preprint arXiv:1606.01100 .
+- Ramachandram, D., DeVries, T., 2017. Lesionseg: semantic segmentation of skin lesions using deep convolutional neural network. arXiv preprint arXiv:1703.03372
+
+.
+
+- Ramachandram, D., Taylor, G.W., 2017. Skin lesion segmentation using deep hypercolumn descriptors. Journal of Computational Vision and Imaging Systems 3. Ramachandran, P., Parmar, N., Vaswani, A., Bello, I., Levskaya, A., Shlens, J., 2019. Stand-alone self-attention in vision models. Advances in Neural Information Processing Systems 32.
+- Ramadan, R., Aly, S., Abdel-Atty, M., 2022. Color-invariant skin lesion semantic segmentation based on modified U-Net deep convolutional neural network. Health Information Science and Systems 10, 1-12.
+- Ramani, D.R., Ranjani, S.S., 2019. U-net based segmentation and multiple feature extraction of dermascopic images for e GLYPH&lt;14&gt; cient diagnosis of melanoma, in: Computer Aided Intervention and Diagnostics in Clinical and Medical Images, pp. 81-101.
+- Rand, W.M., 1971. Objective Criteria for the Evaluation of Clustering Methods. Journal of the American Statistical Association 66, 846-850.
+- Ranftl, R., Bochkovskiy, A., Koltun, V., 2021. Vision transformers for dense prediction, in: Proceedings of the IEEE CVF International Conference on Computer / Vision, pp. 12179-12188.
+
+Redekop, E., Chernyavskiy, A., 2021. Uncertainty-based method for improving poorly labeled segmentation datasets, in: 2021 IEEE 18th International Symposium
+
+<!-- page_break -->
+
+on Biomedical Imaging (ISBI), IEEE. pp. 1831-1835.
+
+- Redmon, J., Divvala, S., Girshick, R., Farhadi, A., 2016. You only look once: Unified, real-time object detection, in: Proceedings of the IEEE conference on computer vision and pattern recognition, pp. 779-788.
+- Ren, S., He, K., Girshick, R., Sun, J., 2015. Faster R-CNN: Towards real-time object detection with region proposal networks. Advances in Neural Information Processing Systems 28.
+- Ren, Y., Yu, L., Tian, S., Cheng, J., Guo, Z., Zhang, Y ., 2021. Serial attention network for skin lesion segmentation. Journal of Ambient Intelligence and Humanized Computing , 1-12.
+- Renard, F., Guedria, S., Palma, N.D., Vuillerme, N., 2020. Variability and reproducibility in deep learning for medical image segmentation. Scientific Reports 10, 1-16.
+- Ribeiro, V., Avila, S., Valle, E., 2020. Less is more: Sample selection and label conditioning improve skin lesion segmentation, in: Proceedings of the IEEE CVF / Conference on Computer Vision and Pattern Recognition Workshops, pp. 738-739.
+- Rohlfing, T., Maurer, C.R., 2006. Shape-Based Averaging. IEEE Transactions on Image Processing 16, 153-161.
+- Ronneberger, O., Fischer, P., Brox, T., 2015. U-Net: Convolutional networks for biomedical image segmentation, in: International Conference on Medical image computing and computer-assisted intervention, pp. 234-241.
+- Ross-Howe, S., Tizhoosh, H.R., 2018. The e GLYPH&lt;11&gt; ects of image pre-and post-processing, wavelet decomposition, and local binary patterns on u-nets for skin lesion segmentation, in: 2018 International Joint Conference on Neural Networks (IJCNN), pp. 1-8.
+
+Rotemberg, V., Kurtansky, N., Betz-Stablein, B., Ca GLYPH&lt;11&gt; ery, L., Chousakos, E., Codella, N., Combalia, M., Dusza, S., Guitera, P., Gutman, D., Halpern, A., Helba, B., Kittler, H., Kose, K., Langer, S., Lioprys, K., Malvehy, J., Musthaq, S., Nanda, J., Reiter, O., Shih, G., Stratigos, A., Tschandl, P., Weber, J., Soyer, H.P., 2021. A Patient-Centric Dataset of Images and Metadata for Identifying Melanomas Using Clinical Context. Scientific Data 8, 34.
+
+Roth, H.R., Yang, D., Xu, Z., Wang, X., Xu, D., 2021. Going to extremes: Weakly supervised medical image segmentation. Machine Learning and Knowledge Extraction 3, 507-524.
+
+- Rother, C., Kolmogorov, V., Blake, A., 2004. 'GrabCut' interactive foreground extraction using iterated graph cuts. ACM Transactions on Graphics (TOG) 23, 309-314.
+
+Rumelhart, D.E., Hinton, G.E., Williams, R.J., 1986. Learning Representations by Back-Propagating Errors. Nature 323, 533-536.
+
+- Saba, T., Khan, M.A., Rehman, A., Marie-Sainte, S.L., 2019. Region Extraction and Classification of Skin Cancer: A Heterogeneous Framework of Deep CNN Features Fusion and Reduction. Journal of Medical Systems 43, 289.
+- Sachin, T.S., Sowmya, V., Soman, K., 2021. Performance analysis of deep learning models for biomedical image segmentation, in: Deep Learning for Biomedical Applications. CRC Press, pp. 83-100.
+
+Sagi, O., Rokach, L., 2018. Ensemble learning: A survey. Wiley Interdisciplinary Reviews: Data Mining and Knowledge Discovery 8, e1249.
+
+- Saha, A., Prasad, P., Thabit, A., 2020. Leveraging adaptive color augmentation in convolutional neural networks for deep skin lesion segmentation, in: 2020 IEEE
+
+17th International Symposium on Biomedical Imaging (ISBI), IEEE. pp. 2014-2017.
+
+S ¸ ahin,
+
+N., Alpaslan, N., Hanbay, D., 2021.
+
+Robust optimization of SegNet hyperparameters for skin lesion segmentation.
+
+Multimedia Tools and Applications ,
+
+1-21.
+
+- Saini, S., Gupta, D., Tiwari, A.K., 2019. Detector-segmentor network for skin lesion localization and segmentation, in: National Conference on Computer Vision, Pattern Recognition, Image Processing, and Graphics, Springer. pp. 589-599.
+- Saini, S., Jeon, Y .S., Feng, M., 2021. B-segnet: branched-segmentor network for skin lesion segmentation, in: Proceedings of the Conference on Health, Inference, and Learning, pp. 214-221.
+- Sarker, M., Kamal, M., Rashwan, H.A., Abdel-Nasser, M., Singh, V.K., Banu, S.F., Akram, F., Chowdhury, F.U., Choudhury, K.A., Chambon, S., et al., 2019. MobileGAN: Skin lesion segmentation using a lightweight generative adversarial network. arXiv preprint arXiv:1907.00856 .
+- Sarker, M.M.K., Rashwan, H.A., Akram, F., Banu, S.F., Saleh, A., Singh, V.K., Chowdhury, F.U., Abdulwahab, S., Romani, S., Radeva, P., et al., 2018. SLSDeep: Skin lesion segmentation based on dilated residual and pyramid pooling networks, in: International Conference on Medical Image Computing and ComputerAssisted Intervention, Springer. pp. 21-29.
+
+Sarker, M.M.K., Rashwan, H.A., Akram, F., Singh, V.K., Banu, S.F., Chowdhury, F.U., Choudhury, K.A., Chambon, S., Radeva, P., Puig, D., et al., 2021. SLSNet: Skin lesion segmentation using a lightweight generative adversarial network. Expert Systems with Applications 183, 115433.
+
+<!-- page_break -->
+
+- Schaefer, G., Rajab, M.I., Celebi, M.E., Iyatomi, H., 2011. Colour and Contrast Enhancement for Improved Skin Lesion Segmentation. Computerized Medical Imaging and Graphics 35, 99-104.
+- Shahin, A.H., Amer, K., Elattar, M.A., 2019. Deep convolutional encoder-decoders with aggregated multi-resolution skip connections for skin lesion segmentation, in: 2019 IEEE 16th International Symposium on Biomedical Imaging (ISBI 2019), IEEE. pp. 451-454.
+- Shamshad, F., Khan, S., Zamir, S.W., Khan, M.H., Hayat, M., Khan, F.S., Fu, H., 2022. Transformers in medical imaging: A survey. arXiv preprint arXiv:2201.09873
+- .
+- Shamsolmoali, P., Zareapoor, M., Granger, E., Zhou, H., Wang, R., Celebi, M.E., Yang, J., 2021. Image Synthesis with Adversarial Networks: A Comprehensive Survey and Case Studies. Information Fusion 72, 126-146.
+- Sharma, M., Saha, O., Sriraman, A., Hebbalaguppe, R., Vig, L., Karande, S., 2017. Crowdsourcing for Chromosome Segmentation and Deep Classification, in: Proceedings of the IEEE Conference on Computer vision and Pattern Recognition Workshops, pp. 786-793.
+- Shimizu, K., Iyatomi, H., Celebi, M.E., Norton, K.A., Tanaka, M., 2015. Four-Class Classification of Skin Lesions with Task Decomposition Strategy. IEEE Transactions on Biomedical Engineering 62, 274-283.
+- Shorten, C., Khoshgoftaar, T.M., 2019. A Survey on Image Data Augmentation for Deep Learning. Journal of Big Data 6, 60.
+- Siegel, R.L., Miller, K.D., Wagle, N.S., Jemal, A., 2023. Cancer statistics, 2023. CA: A Cancer Journal for Clinicians 73, 17-48. URL: https: // doi.org 10.3322 / / caac.21763, doi: 10.3322/caac.21763 .
+- Silveira, M., Nascimento, J.C., Marques, J.S., Marcal, A.R.S., Mendonca, T., Yamauchi, S., Maeda, J., Rozeira, J., 2009. Comparison of Segmentation Methods for Melanoma Diagnosis in Dermoscopy Images. IEEE Journal of Selected Topics in Signal Processing 3, 35-45.
+- Simonyan, K., Zisserman, A., 2014. Very deep convolutional networks for large-scale image recognition. arXiv preprint arXiv:1409.1556 .
+- Singh, V.K., Abdel-Nasser, M., Rashwan, H.A., Akram, F., Pandey, N., Lalande, A., Presles, B., Romani, S., Puig, D., 2019. FCA-Net: Adversarial learning for skin lesion segmentation based on multi-scale features and factorized channel attention. IEEE Access 7, 130552-130565.
+- Smyth, P., Fayyad, U.M., Burl, M.C., Perona, P., Baldi, P., 1995. Inferring Ground Truth from Subjective Labelling of Venus Images, in: Advances in Neural Information Processing Systems, pp. 1085-1092.
+- Soenksen, L.R., Kassis, T., Conover, S.T., Marti-Fuster, B., Birkenfeld, J.S., Tucker-Schwartz, J., Naseem, A., Stavert, R.R., Kim, C.C., Senna, M.M., Avil´ esIzquierdo, J., Collins, J.J., Barzilay, R., Gray, M.L., 2021. Using deep learning for dermatologist-level detection of suspicious pigmented skin lesions from wide-field images. Science Translational Medicine 13, eabb3652.
+- Song, L., Lin, J., Wang, Z.J., Wang, H., 2019. Dense-residual attention network for skin lesion segmentation, in: International Workshop on Machine Learning in Medical Imaging, Springer. pp. 319-327.
+- Sørensen, T.A., 1948. A method of establishing groups of equal amplitude in plant sociology based on similarity of species content and its application to analyses of the vegetation on Danish commons. Biol. Skar. 5, 1-34.
+- Soudani, A., Barhoumi, W., 2019. An image-based segmentation recommender using crowdsourcing and transfer learning for skin lesion extraction. Expert Systems with Applications 118, 400-410.
+- Strudel, R., Garcia, R., Laptev, I., Schmid, C., 2021. Segmenter: Transformer for semantic segmentation, in: Proceedings of the IEEE CVF International Conference / on Computer Vision, pp. 7262-7272.
+- Sun, C., Shrivastava, A., Singh, S., Gupta, A., 2017. Revisiting unreasonable e GLYPH&lt;11&gt; ectiveness of data in deep learning era, in: Proceedings of the IEEE International Conference on Computer Vision, pp. 843-852.
+- Sun, X., Yang, J., Sun, M., Wang, K., 2016. A benchmark for automatic visual classification of clinical skin disease images, in: European Conference on Computer Vision, Springer. pp. 206-222.
+- Taghanaki, S.A., Abhishek, K., Hamarneh, G., 2019. Improved inference via deep input transfer, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 819-827.
+- Taha, A.A., Hanbury, A., 2015. Metrics for Evaluating 3D Medical Image Segmentation: Analysis, Selection, and Tool. BMC Medical Imaging 15, 29.
+- Tajbakhsh, N., Jeyaseelan, L., Li, Q., Chiang, J.N., Wu, Z., Ding, X., 2020a. Embracing Imperfect Datasets: A Review of Deep Learning Solutions for Medical Image Segmentation. Medical Image Analysis 63, 101693.
+- Tajbakhsh, N., Jeyaseelan, L., Li, Q., Chiang, J.N., Wu, Z., Ding, X., 2020b. Embracing imperfect datasets: A review of deep learning solutions for medical image segmentation. Medical Image Analysis 63, 101693.
+
+<!-- page_break -->
+
+- Tan, M., Chen, B., Pang, R., Vasudevan, V., Sandler, M., Howard, A., Le, Q.V., 2019a. MnasNet: Platform-Aware Neural Architecture Search for Mobile, in: Proceedings of the IEEE CVF Conference on Computer Vision and Pattern Recognition, pp. 2820-2828. /
+- Tan, M., Le, Q., 2019. E GLYPH&lt;14&gt; cientNet: Rethinking Model Scaling for Convolutional neural Networks, in: Proceedings of the International Conference on Machine Learning, pp. 6105-6114.
+- Tan, T.Y., Zhang, L., Lim, C.P., Fielding, B., Yu, Y., Anderson, E., 2019b. Evolving ensemble models for image segmentation using enhanced particle swarm optimization. IEEE access 7, 34004-34019.
+- Tang, P., Liang, Q., Yan, X., Xiang, S., Sun, W., Zhang, D., Coppola, G., 2019a. E GLYPH&lt;14&gt; cient skin lesion segmentation using separable-unet with stochastic weight averaging. Computer methods and programs in biomedicine 178, 289-301.
+- Tang, P., Yan, X., Liang, Q., Zhang, D., 2021a. AFLN-DGCL: Adaptive feature learning network with di GLYPH&lt;14&gt; culty-guided curriculum learning for skin lesion segmentation. Applied Soft Computing 110, 107656.
+- Tang, X., Peng, J., Zhong, B., Li, J., Yan, Z., 2021b. Introducing frequency representation into convolution neural networks for medical image segmentation via twin-kernel fourier convolution. Computer Methods and Programs in Biomedicine 205, 106110.
+- Tang, Y., Yang, F., Yuan, S., et al., 2019b. A multi-stage framework with context information fusion structure for skin lesion segmentation, in: 2019 IEEE 16th International Symposium on Biomedical Imaging (ISBI 2019), IEEE. pp. 1407-1410.
+- Tao, S., Jiang, Y ., Cao, S., Wu, C., Ma, Z., 2021. Attention-guided network with densely connected convolution for skin lesion segmentation. Sensors 21, 3462.
+- Tong, X., Wei, J., Sun, B., Su, S., Zuo, Z., Wu, P., 2021. Ascu-net: Attention gate, spatial and channel attention u-net for skin lesion segmentation. Diagnostics 11, 501.
+- Torralba, A., Efros, A.A., 2011. Unbiased look at dataset bias, in: Proceedings of the IEEE CVF Conference on Computer Vision and Pattern Recognition, pp. / 1521-1528.
+- Tran, H., Chen, K., Lim, A.C., Jabbour, J., Shumack, S., 2005. Assessing diagnostic skill in dermatology: a comparison between general practitioners and dermatologists. Australasian journal of dermatology 46, 230-234.
+- Tran, T.T., Pham, V.T., 2022. Fully convolutional neural network with attention gate and fuzzy active contour model for skin lesion segmentation. Multimedia Tools and Applications 81, 13979-13999.
+- Tschandl, P., Rinner, C., Apalla, Z., Argenziano, G., Codella, N., Halpern, A., Janda, M., Lallas, A., Longo, C., Malvehy, J., Paoli, J., Puig, S., Rosendahl,
+- C., Soyer, H.P., Zalaudek, I., Kittler, H., 2020. Human-computer collaboration for skin cancer recognition. Nature Medicine 26, 1229-1234. URL: https: // doi.org 10.1038 s41591-020-0942-0, doi: / / 10.1038/s41591-020-0942-0 .
+- Tschandl, P., Rosendahl, C., Kittler, H., 2018. The HAM10000 Dataset, a Large Collection of Multi-Source Dermatoscopic Images of Common Pigmented Skin Lesions. Scientific Data , 180161.
+- Tschandl, P., Sinz, C., Kittler, H., 2019. Domain-specific classification-pretrained fully convolutional network encoders for skin lesion segmentation. Computers in Biology and Medicine 104, 111-116.
+- Tu, W., Liu, X., Hu, W., Pan, Z., 2019. Dense-residual network with adversarial learning for skin lesion segmentation. IEEE Access 7, 77037-77051.
+- Unnikrishnan, R., Pantofaru, C., Hebert, M., 2007. Toward Objective Evaluation of Image Segmentation Algorithms. IEEE Transactions on Pattern Analysis and
+- Machine Intelligence 29, 929-944.
+- ¨ nver, H.M., Ayan, E., 2019. Skin lesion segmentation in dermoscopic images with combination of YOLO and GrabCut algorithm. Diagnostics 9, 72. U
+- Usatine, R.P., Madden, B.D., 2013. Interactive dermatology atlas. Department of Dermatology and Cutaneous Surgery, University of Texas https: // www.dermatlas. net / [Accessed January 26, 2022].
+- Valanarasu, J.M.J., Patel, V.M., 2022. UNeXt: MLP-based rapid medical image segmentation network, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 23-33.
+- Valle, E., Fornaciali, M., Menegola, A., Tavares, J., Bittencourt, F.V., Li, L.T., Avila, S., 2020. Data, depth, and design: Learning reliable models for skin lesion analysis. Neurocomputing 383, 303-313.
+- van Rijsbergen, C.J., 1979. Information Retrieval. Second ed., Butterworth-Heinemann.
+- Vandewalle, P., 2012. Code sharing is associated with research impact in image processing. Computing in Science &amp; Engineering 14, 42-47.
+- Vanker, A.D., Van Stoecker, W., 1984. An expert diagnostic program for dermatology. Computers and Biomedical Research 17, 241-247.
+- Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A.N., Kaiser, Ł., Polosukhin, I., 2017. Attention is all you need. Advances in Neural
+
+<!-- page_break -->
+
+| Information Processing Systems 30.                                                                                                                                                                                                                                                                                                                                       |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Venkatesh, G., Naresh, Y., Little, S., O'Connor, N.E., 2018. Adeep residual architecture for skin lesion segmentation, in: OR2.0 Context-Aware Operating Theaters, Computer Assisted Robotic Endoscopy, Clinical Image-Based Procedures, and Skin Image Analysis. Springer, pp. 277-284.                                                                                 |
+| S., Patil, S.M., Ravikumar, N., Maier, A.K., 2018a. A multi-task framework for skin lesion detection and segmentation, in: OR 2.0 Context-Aware Operating                                                                                                                                                                                                                |
+| Vesal, Theaters, Computer Assisted Robotic Endoscopy, Clinical Image-Based Procedures, and Skin Image Analysis. Springer, pp. 285-293.                                                                                                                                                                                                                                   |
+| Vesal, S., Ravikumar, N., Maier, A., 2018b. SkinNet: A deep learning framework for skin lesion segmentation, in: 2018 IEEE Nuclear Science Symposium and Medical Imaging Conference Proceedings (NSS / MIC), IEEE. pp. 1-3. ViDIR Dataverse, 2020. HAM10000 Binary Lesion Segmentations. https: // doi.org / 10.7910 / DVN / DBW86T. [Online. Accessed January 9, 2023]. |
+| Wang, H., Wang, G., Sheng, Z., Zhang, S., 2019a. Automated segmentation of skin lesion based on pyramid attention network, in: International Workshop on Machine Learning in Medical Imaging, Springer. pp. 435-443.                                                                                                                                                     |
+| Wang, J., Li, B., Guo, X., Huang, J., Song, M., Wei, M., 2022a. CTCNet: A bi-directional cascaded segmentation network combining Transformers with CNNs for                                                                                                                                                                                                              |
+| skin lesions, in: Chinese Conference on Pattern Recognition and Computer Vision (PRCV), Springer. pp. 215-226. Wang, J., Wei, L., Wang, L., Zhou, Q., Zhu, L., Qin, J., 2021a. Boundary-aware Transformers for skin lesion segmentation, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 206-216.              |
+| Wang, M., Liu, B., Foroosh, H., 2017. Factorized convolutional neural networks, in: Proceedings of the IEEE International Conference on Computer Vision                                                                                                                                                                                                                  |
+| Workshops, pp. 545-553.                                                                                                                                                                                                                                                                                                                                                  |
+| Wang, T., Lan, J., Han, Z., Hu, Z., Huang, Y., Deng, Y., Zhang, H., Wang, J., Chen, M., Jiang, H., et al., 2022b. O-Net: a novel framework with deep fusion of and Transformer for simultaneous segmentation and classification. Frontiers in Neuroscience 16.                                                                                                           |
+| CNN                                                                                                                                                                                                                                                                                                                                                                      |
+| Wang, X., Ding, H., Jiang, X., 2019b. Dermoscopic image segmentation through the enhanced high-level parsing and class weighted loss, in: 2019 IEEE International Conference on Image Processing (ICIP), IEEE. pp. 245-249.                                                                                                                                              |
+| Wang, X., Jiang, X., Ding, H., Liu, J., 2019c. Bi-directional dermoscopic feature learning and multi-scale consistent decision fusion for skin lesion segmentation. IEEE transactions on image processing 29, 3039-3051.                                                                                                                                                 |
+| Wang, X., Jiang, X., Ding, H., Zhao, Y., Liu, J., 2021b. Knowledge-aware deep framework for collaborative skin lesion segmentation and melanoma recognition.                                                                                                                                                                                                             |
+| Wang, Y., Wang, S., 2022. Skin lesion segmentation with attention-based SC-Conv U-Net and feature map distortion. Signal, Image and Video Processing , 1-9. Y., Wei, Y., Qian, X., Zhu, L., Yang, Y., 2020b. DONet: Dual objective networks for skin lesion segmentation. arXiv preprint arXiv:2008.08278 .                                                              |
+| Y., Xu, Z., Tian, J., Luo, J., Shi, Z., Zhang, Y., Fan, J., He, Z., 2022c. Cross-domain few-shot learning for rare-disease skin lesion segmentation, in: ICASSP                                                                                                                                                                                                          |
+| Z., Lyu, J., Luo, W., Tang, X., 2022d. Superpixel inpainting for self-supervised skin lesion segmentation from dermoscopic images, in: 2022 IEEE International Symposium on Biomedical Imaging (ISBI), IEEE. pp. 1-4.                                                                                                                                                    |
+| 19th                                                                                                                                                                                                                                                                                                                                                                     |
+| S. K. anbd Zou, K.H., Wells, W.M., 2004. Simultaneous Truth and Performance Level Estimation (STAPLE): An Algorithm for the Validation of Image Segmentation. IEEE Transactions on Medical Imaging 23, 903-921. Access 7,                                                                                                                                                |
+| 136616-136629. Weng, Y., Zhou, T., Li, Y., Qiu, X., 2019. NAS-Unet: Neural architecture search for medical image segmentation. IEEE Access 7, 44247-44257.                                                                                                                                                                                                               |
+| A., Purnama, S.R., Wirawan, P.W., Rasyidi, H., 2021. Lightweight encoder-decoder model for automatic skin lesion segmentation. Informatics in                                                                                                                                                                                                                            |
+| Unlocked , 100640.                                                                                                                                                                                                                                                                                                                                                       |
+| H., Chen, S., Chen, G., Wang, W., Lei, B., Wen, Z., 2022a. FAT-Net: Feature adaptive Transformers for automated skin lesion segmentation. Medical Analysis 76, 102327.                                                                                                                                                                                                   |
+| H., Pan, J., Li, Z., Wen, Z., Qin, J., 2020. Automated skin lesion segmentation via an adaptive dual attention module. IEEE Transactions on Medical                                                                                                                                                                                                                      |
+| 40, 357-370.                                                                                                                                                                                                                                                                                                                                                             |
+| Wu,                                                                                                                                                                                                                                                                                                                                                                      |
+| Imaging                                                                                                                                                                                                                                                                                                                                                                  |
+| Wibowo,                                                                                                                                                                                                                                                                                                                                                                  |
+| Wu,                                                                                                                                                                                                                                                                                                                                                                      |
+| 2022-2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), IEEE. pp. 1086-1090.                                                                                                                                                                                                                                                        |
+| Wang,                                                                                                                                                                                                                                                                                                                                                                    |
+| Wang,                                                                                                                                                                                                                                                                                                                                                                    |
+| Wang,                                                                                                                                                                                                                                                                                                                                                                    |
+| Warfield,                                                                                                                                                                                                                                                                                                                                                                |
+| Wei, Z., Song, H., Chen, L., Li, Q., Han, G., 2019. Attention-based DenseUnet network with adversarial training for skin lesion segmentation. IEEE                                                                                                                                                                                                                       |
+| Medicine                                                                                                                                                                                                                                                                                                                                                                 |
+| Image                                                                                                                                                                                                                                                                                                                                                                    |
+
+<!-- page_break -->
+
+- Wu, J., Fang, H., Shang, F., Yang, D., Wang, Z., Gao, J., Yang, Y., Xu, Y., 2022b. SeATrans: Learning segmentation-assisted diagnosis model via Transformer, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 677-687.
+- Wu, Y., Zeng, D., Xu, X., Shi, Y., Hu, J., 2022c. FairPrune: Achieving fairness through pruning for dermatological disease diagnosis, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 743-753.
+- Xie, F., Yang, J., Liu, J., Jiang, Z., Zheng, Y ., Wang, Y ., 2020a. Skin lesion segmentation using high-resolution convolutional neural network. Computer methods and programs in biomedicine 186, 105241.
+- Xie, Y., Zhang, J., Xia, Y ., Shen, C., 2020b. A mutual bootstrapping model for automated skin lesion segmentation and classification. IEEE Transactions on Medical Imaging 39, 2482-2493.
+- Xie, Z., Tu, E., Zheng, H., Gu, Y., Yang, J., 2021. Semi-supervised skin lesion segmentation with learning model confidence, in: ICASSP 2021-2021 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), IEEE. pp. 1135-1139.
+- Xu, R., Wang, C., Xu, S., Meng, W., Zhang, X., 2021. DC-Net: Dual context network for 2D medical image segmentation, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 503-513.
+- Xue, Y., Xu, T., Huang, X., 2018. Adversarial learning with multi-scale loss for skin lesion segmentation, in: 2018 IEEE 15th International Symposium on Biomedical Imaging (ISBI 2018), IEEE. pp. 859-863.
+- Yan, Y., Kawahara, J., Hamarneh, G., 2019. Melanoma recognition via visual attention, in: International Conference on Information Processing in Medical Imaging, Springer. pp. 793-804.
+- Yang, C.H., Ren, J.H., Huang, H.C., Chuang, L.Y., Chang, P.Y., 2021. Deep hybrid convolutional neural network for segmentation of melanoma skin lesion. Computational Intelligence and Neuroscience 2021.
+- Yang, X., Li, H., Wang, L., Yeo, S.Y., Su, Y., Zeng, Z., 2018. Skin lesion analysis by multi-target deep neural networks, in: 2018 40th Annual International Conference of the IEEE Engineering in Medicine and Biology Society (EMBC), IEEE. pp. 1263-1266.
+- Yerushalmy, J., 1947. Statistical problems in assessing methods of medical diagnosis, with special reference to X-ray techniques. Public Health Reports (1896-1970) 62, 1432-1449.
+- Yi, X., Walia, E., Babyn, P., 2019. Generative Adversarial Network in Medical Imaging: A Review. Medical Image Analysis 58, 101552.
+- Yu, B., Yu, L., Tian, S., Wu, W., Zhang, D., Kang, X., 2022. mCA-Net: modified comprehensive attention convolutional neural network for skin lesion segmentation. Computer Methods in Biomechanics and Biomedical Engineering: Imaging &amp; Visualization 10, 85-95.
+- Yu, F., Koltun, V., 2016. Multi-scale context aggregation by dilated convolutions. international conference on learning representations .
+- Yu, L., Chen, H., Dou, Q., Qin, J., Heng, P.A., 2017a. Automated melanoma recognition in dermoscopy images via very deep residual networks. IEEE transactions on medical imaging 36, 994-1004.
+- Yu, Y., Gong, Z., Zhong, P., Shan, J., 2017b. Unsupervised representation learning with deep convolutional neural network for remote sensing images, in: International Conference on Image and Graphics, pp. 97-108.
+- Yuan, Y., Chao, M., Lo, Y.C., 2017. Automatic skin lesion segmentation using deep fully convolutional networks with jaccard distance. IEEE transactions on medical imaging 36, 1876-1886.
+- Yuan, Y., Lo, Y.C., 2019. Improving Dermoscopic Image Segmentation with Enhanced Convolutional-Deconvolutional Networks. IEEE Journal of Biomedical and Health Informatics 23, 519-526.
+- Zafar, K., Gilani, S.O., Waris, A., Ahmed, A., Jamil, M., Khan, M.N., Sohail Kashif, A., 2020. Skin lesion segmentation from dermoscopic images using convolutional neural network. Sensors 20, 1601.
+- Zeng, G., Zheng, G., 2018. Multi-scale fully convolutional densenets for automated skin lesion segmentation in dermoscopy images, in: International Conference Image Analysis and Recognition, Springer. pp. 513-521.
+- Zhang, G., Shen, X., Chen, S., Liang, L., Luo, Y., Yu, J., Lu, J., 2019a. DSM: A deep supervised multi-scale network learning for skin cancer segmentation. IEEE Access 7, 140936-140945.
+- Zhang, H., Fritts, J.E., Goldman, S.A., 2008. Image Segmentation Evaluation: A Survey of Unsupervised Methods. Computer Vision and Image Understanding 110, 260-280.
+- Zhang, J., Petitjean, C., Ainouz, S., 2020a. Kappa loss for skin lesion segmentation in fully convolutional network, in: 2020 IEEE 17th International Symposium on Biomedical Imaging (ISBI), IEEE. pp. 2001-2004.
+
+<!-- page_break -->
+
+- Zhang, L., Tanno, R., Bronik, K., Jin, C., Nachev, P., Barkhof, F., Ciccarelli, O., Alexander, D.C., 2020b. Learning to segment when experts disagree, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 179-190.
+- Zhang, L., Yang, G., Ye, X., 2019b. Automatic skin lesion segmentation by coupling deep fully convolutional networks and shallow network with textons. Journal of Medical Imaging 6, 024001.
+- Zhang, R., Liu, S., Yu, Y., Li, G., 2021a. Self-supervised correction learning for semi-supervised biomedical image segmentation, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 134-144.
+- Zhang, X., Zhou, X., Lin, M., Sun, J., 2018. Shu GLYPH&lt;15&gt; eNet: An Extremely E GLYPH&lt;14&gt; cient Convolutional Neural Network for Mobile Devices, in: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp. 6848-6856.
+- Zhang, Y., Chen, Z., Yu, H., Yao, X., Li, H., 2022a. Feature fusion for segmentation and classification of skin lesions, in: 2022 IEEE 19th International Symposium on Biomedical Imaging (ISBI), IEEE. pp. 1-5.
+- Zhang, Y., Liu, H., Hu, Q., 2021b. TransFuse: Fusing Transformers and CNNs for medical image segmentation, in: International Conference on Medical Image Computing and Computer-Assisted Intervention, Springer. pp. 14-24.
+- Zhang, Y., Yang, Q., 2022. A survey on multi-task learning. IEEE Transactions on Knowledge and Data Engineering .
+- Zhang, Z., Tian, C., Gao, X., Wang, C., Feng, X., Bai, H.X., Jiao, Z., 2022b. Dynamic prototypical feature representation learning framework for semi-supervised skin lesion segmentation. Neurocomputing 507, 369-382.
+- Zhao, C., Shuai, R., Ma, L., Liu, W., Wu, M., 2021. Segmentation of dermoscopy images based on deformable 3D convolution and ResU-NeXt ++ . Medical &amp; Biological Engineering &amp; Computing 59, 1815-1832.
+- Zhao, H., Jia, J., Koltun, V., 2020. Exploring self-attention for image recognition, in: Proceedings of the IEEE CVF Conference on Computer Vision and Pattern / Recognition, pp. 10076-10085.
+- Zhao, H., Shi, J., Qi, X., Wang, X., Jia, J., 2017. Pyramid Scene Parsing Network, in: Proceedings of the 2017 IEEE Conference on Computer Vision and Pattern Recognition, pp. 2881-2890.
+- Zhao, M., Kawahara, J., Abhishek, K., Shamanian, S., Hamarneh, G., 2022a. Skin3d: Detection and longitudinal tracking of pigmented skin lesions in 3D total-body textured meshes. Medical Image Analysis 77, 102329.
+- Zhao, Z., Lu, W., Zeng, Z., Xu, K., Veeravalli, B., Guan, C., 2022b. Self-supervised assisted active learning for skin lesion segmentation, in: 2022 44th Annual International Conference of the IEEE Engineering in Medicine &amp; Biology Society (EMBC), IEEE. pp. 5043-5046. URL: https: // doi.org 10.1109 embc48229. / / 2022.9871734, doi: 10.1109/embc48229.2022.9871734 .
+- Zheng, S., Lu, J., Zhao, H., Zhu, X., Luo, Z., Wang, Y., Fu, Y., Feng, J., Xiang, T., Torr, P.H., et al., 2021. Rethinking semantic segmentation from a sequence-tosequence perspective with transformers, in: Proceedings of the IEEE CVF Conference on Computer Vision and Pattern Recognition, pp. 6881-6890. /
+- Zhou, B., Khosla, A., Lapedriza, A., Oliva, A., Torralba, A., 2016. Learning deep features for discriminative localization, in: Proceedings of the IEEE conference on computer vision and pattern recognition, pp. 2921-2929.
+- Zhu, L., Feng, S., Zhu, W., Chen, X., 2020. ASNet: An adaptive scale network for skin lesion segmentation in dermoscopy images, in: Medical Imaging 2020: Biomedical Applications in Molecular, Structural, and Functional Imaging, International Society for Optics and Photonics. SPIE. pp. 226-231.
+- Zhu, Q., 2020. On the Performance of Matthews Correlation Coe GLYPH&lt;14&gt; cient (MCC) for Imbalanced Dataset. Pattern Recognition Letters 136, 71-80.
+- Zijdenbos, A.P., Dawant, B.M., Margolin, R.A., Palmer, A.C., 1994. Morphometric Analysis of White Matter Lesions in MR Images: Method and Validation. IEEE Transactions on Medical Imaging 13, 716-724.
+- Zortea, M., Skrøvseth, S.O., Schopf, T.R., Kirchesch, H.M., Godtliebsen, F., 2011. Automatic segmentation of dermoscopic images by iterative classification. International journal of biomedical imaging 2011.
+- Zou, K.H., Warfield, S.K., Bharatha, A., Tempany, C.M., Kaus, M.R., Haker, S.J., Wells III, W.M., Jolesz, F.A., Kikinis, R., 2004. Statistical Validation of Image Segmentation Quality Based on a Spatial Overlap Index. Academic Radiology 11, 178-189.
+- Zunair, H., Hamza, A.B., 2021. Sharp U-Net: Depthwise convolutional network for biomedical image segmentation. Computers in Biology and Medicine 136, 104699.
+
+<!-- page_break -->
+
+Input Data
+
+Datasets
+
+Synthetic Data
+
+Generation
+
+Image
+
+Processing
+
+Segmentation
+
+Models
+
+Single Network
+
+Models
+
+Multiple Network
+
+Models
+
+Hybrid Feature
+
+Models
+
+Transformer
+
+Models
+
+Optimization and Losses
+
+Full,
+
+Semi-,
+
+Weak,
+
+&amp; Self
+
+Supervision
+
+Loss Functions
+
+Evaluation
+
+Segmentation
+
+Annotation
+
+Inter-Annotator
+
+Agreement
+
+Evaluation
+
+Metrics

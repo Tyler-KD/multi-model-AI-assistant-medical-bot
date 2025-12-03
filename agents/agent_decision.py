@@ -353,7 +353,7 @@ def create_agent_graph():
         response_content = response["response"]
         
         # Extract the content properly based on type
-        if hasattr(response_content, 'content'):
+        if isinstance(response_content, dict) and hasattr(response_content, 'content'):
             # If it's an AIMessage or similar object with a content attribute
             response_text = response_content.content
         else:
@@ -381,13 +381,14 @@ def create_agent_graph():
 
         # Store RAG output ONLY if confidence is high
         if retrieval_confidence >= config.rag.min_retrieval_confidence:
-            temp_output = response["response"]
+            # response_output = response["response"]
+            response_output = AIMessage(content=response_text)
         else:
-            temp_output = ""
+            response_output = AIMessage(content="")
         
         return {
             **state,
-            "output": temp_output,
+            "output": response_output,
             "needs_human_validation": False,  # Assuming no validation needed for RAG responses
             "retrieval_confidence": retrieval_confidence,
             "agent_name": "RAG_AGENT",
@@ -543,9 +544,11 @@ def create_agent_graph():
         # Check if output is valid
         if not output or not isinstance(output, (str, AIMessage)):
             return state
+
+        output_text = output if isinstance(output, str) else output.content
         
         # If the last message was a human validation message
-        if "Human Validation Required" in output.content:
+        if "Human Validation Required" in output_text:
             # Check if the current input is a human validation response
             validation_input = ""
             if isinstance(current_input, str):
@@ -579,10 +582,9 @@ def create_agent_graph():
         elif isinstance(current_input, dict):
             input_text = current_input.get("text", "")
         
-        output_text = output if isinstance(output, str) else output.content
-        
         # Apply output sanitization
         sanitized_output = guardrails.check_output(output_text, input_text)
+        # sanitized_output = output_text
         
         # For non-validation cases, add the sanitized output to messages
         sanitized_message = AIMessage(content=sanitized_output) if isinstance(output, AIMessage) else sanitized_output

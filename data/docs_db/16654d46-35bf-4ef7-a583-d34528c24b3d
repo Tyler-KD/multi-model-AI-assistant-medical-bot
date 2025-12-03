@@ -1,0 +1,86 @@
+## 3.2.3. Dice and Jaccard Loss
+
+The Dice score and the Jaccard index are two popular metrics for segmentation evaluation (Section 4.3), measuring the overlap between predicted segmentation and ground-truth. Models may employ di GLYPH&lt;11&gt; erentiable approximations of these metrics, known as soft Dice (He et al., 2017; Kaul et al., 2019; He et al., 2018; Wang et al., 2019a) and soft Jaccard (Venkatesh et al., 2018; Hasan et al., 2020; Sarker et al., 2019) to optimize an objective directly related to the evaluation metric.
+
+For two classes, these losses are defined as follows:
+
+$$\mathcal { L } _ { d i c e } ( X, Y ; \theta ) = 1 - \frac { 1 } { N } \sum _ { i = 1 } ^ { N } \frac { 2 \sum _ { p \in \Omega } y _ { i p } \hat { y } _ { i p } } { \sum _ { p \in \Omega } y _ { i p } + \hat { y } _ { i p } },$$
+
+$$\mathcal { L } _ { j a c c } ( X, Y ; \theta ) = 1 - \frac { 1 } { N } \sum _ { i = 1 } ^ { N } \frac { \sum _ { p \in \Omega } y _ { i p } \hat { y } _ { i p } } { \sum _ { p \in \Omega } y _ { i p } + \hat { y } _ { i p } - y _ { i p } \hat { y } _ { i p } }.$$
+
+Di GLYPH&lt;11&gt; erent variations of overlap-based loss functions address the class imbalance problem in medical image segmentation tasks. The Tanimoto distance loss, L td is a modified Jaccard loss optimized in some models (Canalini et al., 2019; Baghersalimi et al., 2019; Yuan et al., 2017):
+
+$$\mathcal { L } _ { t d } ( X, Y ; \theta ) = 1 - \frac { 1 } { N } \sum _ { i = 1 } ^ { N } \frac { \sum _ { p \in \Omega } y _ { i p } \hat { y } _ { i p } } { \sum _ { p \in \Omega } y _ { i p } ^ { 2 } + \hat { y } _ { i p } ^ { 2 } - y _ { i p } \hat { y } _ { i p } },$$
+
+which is equivalent to the Jaccard loss when both yip and ˆ yip are binary.
+
+The Tversky loss (Abraham and Khan, 2019), inspired by the Tversky index, is another Jaccard variant that penalizes false
+
+<!-- page_break -->
+
+positives and false negatives di GLYPH&lt;11&gt; erently to address the class imbalance problem:
+
+$$\mathcal { L } _ { \nu } ( X, Y ; \theta ) = 1 - \frac { 1 } { N } \sum _ { i = 1 } ^ { N } \frac { \sum _ { p \in \Omega } y _ { i p } \hat { y } _ { i p } } { \sum _ { p \in \Omega } y _ { i p } \hat { y } _ { i p } + \alpha y _ { i p } ( 1 - \hat { y } _ { i p } ) + \beta ( 1 - y _ { i p } ) \hat { y } _ { i p } },$$
+
+where GLYPH&lt;11&gt; and GLYPH&lt;12&gt; tune the contributions of false negatives and false positives with GLYPH&lt;11&gt; + GLYPH&lt;12&gt; = 1.
+
+Abraham and Khan (2019) combined the Tvserky and focal losses (Lin et al., 2017), the latter encouraging the algorithm to focus on the hard-to-predict pixels:
+
+$$\mathcal { L } _ { f t v } = \mathcal { L } _ { t v } ^ { \frac { 1 } { \gamma } },$$
+
+where GLYPH&lt;13&gt; controls the relative importance of the hard-to-predict samples.
+
+
+## 3.2.4. Matthews Correlation Coe GLYPH&lt;14&gt; cient Loss
+
+Matthews correlation coe GLYPH&lt;14&gt; cient ( MCC ) loss is a metric-based loss function based on the correlation between predicted and ground-truth labels (Abhishek and Hamarneh, 2021). In contrast to the overlap-based losses discussed in Section 3.2.3, MCC considers misclassifying the background pixels by penalizing false negative labels, making it more e GLYPH&lt;11&gt; ective in the presence of skewed class distributions. MCC loss is defined as:
+
+$$\mathcal { L } _ { M C C } ( X, Y ; \theta ) = 1 - \frac { 1 } { N } \sum _ { i = 1 } ^ { N } \frac { \sum _ { p \in \Delta } \hat { y } _ { i p } y _ { i p } \frac { \sum _ { p \in \Delta } \hat { y } _ { i p } \sum _ { p \in \Delta } y _ { i p } } { M _ { i } } } { f ( \hat { y } _ { i } y _ { i } ) },$$
+
+$$f ( \hat { y } _ { i }, y _ { i } ) = \sqrt { \sum _ { p \in \Omega } \hat { y } _ { i p } \sum _ { p \in \Omega } y _ { i p } - \frac { \sum _ { p \in \Omega } \hat { y } _ { i p } ( \sum _ { p \in \Omega } y _ { i p } ) ^ { 2 } } { M _ { i } } - \frac { ( \sum _ { p \in \Omega } \hat { y } _ { i p } ) ^ { 2 } \sum _ { p \in \Omega } y _ { i p } } { M _ { i } } + ( \frac { \sum _ { p \in \Omega } \hat { y } _ { i p } \sum _ { p \in \Omega } y _ { i p } } { M _ { i } } ) ^ { 2 } } \,,$$
+
+where Mi is the total number of pixels in the image i .
+
+
+## 3.2.5. Deep Supervision Loss
+
+In DL models, the loss may apply not only to the final decision layer, but also to the intermediate hidden layers. The supervision of hidden layers, known as deep supervision, guides the learning of intermediate features. Deep supervision also addresses the vanishing gradient problem, leading to faster convergence and improves segmentation performance by constraining the feature space. Deep supervision loss appears in several skin lesion segmentation works (He et al., 2017; Zeng and Zheng, 2018; Li et al., 2018a,b; He et al., 2018; Zhang et al., 2019a; Tang et al., 2019b), where it is computed in multiple layers, at di GLYPH&lt;11&gt; erent scales. The loss has the general form of a weighted summation of multi-scale segmentation losses:
+
+$$\mathcal { L } _ { d s } ( X, Y ; \theta ) = \sum _ { l = 1 } ^ { m } \gamma _ { l } \mathcal { L } _ { l } ( X, Y ; \theta ),$$
+
+where m is the number of scales, L l is the loss at the l th scale, and GLYPH&lt;13&gt; l adjusts the contribution of di GLYPH&lt;11&gt; erent losses.
+
+<!-- page_break -->
+
+
+## 3.2.6. Star-Shape Loss
+
+In contrast to pixel-wise losses which act on pixels independently and cannot enforce spatial constraints, the star-shape loss (Mirikharaji and Hamarneh, 2018) aims to capture class label dependencies and preserve the target object structure in the predicted segmentation masks. Based upon prior knowledge about the shape of skin lesions, the star-shape loss, L ssh penalizes discontinuous decisions in the estimated output as follows:
+
+$$\mathcal { L } _ { s s h } ( X, Y ; \theta ) = \sum _ { i = 1 } ^ { N } \sum _ { p \in \Omega } \sum _ { q \in \mathcal { I } _ { p c } } \mathbb { 1 } _ { y _ { i p } = y _ { i q } } \times | y _ { i p } - \hat { y } _ { i p } | \times | \hat { y } _ { i p } - \hat { y } _ { i q } |, \\ \intertext { n center. } \mathcal { I } _ { s s h } \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$ } \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime`} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime`}}$$
+
+where c is the lesion center, ' pc is the line segment connecting pixels p and c and, q is any pixel lying on ' pc . This loss encourages all pixels lying between p and q on ' pc to be assigned the same estimator whenever p and q have the same ground-truth label. The result is a radial spatial coherence from the lesion center.
+
+
+## 3.2.7. End-Point Error Loss
+
+Many authors consider the lesion boundary the most challenging region to segment. The end-point error loss (Sarker et al., 2018; Singh et al., 2019) underscores borders by using the first derivative of the segmentation masks instead of their raw values:
+
+$$\mathcal { L } _ { e p e } ( X, Y ; \theta ) & = \sum _ { i = 1 } ^ { N } \sum _ { p \in \Omega } \sqrt { ( \xi _ { i p } ^ { 0 } - y _ { i p } ^ { 0 } ) ^ { 2 } + ( \xi _ { i p } ^ { 1 } - y _ { i p } ^ { 1 } ) ^ { 2 } } ),$$
+
+where ˆ 0 y ip and ˆ y 1 ip are the directional first derivatives of the estimated segmentation map in the x and y spatial directions, respectively and, similarly, y 0 ip and y 1 ip for the ground-truth derivatives. Thus, this loss function encourages the magnitude and orientation of edges of estimation and ground-truth to match, thereby mitigating vague boundaries in skin lesion segmentation.
+
+
+## 3.2.8. Adversarial Loss
+
+Another way to add high-order class-label consistency is adversarial training. Adversarial training may be employed along with traditional supervised training to distinguish estimated segmentation from ground-truths using a discriminator. The optimization objective will weight a pixel-wise loss L s matching prediction to ground-truth, and an adversarial loss, as follows:
+
+$$\mathcal { L } _ { a d v } ( X, Y ; \theta, \theta _ { a } ) = \mathcal { L } _ { s } ( X, Y ; \theta ) = \lambda [ \mathcal { L } _ { c e } ( Y, 1 ; \theta _ { a } ) + \mathcal { L } _ { c e } ( \hat { Y }, 0 ; \theta, \theta _ { a } ) ],$$
+
+where GLYPH&lt;18&gt; a are the adversarial model parameters. The adversarial loss employs a binary cross-entropy loss to encourage the segmentation model to produce indistinguishable prediction maps from ground-truth maps. The adversarial objective (Eqn. (16)) is optimized in a mini-max game by simultaneously minimizing it with respect to GLYPH&lt;18&gt; and maximizing it with respect to GLYPH&lt;18&gt; a .
+
+Pixel-wise losses, such as cross-entropy (Izadi et al., 2018; Singh et al., 2019; Jiang et al., 2019), soft Jaccard (Sarker et al., 2019; Tu et al., 2019; Wei et al., 2019), end-point error (Tu et al., 2019; Singh et al., 2019), MSE (Peng et al., 2019) and MAE (Sarker et al., 2019; Singh et al., 2019; Jiang et al., 2019) losses have all been incorporated in adversarial learning of skin lesion segmentation. In addition, Xue et al. (2018) and Tu et al. (2019) presented a multi-scale adversarial term to match a hierarchy of
+
+<!-- page_break -->
+
+local and global contextual features in the predicted maps and ground-truths. In particular, they minimize the MAE of multi-scale features extracted from di GLYPH&lt;11&gt; erent layers of the adversarial model.

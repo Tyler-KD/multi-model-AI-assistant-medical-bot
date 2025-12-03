@@ -57,7 +57,9 @@ class RAGConfig:
         self.embedding_dim = 1536  # Add the embedding dimension here
         self.distance_metric = "Cosine"  # Add this with a default value
         self.use_local = True  # Add this with a default value
-        self.local_path = "./data/qdrant_db"  # Add this with a default value
+        self.vector_local_path = "./data/qdrant_db"  # Add this with a default value
+        self.doc_local_path = "./data/docs_db"
+        self.parsed_content_dir = "./data/parsed_docs"
         self.url = os.getenv("QDRANT_URL")
         self.api_key = os.getenv("QDRANT_API_KEY")
         self.collection_name = "medical_assistance_rag"  # Ensure a valid name
@@ -81,14 +83,39 @@ class RAGConfig:
             openai_api_version = os.getenv("openai_api_version"),  # Ensure this matches your API version
             temperature = 0.3  # Slightly creative but factual
         )
+        self.summarizer_model = AzureChatOpenAI(
+            deployment_name = os.getenv("deployment_name"),  # Replace with your Azure deployment name
+            model_name = os.getenv("model_name"),  # Replace with your Azure model name
+            azure_endpoint = os.getenv("azure_endpoint"),  # Replace with your Azure endpoint
+            openai_api_key = os.getenv("openai_api_key"),  # Replace with your Azure OpenAI API key
+            openai_api_version = os.getenv("openai_api_version"),  # Ensure this matches your API version
+            temperature = 0.5  # Slightly creative but factual
+        )
+        self.chunker_model = AzureChatOpenAI(
+            deployment_name = os.getenv("deployment_name"),  # Replace with your Azure deployment name
+            model_name = os.getenv("model_name"),  # Replace with your Azure model name
+            azure_endpoint = os.getenv("azure_endpoint"),  # Replace with your Azure endpoint
+            openai_api_key = os.getenv("openai_api_key"),  # Replace with your Azure OpenAI API key
+            openai_api_version = os.getenv("openai_api_version"),  # Ensure this matches your API version
+            temperature = 0.0  # factual
+        )
+        self.response_generator_model = AzureChatOpenAI(
+            deployment_name = os.getenv("deployment_name"),  # Replace with your Azure deployment name
+            model_name = os.getenv("model_name"),  # Replace with your Azure model name
+            azure_endpoint = os.getenv("azure_endpoint"),  # Replace with your Azure endpoint
+            openai_api_key = os.getenv("openai_api_key"),  # Replace with your Azure OpenAI API key
+            openai_api_version = os.getenv("openai_api_version"),  # Ensure this matches your API version
+            temperature = 0.3  # Slightly creative but factual
+        )
         self.top_k = 5
+        self.vector_search_type = 'similarity'  # or 'mmr'
         self.similarity_threshold = 0.75
         self.huggingface_token = os.getenv("HUGGINGFACE_TOKEN")
 
         self.chunking_strategy = "hybrid" # Options: semantic, sliding_window, recursive, hybrid
 
         self.reranker_model = "cross-encoder/ms-marco-TinyBERT-L-6"
-        self.reranker_top_k = 5
+        self.reranker_top_k = 3
 
         self.max_context_length = 8192  # ADD THIS LINE (Change based on your need) # 1024 proved to be too low and caused issue (retrieved content length > context length = no context added) in formatting context in response_generator code
         self.response_format_instructions = """Instructions:
@@ -101,7 +128,7 @@ class RAGConfig:
         self.metrics_save_path = "./logs/rag_metrics.json"  # ADD THIS LINE
 
         # ADJUST ACCORDING TO ASSISTANT'S BEHAVIOUR BASED ON THE DATA INGESTED:
-        self.min_retrieval_confidence = 0.8  #the auto routing from RAG agent to WEB_SEARCH agent is dependent on this value
+        self.min_retrieval_confidence = 0.40  #the auto routing from RAG agent to WEB_SEARCH agent is dependent on this value
 
         self.context_limit = 20     # include last 20 messsages (10 Q&A pairs) in history
 

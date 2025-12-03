@@ -1,48 +1,67 @@
 import os
 import uuid
-import requests
-from werkzeug.utils import secure_filename
-from flask import Flask, render_template, request, jsonify, make_response, abort, send_file, after_this_request
+import tempfile
+from typing import Dict, Union, Optional, List
+import glob
 import threading
 import time
-import glob
-import tempfile
-from pydub import AudioSegment
-
 from io import BytesIO
+
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Depends, Request, Response, Cookie
+from fastapi.responses import JSONResponse, FileResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
+
+import uvicorn
+import requests
+from werkzeug.utils import secure_filename
+from pydub import AudioSegment
 from elevenlabs.client import ElevenLabs
 
 from config import Config
+from agents.agent_decision import process_query
 
+# Load configuration
 config = Config()
 
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads/frontend'
-app.config['SPEECH_DIR'] = 'uploads/speech'
-# Convert MB to bytes for MAX_CONTENT_LENGTH
-app.config['MAX_CONTENT_LENGTH'] = config.api.max_image_upload_size * 1024 * 1024  # Convert MB to bytes
-app.config['ELEVEN_LABS_API_KEY'] = config.speech.eleven_labs_api_key
-app.config['API_URL'] = "http://localhost:8000"  # Your FastAPI backend URL
+# Initialize FastAPI app
+app = FastAPI(title="Multi-Agent Medical Chatbot", version="1.0")
 
-# Ensure upload directory exists
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+# Set up directories
+UPLOAD_FOLDER = "uploads/backend"
+FRONTEND_UPLOAD_FOLDER = "uploads/frontend"
+SKIN_LESION_OUTPUT = "uploads/skin_lesion_output"
+SPEECH_DIR = "uploads/speech"
 
-# ElebenLabs Client
+# Create directories if they don't exist
+for directory in [UPLOAD_FOLDER, FRONTEND_UPLOAD_FOLDER, SKIN_LESION_OUTPUT, SPEECH_DIR]:
+    os.makedirs(directory, exist_ok=True)
+
+# Mount static files directory
+app.mount("/data", StaticFiles(directory="data"), name="data")
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
+# Set up templates
+templates = Jinja2Templates(directory="templates")
+
+# Initialize ElevenLabs client
 client = ElevenLabs(
-    api_key = app.config['ELEVEN_LABS_API_KEY'],
+    api_key=config.speech.eleven_labs_api_key,
 )
 
 # Define allowed file extensions
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 def allowed_file(filename):
+    """Check if file has an allowed extension"""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def cleanup_old_audio():
     """Deletes all .mp3 files in the uploads/speech folder every 5 minutes."""
     while True:
         try:
-            files = glob.glob(f"{app.config['SPEECH_DIR']}/*.mp3")
+            files = glob.glob(f"{SPEECH_DIR}/*.mp3")
             for file in files:
                 os.remove(file)
             print("Cleaned up old speech files.")
@@ -54,154 +73,205 @@ def cleanup_old_audio():
 cleanup_thread = threading.Thread(target=cleanup_old_audio, daemon=True)
 cleanup_thread.start()
 
+class QueryRequest(BaseModel):
+    query: str
+    conversation_history: List = []
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+class SpeechRequest(BaseModel):
+    text: str
+    voice_id: str = "EXAMPLE_VOICE_ID"  # Default voice ID
 
-@app.route('/send_message', methods=['POST'])
-def send_message():
-    data = request.form
-    prompt = data.get('message')
-    
-    # Get session cookie if it exists in the request
-    session_cookie = request.cookies.get('session_id')
-    
-    # Process any uploaded file
-    uploaded_file = None
-    if 'file' in request.files:
-        file = request.files['file']
-        
-        if file and file.filename != '':
-            # Validate file type
-            if not allowed_file(file.filename):
-                return jsonify({
-                    "status": "error",
-                    "agent": "System",
-                    "response": "Unsupported file type. Allowed formats: PNG, JPG, JPEG"
-                }), 400
-            
-            # Validate file size before saving
-            file.seek(0, os.SEEK_END)
-            file_size = file.tell()
-            file.seek(0)  # Reset file pointer
-            
-            if file_size > app.config['MAX_CONTENT_LENGTH']:
-                return jsonify({
-                    "status": "error", 
-                    "agent": "System",
-                    "response": f"File too large. Maximum size allowed: {config.api.max_image_upload_size}MB"
-                }), 413
-            
-            # Save file securely
-            filename = secure_filename(f"{uuid.uuid4()}_{file.filename}")
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
-            uploaded_file = filepath
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    """Serve the main HTML page"""
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/health")
+def health_check():
+    """Health check endpoint for Docker health checks"""
+    return {"status": "healthy"}
+
+@app.post("/chat")
+def chat(
+    request: QueryRequest, 
+    response: Response, 
+    session_id: Optional[str] = Cookie(None)
+):
+    """Process user text query through the multi-agent system."""
+    # Generate session ID for cookie if it doesn't exist
+    if not session_id:
+        session_id = str(uuid.uuid4())
     
     try:
-        # Create cookies dict if session exists
-        cookies = {}
-        if session_cookie:
-            cookies['session_id'] = session_cookie
+        response_data = process_query(request.query)
+        response_text = response_data['messages'][-1].content
         
-        if uploaded_file:
-            # API request with image
-            with open(uploaded_file, "rb") as image_file:
-                files = {"image": (os.path.basename(uploaded_file), image_file, "image/jpeg")}
-                data = {"text": prompt}
-                response = requests.post(
-                    f"{app.config['API_URL']}/upload", 
-                    files=files, 
-                    data=data,
-                    cookies=cookies
-                )
-            
-            # Remove temporary file after sending
-            try:
-                os.remove(uploaded_file)
-            except Exception as e:
-                print(f"Failed to remove temporary file: {str(e)}")
-        else:
-            # API request for text only
-            payload = {
-                "query": prompt,
-                "conversation_history": []  # Empty array since backend maintains history
-            }
-            response = requests.post(
-                f"{app.config['API_URL']}/chat", 
-                json=payload,
-                cookies=cookies
-            )
+        # Set session cookie
+        response.set_cookie(key="session_id", value=session_id)
+
+        # Check if the agent is skin lesion segmentation and find the image path
+        result = {
+            "status": "success",
+            "response": response_text, 
+            "agent": response_data["agent_name"]
+        }
         
-        if response.status_code == 200:
-            result = response.json()
-            
-            # Create response object to modify
-            response_data = {
-                "status": "success",
-                "agent": result["agent"],
-                "response": result["response"]
-            }
-            
-            # Add result image URL if it exists
-            if "result_image" in result:
-                # Prefix with the FastAPI URL
-                response_data["result_image"] = f"{app.config['API_URL']}{result['result_image']}"
-            
-            flask_response = jsonify(response_data)
-            
-            # Extract session cookie from response if it exists
-            if 'session_id' in response.cookies:
-                # Set the cookie in our Flask response
-                flask_response.set_cookie('session_id', response.cookies['session_id'])
-            
-            return flask_response
-        else:
-            return jsonify({
+        # If it's the skin lesion segmentation agent, check for output image
+        if response_data["agent_name"] == "SKIN_LESION_AGENT, HUMAN_VALIDATION":
+            segmentation_path = os.path.join(SKIN_LESION_OUTPUT, "segmentation_plot.png")
+            if os.path.exists(segmentation_path):
+                result["result_image"] = f"/uploads/skin_lesion_output/segmentation_plot.png"
+            else:
+                print("Skin Lesion Output path does not exist.")
+        
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/upload")
+async def upload_image(
+    response: Response,
+    image: UploadFile = File(...), 
+    text: str = Form(""),
+    session_id: Optional[str] = Cookie(None)
+):
+    """Process medical image uploads with optional text input."""
+    # Validate file type
+    if not allowed_file(image.filename):
+        return JSONResponse(
+            status_code=400, 
+            content={
                 "status": "error",
                 "agent": "System",
-                "response": f"Error: {response.status_code} - {response.text}"
-            }), response.status_code
-    except Exception as e:
-        print(f"Exception: {str(e)}")
-        return jsonify({
-            "status": "error",
-            "agent": "System",
-            "response": f"Error: {str(e)}"
-        }), 500
+                "response": "Unsupported file type. Allowed formats: PNG, JPG, JPEG"
+            }
+        )
+    
+    # Check file size before saving
+    file_content = await image.read()
+    if len(file_content) > config.api.max_image_upload_size * 1024 * 1024:  # Convert MB to bytes
+        return JSONResponse(
+            status_code=413, 
+            content={
+                "status": "error",
+                "agent": "System",
+                "response": f"File too large. Maximum size allowed: {config.api.max_image_upload_size}MB"
+            }
+        )
+    
+    # Generate session ID for cookie if it doesn't exist
+    if not session_id:
+        session_id = str(uuid.uuid4())
+    
+    # Save file securely
+    filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
+    file_path = os.path.join(UPLOAD_FOLDER, filename)
+    with open(file_path, "wb") as f:
+        f.write(file_content)
+    
+    try:
+        query = {"text": text, "image": file_path}
+        response_data = process_query(query)
+        response_text = response_data['messages'][-1].content
 
-@app.route('/transcribe', methods=['POST'])
-def transcribe_audio():
+        # Set session cookie
+        response.set_cookie(key="session_id", value=session_id)
+
+        # Check if the agent is skin lesion segmentation and find the image path
+        result = {
+            "status": "success",
+            "response": response_text, 
+            "agent": response_data["agent_name"]
+        }
+        
+        # If it's the skin lesion segmentation agent, check for output image
+        if response_data["agent_name"] == "SKIN_LESION_AGENT, HUMAN_VALIDATION":
+            segmentation_path = os.path.join(SKIN_LESION_OUTPUT, "segmentation_plot.png")
+            if os.path.exists(segmentation_path):
+                result["result_image"] = f"/uploads/skin_lesion_output/segmentation_plot.png"
+            else:
+                print("Skin Lesion Output path does not exist.")
+        
+        # Remove temporary file after sending
+        try:
+            os.remove(file_path)
+        except Exception as e:
+            print(f"Failed to remove temporary file: {str(e)}")
+        
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/validate")
+def validate_medical_output(
+    response: Response,
+    validation_result: str = Form(...), 
+    comments: Optional[str] = Form(None),
+    session_id: Optional[str] = Cookie(None)
+):
+    """Handle human validation for medical AI outputs."""
+    # Generate session ID for cookie if it doesn't exist
+    if not session_id:
+        session_id = str(uuid.uuid4())
+
+    try:
+        # Set session cookie
+        response.set_cookie(key="session_id", value=session_id)
+        
+        # Re-run the agent decision system with the validation input
+        validation_query = f"Validation result: {validation_result}"
+        if comments:
+            validation_query += f" Comments: {comments}"
+        
+        response_data = process_query(validation_query)
+
+        if validation_result.lower() == 'yes':
+            return {
+                "status": "validated",
+                "message": "**Output confirmed by human validator:**",
+                "response": response_data['messages'][-1].content
+            }
+        else:
+            return {
+                "status": "rejected",
+                "comments": comments,
+                "message": "**Output requires further review:**",
+                "response": response_data['messages'][-1].content
+            }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/transcribe")
+async def transcribe_audio(audio: UploadFile = File(...)):
     """Endpoint to transcribe speech using ElevenLabs API"""
-    if 'audio' not in request.files:
-        return jsonify({"error": "No audio file provided"}), 400
-    
-    audio_file = request.files['audio']
-    
-    if audio_file.filename == '':
-        return jsonify({"error": "No audio file selected"}), 400
+    if not audio.filename:
+        return JSONResponse(
+            status_code=400,
+            content={"error": "No audio file selected"}
+        )
     
     try:
         # Save the audio file temporarily
-        temp_dir = app.config['SPEECH_DIR']
-        os.makedirs(temp_dir, exist_ok=True)
+        os.makedirs(SPEECH_DIR, exist_ok=True)
+        temp_audio = f"./{SPEECH_DIR}/speech_{uuid.uuid4()}.webm"
         
-        # Save with a generic extension
-        # temp_audio = os.path.join(temp_dir, f"speech_{uuid.uuid4()}.webm")
-        temp_audio = f"./{temp_dir}/speech_{uuid.uuid4()}.webm"
-        audio_file.save(temp_audio)
+        # Read and save the file
+        audio_content = await audio.read()
+        with open(temp_audio, "wb") as f:
+            f.write(audio_content)
         
         # Debug: Print file size to check if it's empty
         file_size = os.path.getsize(temp_audio)
         print(f"Received audio file size: {file_size} bytes")
         
         if file_size == 0:
-            return jsonify({"error": "Received empty audio file"}), 400
+            return JSONResponse(
+                status_code=400,
+                content={"error": "Received empty audio file"}
+            )
         
-        # Convert to MP3 using ffmpeg directly
-        # mp3_path = os.path.join(temp_dir, f"speech_{uuid.uuid4()}.mp3")
-        mp3_path = f"./{temp_dir}/speech_{uuid.uuid4()}.mp3"
+        # Convert to MP3
+        mp3_path = f"./{SPEECH_DIR}/speech_{uuid.uuid4()}.mp3"
         
         try:
             # Use pydub with format detection
@@ -218,10 +288,10 @@ def transcribe_audio():
 
             transcription = client.speech_to_text.convert(
                 file=audio_data,
-                model_id="scribe_v1", # Model to use, for now only "scribe_v1" is supported
-                tag_audio_events=True, # Tag audio events like laughter, applause, etc.
-                language_code="eng", # Language of the audio file. If set to None, the model will detect the language automatically.
-                diarize=True, # Whether to annotate who is speaking
+                model_id="scribe_v1",
+                tag_audio_events=True,
+                language_code="eng",
+                diarize=True,
             )
             
             # Clean up temp files
@@ -230,39 +300,49 @@ def transcribe_audio():
                 os.remove(mp3_path)
                 print(f"Deleted temp files: {temp_audio}, {mp3_path}")
             except Exception as e:
-                # pass
                 print(f"Could not delete file: {e}")
             
             if transcription.text:
-                return jsonify({"transcript": transcription.text})
+                return {"transcript": transcription.text}
             else:
-                return jsonify({"error": f"API error: {transcription}", "details": transcription.text}), 500
+                return JSONResponse(
+                    status_code=500,
+                    content={"error": f"API error: {transcription}", "details": transcription.text}
+                )
 
         except Exception as e:
             print(f"Error processing audio: {str(e)}")
-            return jsonify({"error": f"Error processing audio: {str(e)}"}), 500
+            return JSONResponse(
+                status_code=500,
+                content={"error": f"Error processing audio: {str(e)}"}
+            )
                 
     except Exception as e:
         print(f"Transcription error: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+        return JSONResponse(
+            status_code=500,
+            content={"error": str(e)}
+        )
 
-@app.route('/generate-speech', methods=['POST'])
-def generate_speech():
-    """Endpoint to generate speech securely"""
+@app.post("/generate-speech")
+async def generate_speech(request: SpeechRequest):
+    """Endpoint to generate speech using ElevenLabs API"""
     try:
-        data = request.json
-        text = data.get("text", "")
-        selected_voice_id = data.get("voice_id", "EXAMPLE_VOICE_ID")  # Replace with a valid voice ID
-
+        text = request.text
+        selected_voice_id = request.voice_id
+        
         if not text:
-            return jsonify({"error": "Text is required"}), 400
+            return JSONResponse(
+                status_code=400,
+                content={"error": "Text is required"}
+            )
         
         # Define API request to ElevenLabs
         elevenlabs_url = f"https://api.elevenlabs.io/v1/text-to-speech/{selected_voice_id}/stream"
         headers = {
             "Accept": "audio/mpeg",
             "Content-Type": "application/json",
-            "xi-api-key": app.config['ELEVEN_LABS_API_KEY']
+            "xi-api-key": config.speech.eleven_labs_api_key
         }
         payload = {
             "text": text,
@@ -277,82 +357,41 @@ def generate_speech():
         response = requests.post(elevenlabs_url, headers=headers, json=payload)
 
         if response.status_code != 200:
-            return jsonify({"error": f"Failed to generate speech, status: {response.status_code}", "details": response.text}), 500
+            return JSONResponse(
+                status_code=500,
+                content={"error": f"Failed to generate speech, status: {response.status_code}", "details": response.text}
+            )
         
         # Save the audio file temporarily
-        temp_dir = app.config['SPEECH_DIR']
-        os.makedirs(temp_dir, exist_ok=True)
-
-        # Save the audio file temporarily
-        temp_audio_path = f"./{temp_dir}/{uuid.uuid4()}.mp3"
+        os.makedirs(SPEECH_DIR, exist_ok=True)
+        temp_audio_path = f"./{SPEECH_DIR}/{uuid.uuid4()}.mp3"
         with open(temp_audio_path, "wb") as f:
             f.write(response.content)
 
-        # Send back the generated audio file
-        return send_file(temp_audio_path, mimetype="audio/mpeg")
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# Add a custom error handler for request entity too large
-@app.errorhandler(413)
-def request_entity_too_large(error):
-    return jsonify({
-        "status": "error",
-        "agent": "System",
-        "response": f"File too large. Maximum size allowed: {config.api.max_image_upload_size}MB"
-    }), 413
-
-@app.route('/send_validation', methods=['POST'])
-def send_validation():
-    """
-    Receives validation data from the UI and forwards it to the FastAPI '/validate' endpoint.
-    """
-    try:
-        # Parse form data
-        validation_result = request.form.get('validation_result')
-        comments = request.form.get('comments', '')
-
-        if not validation_result:
-            return jsonify({"error": "No validation result provided"}), 400
-
-        # If there's a session cookie, pass it to FastAPI
-        session_cookie = request.cookies.get('session_id')
-        cookies = {}
-        if session_cookie:
-            cookies['session_id'] = session_cookie
-
-        # Forward data to FastAPI validation endpoint
-        fastapi_url = f"{app.config['API_URL']}/validate"
-        form_data = {
-            "validation_result": validation_result,
-            "comments": comments
-        }
-
-        response = requests.post(
-            fastapi_url,
-            data=form_data,
-            cookies=cookies
+        # Return the generated audio file
+        return FileResponse(
+            path=temp_audio_path,
+            media_type="audio/mpeg",
+            filename="generated_speech.mp3"
         )
 
-        if response.status_code == 200:
-            result = response.json()
-
-            # If FastAPI sets/updates session_id, update it in our response
-            if 'session_id' in response.cookies:
-                resp = make_response(jsonify(result))
-                resp.set_cookie('session_id', response.cookies['session_id'])
-                return resp
-
-            return jsonify(result)
-        else:
-            return jsonify({
-                "error": f"Error from FastAPI: {response.status_code}",
-                "details": response.text
-            }), response.status_code
-
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return JSONResponse(
+            status_code=500,
+            content={"error": str(e)}
+        )
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+# Add exception handler for request entity too large
+@app.exception_handler(413)
+async def request_entity_too_large(request, exc):
+    return JSONResponse(
+        status_code=413,
+        content={
+            "status": "error",
+            "agent": "System",
+            "response": f"File too large. Maximum size allowed: {config.api.max_image_upload_size}MB"
+        }
+    )
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)

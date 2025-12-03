@@ -1,0 +1,62 @@
+## Results and discussion
+
+As part of the study, CNN and CNN-based transfer learning models such as InceptionV3, EfficientNetB4, VGG19 were trained on open-source shared brain tumor patients. The best accuracy result was obtained with EfficientNetB4 with 95%. The comparison of the brain tumor studies with the literature is shown in Table 4.
+
+As shown in Table 4, the CNN-based transfer learning models used in the study performed better. AI in healthcare plays an important role in the management of complex diseases such as brain tumors. AI enables faster, more accurate, and more effective diagnosis and treatment processes. However, AI technology is not intended to completely replace doctors, but to support and enhance their work. To realize the full potential of AI, it is important to consider issues such as ethics, security and privacy. In the future, AI-based solutions will continue to contribute to better management of brain tumors and other health problems, and improve the quality of life
+
+<!-- page_break -->
+
+Figure 4. The ROC curve of ( a ) CNN model, ( b ) EfficientNetB4 model, ( c ) VGG19 model ( d ) InceptionV3 model, ( e ) VGG16.
+
+picture_counter_5 The image consists of five Receiver Operating Characteristic (ROC) curves, each representing different deep learning models used for diagnosing brain tumors. Each graph plots the True Positive Rate against the False Positive Rate for four categories: glioma tumor, meningioma tumor, no tumor, and pituitary tumor. The models displayed are:
+
+(a) CNN
+(b) EfficientNetB4
+(c) VGG19
+(d) InceptionV3
+(e) VGG16
+
+Each graph includes the Area Under the Curve (AUC) values for the respective categories, showing high performance in tumor classification across all models.
+
+for patients. As seen in this study, AI-based studies will increase their importance to human health, from early diagnosis to positive progress in the treatment process.
+
+Based on the results of this study, transfer learning methods should be preferred especially in image processing-based applications to support health decision makers. The data obtained from MRI or CT can be used as an early warning system to help health decision makers make quick and accurate decisions. Therefore, in addition to empirical analysis, AI-based applications should take a more active role as soon as possible. To this end, the diagnosis of diseases from instant CT or MR images will be investigated in the coming years.
+
+
+## Limitation
+
+With our motivation to investigate how it will work in single CNN and multilayer CNN based transfer learning models, we subjected the dataset to classification as it is without rotation and cropping operations, which is the most important limitation of our study.
+
+Vol.:(0123456789)
+
+<!-- page_break -->
+
+Vol:.(1234567890)
+
+Figure 5. The confusion metrics of ( a ) CNN model, ( b ) EfficientNetB4 model, ( c ) VGG19 model ( d ) InceptionV3 model, ( e ) VGG16.
+
+picture_counter_6 The image consists of five confusion matrices labeled (a) CNN, (b) EfficientNetB4, (c) VGG19, (d) InceptionV3, and (e) VGG16. Each matrix shows the performance of different AI models in predicting four categories: glioma tumor, meningioma tumor, no tumor, and pituitary tumor. The matrices display the number of correct and incorrect predictions, with darker colors indicating higher values and lighter colors indicating lower values. The rows represent the actual diagnosis, and the columns represent the AI predictions.
+
+Table 4. Comparison with previous studies on brain tumor. Best results obtained in the study.
+
+| Authors                 | Dataset                          | Models                                     | Accuracy (%)                        |
+|-------------------------|----------------------------------|--------------------------------------------|-------------------------------------|
+| Wallis and Buvat 1      | Brain Tumor Dataset 28           | SVM                                        | 74                                  |
+| Seere and Karibasappa 2 | Their own Brain Tumor dataset    | SVM                                        | 85.32                               |
+| Ortiz-Ramón et al. 3    | Their own Brain Tumor dataset    | SVM                                        | 89.6                                |
+| Gupta and Sasidhar 4    | MICCAI 2012 Challenge database 4 | SVM                                        | 87                                  |
+| Gumaei et al. 5         | Brain Tumor Dataset 28           | RELM                                       | 92.61                               |
+| Shahajad et al. 6       | Kaggle brain dataset 17          | SVM                                        | 92                                  |
+| Vankdothu et al. 7      | Brain Tumor Dataset 17           | CNN, LSTM CNN-LSTM                         | CNN89 LSTM 90.02 CNN-LSTM 92        |
+| Sirinivas et al. 8      | Brain Tumor Dataset 17           | InceptionV3 VGG16 ResNET50                 | InceptionV3 78 VGG16 96 ResNET50 95 |
+| Choudhury et al. 9      | Their own Brain Tumor dataset    | CNN                                        | 96.08                               |
+| Martini and Oermann 10  | Their own Brain Tumor dataset    | CNN                                        | 93.09                               |
+| Sarkar et al. 11        | Their own Brain Tumor dataset    | CNN                                        | 91.03                               |
+| Arunkumar et al. 12     | None                             | SVM, KNN                                   | 92.14                               |
+| Zacharaki et al. 13     | Their own Brain Tumor dataset    | SVM, KNN                                   | 88                                  |
+| Cheng et al. 14         | Their own Brain Tumor dataset    | SVM, KNN                                   | 91.28                               |
+| Paul et al. 15          | Their own Brain Tumor dataset    | CNN                                        | 91.43                               |
+| Afshar et al. 16        | Brain Tumor Dataset 28           | CapsNet                                    | 90.89                               |
+| This study              | Brain Tumor Dataset 17           | EfficientNetB4 InceptionV3 VGG19 VGG16 CNN | 97 95 96 98 91                      |
+
+<!-- page_break -->

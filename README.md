@@ -9,9 +9,9 @@
 ![LangGraph - Version](https://img.shields.io/badge/LangGraph-0.3+-teal?style=for-the-badge&logo=langgraph)
 ![LangChain - Version](https://img.shields.io/badge/LangChain-0.3+-teal?style=for-the-badge&logo=langchain)
 ![Qdrant Client - Version](https://img.shields.io/badge/Qdrant-1.13+-red?style=for-the-badge&logo=qdrant)
-![FastAPI - Version](https://img.shields.io/badge/FastAPI-0.115+-teal?style=for-the-badge&logo=fastapi)
 ![Pydantic - Version](https://img.shields.io/badge/Pydantic-2.10+-red?style=for-the-badge&logo=pydantic)
-![Flask - Version](https://img.shields.io/badge/Flask-3.1+-blue?style=for-the-badge&logo=flask)
+![FastAPI - Version](https://img.shields.io/badge/FastAPI-0.115+-teal?style=for-the-badge&logo=fastapi)
+![Docling - Version](https://img.shields.io/badge/Docling-3.1+-orange?style=for-the-badge&logo=docling)
 [![Generic badge](https://img.shields.io/badge/License-Apache-<COLOR>.svg?style=for-the-badge)](https://github.com/souvikmajumder26/Multi-Agent-Medical-Assistant/blob/main/LICENSE) 
 [![GitHub Issues](https://img.shields.io/github/issues/souvikmajumder26/Multi-Agent-Medical-Assistant.svg?style=for-the-badge)](https://github.com/souvikmajumder26/Multi-Agent-Medical-Assistant/issues)
 ![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg?style=for-the-badge)
@@ -109,7 +109,7 @@ If you like what you see and would want to support the project's developer, you 
 🔹 **Vector Database**: Qdrant (for retrieval-augmented generation) 🔍  
 🔹 **Medical Image Analysis**: Computer vision models (Brain Tumor - Semantic Segmentation, Chest X-ray - Object Detection, Skin Lesion - Classification) 🏥  
 🔹 **Speech Processing**: Eleven Labs API 🎙️  
-🔹 **UI**: HTML, CSS, JS, Flask 🌐  
+🔹 **UI**: HTML, CSS, JS 🌐  
 🔹 **Deployment**: Docker 🛠️   -->
 
 ## ✨ Key Features  <a name="key-features"></a>
@@ -154,8 +154,9 @@ If you like what you see and would want to support the project's developer, you 
 
 | Component | Technologies |
 |-----------|-------------|
-| 🔹 **Backend Framework** | FastAPI, Flask |
+| 🔹 **Backend Framework** | FastAPI |
 | 🔹 **Agent Orchestration** | LangGraph |
+| 🔹 **Document Parsing** | Docling |
 | 🔹 **Knowledge Storage** | Qdrant Vector Database |
 | 🔹 **Medical Imaging** | Computer Vision Models |
 | | • Brain Tumor: Object Detection (PyTorch) |
@@ -164,7 +165,7 @@ If you like what you see and would want to support the project's developer, you 
 | 🔹 **Guardrails** | LangChain |
 | 🔹 **Speech Processing** | Eleven Labs API |
 | 🔹 **Frontend** | HTML, CSS, JavaScript |
-| 🔹 **Deployment** | Docker, CI/CD Pipeline |
+| 🔹 **Deployment** | Docker, GitHub Actions CI/CD |
 
 ---
 

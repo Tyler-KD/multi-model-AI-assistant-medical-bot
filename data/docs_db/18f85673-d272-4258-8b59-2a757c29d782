@@ -1,8 +1,0 @@
-## Approval for participation
-
-As the data is open source, there are no experiments on humans conducted by the authors. Open source has been studied on MRI images.
-
-
-## Experimental settings and results
-
-This study addresses the problem of image classification using deep learning methods. The most important and widely studied of these problems is that of health images. In this context, five different models (InceptionV3, EfficientNetB4, VGG16, VGG19, Multi-Layer CNN) were selected for the classification of brain tumors and their performances were compared on the same dataset. 10% of the dataset was used for testing, 15% for validation and 75% for training. All experimental setup and results were done at Google Colab.

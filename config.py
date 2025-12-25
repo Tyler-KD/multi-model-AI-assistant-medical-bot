@@ -65,7 +65,6 @@ class RAGConfig:
         self.collection_name = "medical_assistance_rag"  # Ensure a valid name
         self.chunk_size = 512  # Modify based on documents and performance
         self.chunk_overlap = 50  # Modify based on documents and performance
-        self.processed_docs_dir = "./data/processed"  # Set a default value
         # self.embedding_model = "text-embedding-3-large"
         # Initialize Azure OpenAI Embeddings
         self.embedding_model = AzureOpenAIEmbeddings(
@@ -109,26 +108,18 @@ class RAGConfig:
         )
         self.top_k = 5
         self.vector_search_type = 'similarity'  # or 'mmr'
-        self.similarity_threshold = 0.75
-        self.huggingface_token = os.getenv("HUGGINGFACE_TOKEN")
 
-        self.chunking_strategy = "hybrid" # Options: semantic, sliding_window, recursive, hybrid
+        self.huggingface_token = os.getenv("HUGGINGFACE_TOKEN")
 
         self.reranker_model = "cross-encoder/ms-marco-TinyBERT-L-6"
         self.reranker_top_k = 3
 
-        self.max_context_length = 8192  # ADD THIS LINE (Change based on your need) # 1024 proved to be too low and caused issue (retrieved content length > context length = no context added) in formatting context in response_generator code
-        self.response_format_instructions = """Instructions:
-        1. Answer the query based ONLY on the information provided in the context.
-        2. If the context doesn't contain relevant information to answer the query, state: "I don't have enough information to answer this question based on the provided context."
-        3. Do not use prior knowledge not contained in the context.
-        5. Be concise and accurate.
-        6. Provide a well-structured response based on retrieved knowledge."""  # ADD THIS LINE
-        self.include_sources = True  # ADD THIS LINE
-        self.metrics_save_path = "./logs/rag_metrics.json"  # ADD THIS LINE
+        self.max_context_length = 8192  # (Change based on your need) # 1024 proved to be too low (retrieved content length > context length = no context added) in formatting context in response_generator code
+
+        self.include_sources = True  # Show links to reference documents and images along with corresponding query response
 
         # ADJUST ACCORDING TO ASSISTANT'S BEHAVIOUR BASED ON THE DATA INGESTED:
-        self.min_retrieval_confidence = 0.40  #the auto routing from RAG agent to WEB_SEARCH agent is dependent on this value
+        self.min_retrieval_confidence = 0.40  # The auto routing from RAG agent to WEB_SEARCH agent is dependent on this value
 
         self.context_limit = 20     # include last 20 messsages (10 Q&A pairs) in history
 
@@ -147,21 +138,8 @@ class MedicalCVConfig:
             temperature = 0.1  # Keep deterministic for classification tasks
         )
 
-class APIConfig:
-    def __init__(self):
-        self.host = "0.0.0.0"
-        self.port = 8000
-        self.debug = True
-        self.rate_limit = 10
-        self.max_image_upload_size = 5  # 1 MB max upload
-
 class SpeechConfig:
     def __init__(self):
-        # self.tts_voice_id = "EXAVITQu4vr4xnSDxMaL"
-        # self.tts_stability = 0.5
-        # self.tts_similarity_boost = 0.8
-        # self.stt_model = "whisper-1"
-        # self.stt_language = "en"
         self.eleven_labs_api_key = os.getenv("ELEVEN_LABS_API_KEY")  # Replace with your actual key
         self.eleven_labs_voice_id = "21m00Tcm4TlvDq8ikWAM"    # Default voice ID (Rachel)
 
@@ -177,6 +155,14 @@ class ValidationConfig:
         }
         self.validation_timeout = 300
         self.default_action = "reject"
+
+class APIConfig:
+    def __init__(self):
+        self.host = "0.0.0.0"
+        self.port = 8000
+        self.debug = True
+        self.rate_limit = 10
+        self.max_image_upload_size = 5  # max upload size in MB
 
 class UIConfig:
     def __init__(self):
@@ -198,7 +184,7 @@ class Config:
         self.ui = UIConfig()
         self.eleven_labs_api_key = os.getenv("ELEVEN_LABS_API_KEY")
         self.tavily_api_key = os.getenv("TAVILY_API_KEY")
-        self.max_conversation_history = 40  # storing 20 sets of QnA in history, history is truncated based on this value
+        self.max_conversation_history = 20  # Include last 20 messsages (10 Q&A pairs) in history
 
 # # Example usage
 # config = Config()

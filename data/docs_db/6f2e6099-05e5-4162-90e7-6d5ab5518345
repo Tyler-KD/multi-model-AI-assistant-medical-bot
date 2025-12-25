@@ -17,25 +17,24 @@ As shown in Fig. 6, we have classified the existing literature into single-netwo
 
 Fig. 6: Taxonomy of DL -based skin lesion segmentation model architectures.
 
-picture_counter_20 The image is a diagram illustrating different segmentation model architectures used in medical research or artificial intelligence techniques for diagnosing diseases. It is divided into several categories:
+picture_counter_20 The image is a diagram illustrating various segmentation model architectures used in artificial intelligence techniques for diagnosing diseases. It is divided into three main categories: Single Network Models, Multiple Network Models, and Hybrid Feature Models. Each category has subcategories:
 
-1. **Single Network Models** (§3.1.1):
+1. Single Network Models:
    - Shortcut Connections (§3.1.1.1)
    - Conv. Modules (§3.1.1.2)
    - Multi-scale Modules (§3.1.1.3)
    - Attention Modules (§3.1.1.4)
    - Recurrent CNNs (§3.1.1.5)
 
-2. **Multiple Network Models** (§3.1.2):
+2. Multiple Network Models:
    - Ensembles (§3.1.2.1)
    - Multi-task Models (§3.1.2.2)
    - GANs (§3.1.2.3)
 
-3. **Hybrid Feature Models** (§3.1.3)
+3. Hybrid Feature Models:
+   - Transformer Models (§3.1.4)
 
-4. **Transformer Models** (§3.1.4)
-
-The central node is labeled "Segmentation Model Architectures" (§3.1).
+The central node is labeled "Segmentation Model Architectures §3.1" and branches out to the different categories and subcategories.
 
 Transformers either with or without CNNs for segmentation, and have started being used for skin lesion segmentation only recently. We classified works according to their most relevant feature, but the architectural improvements discussed in Section 3.1.1 also appear in the models listed in the other sections. In Fig. 7, we show how frequently di GLYPH&lt;11&gt; erent architectural modules appear in the 177 surveyed works, grouped by our taxonomy of model architectures (Fig. 6).
 
@@ -52,7 +51,7 @@ Earlier DL -based skin lesion segmentation works adopted either FCN (Long et al.
 
 Fig. 7: The frequency of utilization of di GLYPH&lt;11&gt; erent architectural modules in the surveyed studies. Shortcut connections, particularly, skip connections (112 papers) and residual connections (70 papers) are the two most frequent components in DL -based skin lesion segmentation models. Attention mechanisms learn dependencies between elements in sequences, either spatially or channel-wise, and are therefore used by several encoder-decoder-style segmentation models (41 papers). Dilated convolutions help expand the receptive field of CNN -models without any additional parameters, which is why they are the most popular variant of convolution in the surveyed studies (35 papers). Finally, papers using Transformers (12 papers) started appearing from 2021 onwards and are on the rise.
 
-picture_counter_21 The image is a bar plot from a medical research paper that demonstrates the use of artificial intelligence techniques in diagnosing diseases. The bar plot categorizes different AI techniques and their frequency of use. The categories include Shortcut Connections, Convolutional Modules, Multi-scale Modules, GAN, Attention Modules, RCNN, and Transformer. Each bar is color-coded to represent different techniques such as dense connection, Transformer, recurrent CNN, attention module, GAN, pyramid pooling, image pyramid, parallel multi-scale convolution, factorized convolution, separable convolution, global convolution, dilated convolution, skip connection, and residual connection. The highest frequency is observed in the Shortcut Connections category, predominantly represented by skip connections and dense connections.
+picture_counter_21 The image is a bar plot from a medical research paper demonstrating the use of artificial intelligence techniques in diagnosing diseases. The bar plot categorizes various AI techniques and their frequency of usage. The categories include Shortcut Connections, Convolutional Modules, Multi-scale Modules, GAN, Attention Modules, RCNN, and Transformer. Each category is further broken down into specific techniques such as dense connection, Transformer, recurrent CNN, attention module, GAN, pyramid pooling, image pyramid, parallel multi-scale convolution, factorized convolution, separable convolution, global convolution, dilated convolution, skip connection, and residual connection, which are color-coded in the legend. The y-axis represents the frequency, with Shortcut Connections being the most frequent, followed by Attention Modules and others.
 
 FCN originally comprised a backbone of VGG 16 (Simonyan and Zisserman, 2014) CNN layers in the encoder and a single deconvolution layer in the encoder. The original paper proposes three versions, two with skip connections ( FCN -8 and FCN -16), and one without them (FCN-32). U-Net (Ronneberger et al., 2015), originally proposed for segmenting electron microscopy images, was rapidly adopted in the medical image segmentation literature. As its name suggests, it is a U-shaped model, with an encoder stacking convolutional layers that double in size filterwise, intercalated by pooling layers, and a symmetric decoder with pooling layers replaced by up-convolutions. Skip connections between corresponding encoder-decoder blocks improve the flow of information between layers, preserving low-level features lost during pooling and producing detailed segmentation boundaries.
 

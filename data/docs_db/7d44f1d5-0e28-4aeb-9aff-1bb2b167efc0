@@ -59,7 +59,7 @@ Biases in computer vision datasets are a constant source of issues (Torralba and
 
 Fig. 3: The frequency of utilization of di GLYPH&lt;11&gt; erent skin lesion segmentation datasets in the surveyed studies. We found that 82 papers evaluated on more than 1 dataset, with 36 papers opting for cross-dataset evaluation ( CDE in Table 3). ISIC datasets ( ISIC 2016, ISIC 2017, ISIC 2018, and ISIC Archive) are used in the majority of papers, with 168 of 177 papers using at least one ISIC dataset and the ISIC 2017 dataset being the most popular (117 papers). The PH 2 dataset is the second most widely used (56 papers) following ISIC datasets.
 
-picture_counter_12 The image is a pie chart depicting the distribution of data sources used in a study. The segments include:
+picture_counter_12 The image is a pie chart depicting the distribution of different datasets used in a study. The datasets and their respective proportions are:
 
 - ISIC 2017: 39.4%
 - ISIC 2018: 21.2%
@@ -81,25 +81,25 @@ As mentioned earlier, augmented training data induce invariance on the models: r
 
 augmentation schemes for skin lesion classification, finding that the use of both training and test augmentation is critical for performance, surpassing, in some cases, increases of real data without augmentation. Valle et al. (2020) found, in a very large-scale experiment, that test-time augmentation was the second most influential factor for classification performance, after training set size. No systematic study of this kind exists for skin lesion segmentation.
 
-picture_counter_13 The image shows a close-up view of a skin lesion, possibly a melanoma, under magnification. The lesion appears irregular in shape with varying shades of brown and black, and some areas of blue. There are visible hair strands across the lesion.
+picture_counter_13 The image shows a close-up view of a skin lesion under magnification, likely taken with a dermatoscope. The lesion appears irregular in shape with varying shades of brown and black, indicating pigmentation. Hair strands are visible across the lesion. This type of image is typically used in medical research papers or studies involving artificial intelligence techniques for diagnosing skin conditions such as melanoma.
 
-picture_counter_14 The image shows a close-up view of skin with a dark, irregularly shaped lesion. The lesion appears to have varying shades of brown and blue, and there are some visible lines and markings on the skin, likely indicating measurement or annotation for medical analysis. This type of image is typically used in dermatology to diagnose skin conditions, possibly melanoma.
+picture_counter_14 The image shows a close-up view of a skin lesion with irregular borders and varied coloration, including dark brown and blue areas. The lesion is likely being analyzed for diagnostic purposes, potentially using artificial intelligence techniques to identify characteristics indicative of skin diseases such as melanoma.
 
-picture_counter_15 The image shows a close-up view of a skin lesion with irregular borders and varying coloration, including dark brown and bluish areas. This type of image is often used in medical research papers or reports to demonstrate the use of artificial intelligence techniques, such as machine learning and deep learning, in diagnosing skin diseases like melanoma.
+picture_counter_15 The image shows a close-up view of a skin lesion, likely used in a medical research paper or a study involving artificial intelligence techniques for diagnosing diseases. The lesion appears irregular in shape with varied coloration, which may be indicative of a skin condition such as melanoma. The image is likely used to demonstrate the application of AI in analyzing skin lesions for medical diagnosis.
 
 (a) Original
 
-picture_counter_16 The image shows a close-up view of a skin lesion under magnification, likely used in medical research or a study involving artificial intelligence techniques for diagnosing diseases. The lesion displays irregular dark pigmentation with varying shades of brown and black, and there are visible hair strands across the lesion.
+picture_counter_16 The image shows a close-up view of a skin lesion under magnification, possibly indicating melanoma. The lesion has irregular borders and varying shades of brown and black pigmentation. There are visible hair strands around and over the lesion.
 
 (b) A GLYPH&lt;14&gt; ne deformation
 
 (c) Elastic deformation
 
-picture_counter_17 The image shows a close-up view of a skin lesion under magnification, likely taken using a dermoscope. The lesion has irregular borders and varied pigmentation, including areas of dark and light red as well as some blackish regions. There are visible hair strands over the lesion. This type of image is commonly used in medical research papers focusing on skin cancer diagnosis, such as melanoma, using artificial intelligence techniques.
+picture_counter_17 The image shows a close-up view of a skin lesion. The lesion appears irregular in shape with varying shades of red and dark areas, possibly indicating different pigmentation or tissue characteristics. There are several hairs visible around and over the lesion. This type of image is typically used in medical research for diagnosing skin conditions such as melanoma using artificial intelligence techniques.
 
 (d) Histogram equalization
 
-picture_counter_18 The image shows a close-up view of a skin lesion, likely captured through a dermatoscope. The lesion appears irregular in shape with varying shades of brown and some areas of blue pigmentation. There are visible hair strands across the lesion and surrounding skin. This type of image is typically used in medical research for diagnosing skin conditions, such as melanoma, using artificial intelligence techniques.
+picture_counter_18 The image shows a close-up view of a skin lesion under magnification, likely taken with a dermatoscope. The lesion appears irregular in shape with varying colors, including shades of brown and blue. There are visible hair strands over the lesion. This image is relevant to medical research or a report focused on diagnosing skin conditions, potentially using artificial intelligence techniques.
 
 (e) HSV shift
 
@@ -136,7 +136,7 @@ Although supervised DL has achieved outstanding performance in various medical i
 
 Fig. 5: A breakdown of di GLYPH&lt;11&gt; erent levels of supervision used in the 177 surveyed works. Fully supervised models continue to make up the majority of the literature (163 papers), with semi-supervised and weakly supervised methods appearing in only 9 papers. Self-supervision in skin lesion segmentation is fairly new, with all the 5 papers appearing from 2020 onwards.
 
-picture_counter_19 The image is a pie chart showing the distribution of different types of supervised learning approaches used in a study. The chart indicates that 92.1% of the approaches are fully-supervised, 5.1% are semi- and weakly-supervised, and 2.8% are self-supervised.
+picture_counter_19 The image is a pie chart depicting the distribution of different types of learning methods used in diagnosing diseases. The chart shows that 92.1% of the methods are fully-supervised, 5.1% are semi- and weakly-supervised, and 2.8% are self-supervised.
 
 techniques attempt to learn from both labeled and unlabeled samples. Weakly supervised techniques attempt to exploit partial annotations like image-level labels or bounding boxes, often in conjunction with a subset of pixel-level fully-annotated samples.
 

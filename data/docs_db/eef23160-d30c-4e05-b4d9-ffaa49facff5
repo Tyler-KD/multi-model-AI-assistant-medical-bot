@@ -35,7 +35,7 @@ Vol:.(1234567890)
 
 Figure 1. Flow diagram of the work.
 
-picture_counter_1 The image is a diagram illustrating a deep learning model architecture for diagnosing brain tumors using MRI images. On the left side, there are four labeled MRI images: Glioma Tumor, Meningioma Tumor, No Tumor, and Pituitary Tumor. These images are input into a block containing five different neural network models: EfficientNetB4, InceptionV3, VGG16, VGG19, and CNN. The output from these models is processed through a series of layers: GlobalAveragePooling2D, Dropout (Rate = 0.05), Dense Layer, and an Optimizer (RectifiedAdam). Finally, the processed output is classified into one of four categories: Glioma Tumor, Meningioma Tumor, No Tumor, and Pituitary Tumor.
+picture_counter_1 The image is a diagram from a medical research paper demonstrating the use of artificial intelligence techniques in diagnosing brain tumors. It shows a flowchart with MRI images of different types of brain tumors (Glioma Tumor, Meningioma Tumor, No Tumor, Pituitary Tumor) on the left. These images are processed using various deep learning models (EfficientNetB4, InceptionV3, VGG16, VGG19, CNN) as indicated in the central section. The output from these models undergoes several layers of processing (GlobalAveragePooling2D, Dropout with rate 0.05, Dense Layer, Optimizer using RectifiedAdam) leading to the final classification of tumor types on the right.
 
 Studies on brain tumors in the last 5 years will be scanned from indexes such as WOS and IEEE and the details of the related studies will be explained in this section.
 

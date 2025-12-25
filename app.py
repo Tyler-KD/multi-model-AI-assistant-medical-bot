@@ -26,7 +26,7 @@ from agents.agent_decision import process_query
 config = Config()
 
 # Initialize FastAPI app
-app = FastAPI(title="Multi-Agent Medical Chatbot", version="1.0")
+app = FastAPI(title="Multi-Agent Medical Chatbot", version="2.0")
 
 # Set up directories
 UPLOAD_FOLDER = "uploads/backend"
@@ -394,4 +394,4 @@ async def request_entity_too_large(request, exc):
     )
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host=config.api.host, port=config.api.port)

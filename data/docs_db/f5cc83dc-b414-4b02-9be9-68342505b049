@@ -19,3 +19,8 @@ activation function is utilized for all hidden layers. Then, the first 2 fully c
 ## EfficientNetB0 model
 
 Google research group designed a family of models, called EfficientNets using a scaling method and achieved better efficiency and accuracy than previous ConvNets. EfficientNet is based on scaling CNNs and reaching better performance by balancing network width, depth, and resolution. Therefore, the focus is to present a scaling method to uniformly scale the 3 dimensions with a simple highly effective compound coefficient. Thus, it can be considered as an optimization problem to find the best coefficients for depth, width, and resolution that maximizes the accuracy of the network given the constraints of the available resources. The primary building block of the EfficientNet models is MBConv. The network's dimension equation was used to get the family of neural networks EfficientNet-B0 to   B7 16 . In this research, EfficientNetB0 was used for the classification of the chest X-ray images. Figure 4 sums up the framework of the adopted methodology in this research.
+
+
+## Ethical approval
+
+This article does not contain any studies with human participants or animals performed by the author.

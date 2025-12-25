@@ -52,7 +52,7 @@ class MedicalRAG:
                 raise ValueError(f"Directory not found: {directory_path}")
             
             # Get all files in the directory
-            files = [os.path.join(directory_path, f) for f in os.listdir(directory_path) 
+            files = [os.path.join(directory_path + '/', f) for f in os.listdir(directory_path) 
                      if os.path.isfile(os.path.join(directory_path, f))]
             
             if not files:
@@ -210,7 +210,8 @@ class MedicalRAG:
             response = self.response_generator.generate_response(
                 query=query,
                 retrieved_docs=reranked_documents,
-                picture_paths=reranked_top_k_picture_paths
+                picture_paths=reranked_top_k_picture_paths,
+                chat_history=chat_history
                 )
             
             # Add timing information

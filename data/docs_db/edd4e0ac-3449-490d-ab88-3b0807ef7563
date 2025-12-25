@@ -1,8 +1,3 @@
-## Ethical approval
-
-This article does not contain any studies with human participants or animals performed by the author.
-
-
 ## Experimental results
 
 This section presents the experimental results of the proposed framework to evaluate its performance and study the effect of different enhancements applied to the X-ray images on the performance of the CNN classification model.
@@ -16,7 +11,7 @@ Both the full and segmented datasets with their enhanced versions have been used
 
 Figure 4. The framework of the used methodology for Chest X-ray images classification.
 
-picture_counter_23 The image is a flowchart depicting the use of transfer learning for medical image analysis. It shows two pathways: one for 'Original & enhancements' and another for 'Segmented' images. The enhancements include Original, Enhanced HE, Enhanced CLAHE, and Complement images. These images undergo multiplication with a mask to generate segmented images. The enhanced and segmented images are then fed into two neural networks, VGG19 and EfficientNetB0, for transfer learning. The flow of data is indicated by colored arrows connecting the images to the respective neural networks.
+picture_counter_23 The image illustrates a workflow for medical image analysis using artificial intelligence techniques. It shows two main sections: "Original & enhancements" and "Segmented." The original chest X-ray images undergo various enhancements, including HE (Histogram Equalization), CLAHE (Contrast Limited Adaptive Histogram Equalization), and Complement. These enhanced images are then segmented using a mask. Both the original and segmented images are fed into two different neural networks, VGG19 and EfficientNetB0, indicating the use of transfer learning for disease diagnosis. The image includes arrows connecting each step, showing the flow of data through the process.
 
 <!-- page_break -->
 

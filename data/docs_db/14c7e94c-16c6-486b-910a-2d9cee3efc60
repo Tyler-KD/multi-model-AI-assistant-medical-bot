@@ -18,17 +18,17 @@ The purpose of the pre-processing phase is to prepare the X-ray images for class
 
 Table 1. COVID-19 radiography database distribution.
 
-picture_counter_1 The image is a chest X-ray showing the lungs, heart, and surrounding structures.
+picture_counter_1 The image is an X-ray of a human chest, showing the lungs, heart, and surrounding structures.
 
 Normal-3
 
-picture_counter_2 The image is an X-ray of a human chest, showing the ribs, spine, and surrounding tissues.
+picture_counter_2 The image is a chest X-ray showing the rib cage, spine, and upper part of the lungs.
 
-picture_counter_3 The image is a chest X-ray showing the lungs, heart, and surrounding structures.
+picture_counter_3 The image is a chest X-ray displaying the thoracic cavity, including the lungs, heart, and surrounding structures.
 
 COVID-31
 
-picture_counter_4 The image shows a chest X-ray, which is likely used in a medical research paper or a report demonstrating the use of artificial intelligence techniques in diagnosing diseases. The X-ray reveals the lungs and heart, and there are medical devices visible on the patient's body.
+picture_counter_4 The image is a chest X-ray showing the lungs and surrounding structures, likely used in the context of a medical research paper or a study on the use of artificial intelligence techniques in diagnosing diseases.
 
 Viral Pneumonia-13
 

@@ -1,0 +1,81 @@
+## Data availability
+
+The used data has been obtained from an available online database and it has been referenced in the manuscript. The link to the database used in the study: https://  www.  kaggle.  com/  tawsi  furra  hman/  covid  19-  radio  graphy-  datab ase
+
+Vol.:(0123456789)
+
+<!-- page_break -->
+
+Received: 7 January 2024; Accepted: 8 May 2024
+
+
+## References
+
+- 1.  https://  www.  who.  int/  europe/  emerg  encies/  situa  tions/  covid-  19.
+- 2.  Kanne, J. P . et al. Essentials for radiologists on COVID-19: An update-Radiology scientific expert panel. Radiology 296 , E113-E114 (2020).
+- 3.  https://  www.  who.  int/  emerg  encies/  disea  ses/  novel-  coron  avirus-  2019.
+- 4.  https://  www.  world  omete  rs.  info/  coron  avirus/.
+- 5.  https://  www.  who.  int/  health-  topics/  coron  avirus#  tab=  tab\_1.
+- 6.  Yang, D. et al. Detection and analysis of COVID-19 in medical images using deep learning techniques. Sci. Rep. 11 (1), 1-13 (2021).
+- 7.  Alsattar, H. A. et al. Developing deep transfer and machine learning models of chest X-ray for diagnosing COVID-19 cases using probabilistic single-valued neutrosophic hesitant fuzzy. Expert Syst. Appl. 236 , 121300 (2023).
+- 8.  Wang, X. et al. Broad learning solution for rapid diagnosis of COVID-19. Biomed. Signal Process. Control 83 , 104724 (2023).
+- 9.  Mezina, A. &amp; Burget, R. Detection of post-COVID-19-related pulmonary diseases in X-ray images using Vision Transformer-based neural network. Biomed. Signal Process. Control 87 , 105380 (2024).
+- 10. Gaur, P . et al. COVID-19 disease identification from chest CT images using empirical wavelet transformation and transfer learning. Biomed. Signal Process. Control 71 , 103076 (2022).
+- 11. Wong, H. Y. F. et al. Frequency and distribution of chest radiographic findings in patients positive for COVID-19. Radiology 296 (2), E72-E78 (2020).
+- 12. Badrinarayanan, V., Kendall, A. &amp; Cipolla, R. Segnet: A deep convolutional encoder-decoder architecture for image segmentation. IEEE Trans. Pattern Anal. Mach. Intell. 39 (12), 2481-2495 (2017).
+- 13. Russakovsky, O. et al. Imagenet large scale visual recognition challenge. Int. J. Comput. Vis. 115 , 211-252 (2015).
+- 14. Kermany, D. S. et al. Identifying medical diagnoses and treatable diseases by image-based deep learning. Cell 172 (5), 1122-11319 (2018).
+- 15. Simonyan, K., Zisserman, A. Very deep convolutional networks for large-scale image recognition. arXiv preprint arXiv:1409.***1556 (2014).
+- 16. Tan, M., Le, Q. Efficientnet: Rethinking model scaling for convolutional neural networks. In International Conference on Machine Learning . (PMLR, 2019).
+- 17. Howard, A. G., et  al. Mobilenets: Efficient convolutional neural networks for mobile vision applications. arXiv preprint arXiv***:1704.04861 (2017).
+- 18. He, K., et al. Deep residual learning for image recognition. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition . (2016).
+- 19. Nishio, M. et al. Automatic classification between COVID-19 pneumonia, non-COVID-19 pneumonia, and the healthy on chest X-ray image: Combination of data augmentation methods. Sci. Rep. 10 (1), 1-6 (2020).
+- 20. Minaee, S. et al. Deep-COVID: Predicting COVID-19 from chest X-ray images using deep transfer learning. Med. Image Anal. 65 , 101794 (2020).
+- 21. Sahin, M. E. Deep learning-based approach for detecting COVID-19 in chest X-rays. Biomed. Signal Process. Control 78 , 103977 (2022).
+- 22. Wang, L., Lin, Z. Q. &amp; Wong, A. Covid-net: A tailored deep convolutional neural network design for detection of covid-19 cases from chest X-ray images. Sci. Rep. 10 (1), 1-12 (2020).
+- 23. Panwar, H. et al. Application of deep learning for fast detection of COVID-19 in X-Rays using nCOVnet. Chaos Solitons Fractals 138 , 109944 (2020).
+- 24. Nigam, B. et al. COVID-19: Automatic detection from X-ray images by utilizing deep learning methods. Expert Syst. Appl. 176 , 114883 (2021).
+- 25. Chow, L. S. et al. Quantitative and qualitative analysis of 18 deep convolutional neural network (CNN) models with transfer learning to diagnose COVID-19 on chest X-ray (CXR) images. SN Comput. Sci. 4 (2), 141 (2023).
+- 26. Rahman, T., COVID-19 radiography database. https://  www.  kaggle.  com/  tawsi  furra  hman/  covid  19-  radio  graphy-  datab  ase (2021).
+- 27. Veluchamy, M. &amp; Subramani, B. Image contrast and color enhancement using adaptive gamma correction and histogram equalization. Optik 183 , 329-337 (2019).
+- 28. Zimmerman, J. B. et al. An evaluation of the effectiveness of adaptive histogram equalization for contrast enhancement. IEEE Trans. Med. Imaging 7 (4), 304-312 (1988).
+
+
+## Author contributions
+
+E.M.F.E.H. is the only author of this manuscript and hence is the corresponding author and the only contributor for this manuscript.
+
+
+## Funding
+
+Open access funding provided by The Science, Technology &amp; Innovation Funding Authority (STDF) in cooperation with The Egyptian Knowledge Bank (EKB).
+
+
+## Competing interests
+
+The author declares no competing interests.
+
+
+## Additional information
+
+Correspondence and requests for materials should be addressed to E.M.F.E.H.
+
+Reprints and permissions information is available at www.nature.com/reprints.
+
+Publisher's note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.
+
+Scientific Reports
+
+|        (2024) 14:11639  |
+
+Vol:.(1234567890)
+
+<!-- page_break -->
+
+
+
+Open Access This  article  is  licensed  under  a  Creative  Commons  Attribution  4.0  International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article's Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article's Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://  creat  iveco  mmons.  org/  licen  ses/  by/4.  0/.
+
+© The Author(s) 2024
+
+Vol.:(0123456789)

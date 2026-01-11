@@ -1,0 +1,42 @@
+OPEN
+
+
+
+
+## Brain tumor detection from images and comparison with transfer learning methods and ͹-layer CNN
+
+Mohammad Zafer Khaliki  ͷ  &amp; Muhammet Sinan Başarslan  ͸ *
+
+Health is very important for human life. In particular, the health of the brain, which is the executive of the vital resource, is very important. Diagnosis for human health is provided by magnetic resonance imaging ȋMRIȌ devices, which help health decision makers in critical organs such as brain health. Images from these devices are a source of big data for artificial intelligence. This big data enables high performance in image processing classification problems, which is a subfield of artificial intelligence. In this study, we aim to classify brain tumors such as glioma, meningioma, and pituitary tumor from brain MR images. Convolutional Neural Network ȋCNNȌ and CNN-based inception-V͹, EfficientNetBͺ, VGGͷͿ, transfer learning methods were used for classification. F-score, recall, imprinting and accuracy were used to evaluate these models. The best accuracy result was obtained with VGGͷͼ with Ϳ;%, while the F-score value of the same transfer learning model was Ϳͽ%, the Area Under the Curve ȋAUCȌ value was ͿͿ%, the recall value was Ϳ;%, and the precision value was Ϳ;%. CNN architecture and CNN-based transfer learning models are very important for human health in early diagnosis and rapid treatment of such diseases.
+
+The healthcare industry has been rapidly transformed by technological advances in recent years, and an important component of this transformation is artificial intelligence (AI) technology. AI is a computer system that simulates human-like intelligence and has many applications in medicine. One such area is the fight against brain tumors. Brain tumors are a major public health problem in the healthcare sector, and accurate diagnosis, treatment, and follow-up processes are critical. AI has become an important tool for improving these processes and has great potential for early diagnosis and treatment of brain tumors.
+
+Brain tumors affect human health due to their   location . AI is designed to help diagnose and treat complex 1 diseases such as brain tumors by combining technologies such as big data analytics, machine learning, and deep learning. AI has the ability to detect and classify tumors by analyzing brain imaging techniques, such as Magnetic Resonance Imaging (MRI). AI algorithms can help determine the size, location, class, and aggressiveness of tumors. This helps physicians make a more accurate diagnosis and treatment plan, and helps patients better understand their health.
+
+AI can also be used to track a patient's progress through treatment. AI-based analytics can be used to assess treatment response and predict potential tumor recurrence. In this way, patients' treatment plans can be more effectively organized and individualized treatment approaches can be developed.
+
+In this study, difference detection was performed on brain images. Classification was performed with multilayer CNN and CNN-based transfer learning methods on 4 classes labeled by physicians.
+
+The contribution of the study is as follows.
+
+- · We investigate the transfer learning method with the highest performance in the classification process of transfer learning methods on brain images.
+- · We investigate the performance of CNN and transfer learning on brain images using CNN as a multi-layer without using transfer learning.
+- · We investigate whether it is possible to achieve good results with a skewed and poor quality dataset.
+
+The flow diagram of the study is shown in Fig. 1.
+
+ͷ Ataşehir Bil Anatolian High School, ͹ͺͽ͸Ͷ Istanbul, Turkey. ͸ Department of Computer Engineering, Faculty  of  Engineering  and  Natural  Sciences,  Istanbul  Medeniyet  University,  ͹ͺ;;ͻ  Istanbul,  Turkey. * email: muhammet.basarslan@medeniyet.edu.tr glyph&lt;c=25,font=/HXRIKF+Corbel&gt;
+
+ol.:ȋͬͭͮͯ
+
+<!-- page_break -->
+
+Vol:.(1234567890)
+
+Figure 1. Flow diagram of the work.
+
+picture_counter_1 The image is a diagram from a medical research paper demonstrating the use of artificial intelligence techniques in diagnosing brain tumors. It shows a flowchart with MRI images of different types of brain tumors (Glioma Tumor, Meningioma Tumor, No Tumor, Pituitary Tumor) on the left. These images are processed using various deep learning models (EfficientNetB4, InceptionV3, VGG16, VGG19, CNN) as indicated in the central section. The output from these models undergoes several layers of processing (GlobalAveragePooling2D, Dropout with rate 0.05, Dense Layer, Optimizer using RectifiedAdam) leading to the final classification of tumor types on the right.
+
+Studies on brain tumors in the last 5 years will be scanned from indexes such as WOS and IEEE and the details of the related studies will be explained in this section.
+
+In a study of 3064 MRI images from 233 patients belonging to 4 different tumor classes (meningioma, glioma, pituitary, tumor) with support vector machine (SVM) on datasets generated after various preprocessing, an accuracy value between 94% was   obtained 1 .  Santhosh and colleagues presented a classification model aimed at distinguishing between normal and abnormal brain tissue. This system relied on a combination of thresholding and watershed segmentation techniques. Using SVM, the classification accuracy reached an impressive 85.32% across all   categories . Rafael et al. achieved an accuracy rate of 89.6% using SVM for brain 2 tumor   classification . Similarly, Gupta and Sasidhar achieved 87% accuracy using   SVM . Gumaei et al. proposed 3 4 a classification framework that harnesses the power of regularized extreme learning machine (RELM) for the purpose of distinguishing between benign and malignant brain tumors. Their study involved the collection and preprocessing of MRI data related to meningioma, glioma, and pituitary tumors. The feature selection process was performed using GIST, Normalized GIST (NGIST), and PCA-NGIST methods. Using a meticulous fivefold cross-validation procedure, the RELM technique yielded an impressive overall accuracy of 92.61% . 92% accuracy 5 was achieved using SVM machine learning on a dataset of 90 normal and 154 tumor brain   images . 3264 brain 6 tumor images from Kaggle were classified using CNN, LSTM and CNN-LSTM hybrid. The results obtained; CNN 89%, LSTM 90.02%, CNN-LSTM 92%   accuracy 7 . Srinivas and co-authors conducted a comprehensive study involving a comparative performance analysis of transfer learning based  CNN models pre-trained with VGG16, ResNet-50 and InceptionV3 architectures for brain tumor cell prediction. In particular, InceptionV3 had an accuracy of 78%, VGG16 had a high accuracy of 96%, and ResNet-50 had an accuracy of 95% 8 . In a CNN-based study of brain tumor images, Choudhury, Mahanty, Kumar, and Mishra achieved an accuracy of 96.08% 9 , while Martini and Oermann's CNN-based study achieved an accuracy of 93.9% 10 . Between 2005 and 2010, a study was conducted to predict the classes of meningioma, glioma, and pituitary gland from brain images of 233 patients in China. In this study, 4-layer CNN was used. The accuracy was 91.3% 11 . In a study of 200 brain tumor images, the accuracy of image segmentation was 92.14% 12 . Classification studies on 102 brain tumor patients using SVM and KNN machine learning methods achieved 85% and 88% accuracy,   respectively 13 . In a classification study of 233 brain tumor patients, SVM and KNN were used. In this study, the accuracy result was 91.28% 14 . In a classification study using CNN on 233 patient images with meningioma, glioma or pituitary tumor, the accuracy was 91.43% with fivefold cross-validation 15 . The author introduced a novel approach known as a Capsule Network (CapsNet), which effectively integrates brain MRI images and approximate tumor boundaries for the purpose of brain tumor classification. This study achieved an impressive accuracy of 90.89% in accurately classifying brain   tumors 16 . In this study, as seen in the literature, CNN and CNN-based transfer learning methods will be used for brain tumor detection.

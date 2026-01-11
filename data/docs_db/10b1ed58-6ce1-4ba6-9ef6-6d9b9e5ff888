@@ -1,0 +1,8 @@
+## Deep learning
+
+Deep learning is a subset of machine learning that focuses on training artificial neural networks to perform complex tasks by learning patterns and representations directly from data. Unlike traditional machine learning approaches that require manual feature engineering, deep learning algorithms autonomously extract hierarchical features from data, leading to the creation of powerful and highly accurate   models 18-20 . In this study, a CNN architecture is employed.
+
+
+## Convolution neural network
+
+Convolutional neural networks represent a major breakthrough in deep learning and computer vision. These architectures are specifically designed to extract meaningful features from complex visual data, such as images and video. The inherent structure of the CNN, consisting of convolutional layers, pooling layers, and fully connected layers, mimics the ability of the human visual system to recognize patterns and hierarchical features. Convolutional layers use convolutional operations to detect local features, which are then progressively abstracted by pooling layers that condense the information. The resulting hierarchical representations are then fed into fully connected layers for classification or regression tasks. CNN have redefined the landscape of image recognition, achieving remarkable success in diverse domains ranging from image classification and object detection to face recognition and medical image   analysis 21 .

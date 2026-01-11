@@ -1,0 +1,20 @@
+## Material method
+
+This section describes the dataset, the classification algorithm (CNN) used in the study, and the transfer learning architectures VGG19, VGG16, InceptionV3, EfficientNetB4 developed based on this algorithm.
+
+
+## Data source
+
+The dataset consists of a total of 2870 human brain MRI images systematically classified into four different categories: glioma, meningioma, no tumor and pituitary. The distribution of labeled images into these four classes is shown in Table 1 for   reference 17 .
+
+<!-- page_break -->
+
+Table 1. Distribution of the preprocessed brain tumor dataset.
+
+| Data            |   Glioma |   Meningioma |   No tumor |   Pituitary |   Total |
+|-----------------|----------|--------------|------------|-------------|---------|
+| Training data   |      696 |          704 |        316 |         676 |    2452 |
+| Testing data    |       92 |           93 |         49 |          90 |     324 |
+| Validation data |      138 |          140 |         75 |         135 |     488 |
+
+Glioma is the most common type of malignant brain tumor and typically occurs in glial cells in the brain and spinal cord. Meningioma is a benign type of brain tumor, but can become malignant without appropriate intervention. These classes are labeled by physicians. The size of the input images is 64 × 64. Table 1 shows the training, test and validation set discriminations by class.

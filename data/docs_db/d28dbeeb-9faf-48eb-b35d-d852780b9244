@@ -1,0 +1,100 @@
+## 3.2. Loss Functions
+
+A segmentation model f may be formalized as a function ˆ y = f GLYPH&lt;18&gt; ( x ), which maps an input image x to an estimated segmentation map ˆ parameterized by a (large) set of parameters y GLYPH&lt;18&gt; . For skin lesions, ˆ is a binary mask separating the lesion from the surrounding y skin. Given a training set of images xi and their corresponding ground-truth masks yi f ( xi ; yi ); i = 1 ; :::; N g , training a segmentation model consists of finding the model parameters GLYPH&lt;18&gt; that maximize the likelihood of observing those data:
+
+$$\theta ^ { * } = \arg \max _ { \theta } \sum _ { i = 1 } ^ { N } \log P ( y _ { i } | x _ { i } ; \theta ),$$
+
+which is performed indirectly, via the minimization of a loss function between the estimated and the true segmentation masks:
+
+$$\theta ^ { * } = \arg \min _ { \theta } \sum _ { i = 1 } ^ { N } \mathcal { L } ( \hat { y } _ { i } | y _ { i } ) = \arg \min _ { \theta } \sum _ { i = 1 } ^ { N } \mathcal { L } ( f _ { \theta } ( x _ { i } ) | y _ { i } ).$$
+
+The choice of the loss function is thus critical, as it encodes not only the main optimization objective, but also much of the prior
+
+<!-- page_break -->
+
+Fig. 8: The distribution of loss functions used by the surveyed works in DL -based skin lesion segmentation. Cross-entropy loss is the most popular loss function (96 papers), followed by Dice (53 papers) and Jaccard (19 papers) losses. Of the 177 surveyed papers, 65 use a combination of losses, with CE + Dice (27 papers) and CE + Jaccard (11 papers) being the most popular combinations.
+
+picture_counter_22 The image is a pie chart depicting the distribution of different loss functions used in a study. The loss functions and their respective percentages are as follows: CE (41.2%), Dice (22.7%), Jaccard (8.2%), DS (5.6%), L1 (4.3%), Focal (3.9%), Adversarial (3.0%), Tanimoto (3.0%), Tversky (2.1%), L2 (2.1%).
+
+information needed to guide the learning and constrain the search space. As can been in Table 3, many skin lesion segmentation models employ a combination of losses to enhance generalization.
+
+
+## 3.2.1. Losses based on p-norms
+
+Losses based on p -norms are the simplest ones, and comprise the mean squared error ( MSE ) (for p = 2) and the mean absolute error ( MAE ) (for p = 1).
+
+$$M S E ( X, Y ; \theta ) = - \sum _ { i = 1 } ^ { N } \| y _ { i } - \hat { y } _ { i } \| _ { 2 },$$
+
+$$\text{MAE} ( X, Y ; \theta ) = - \sum _ { i = 1 } ^ { N } \| y _ { i } - \hat { y } _ { i } \| _ { 1 }.$$
+
+In GAN s, to regularize the segmentations produced by the generator, it is common to utilize hybrid losses containing MSE ( ' 2 loss) (Peng et al., 2019) or MAE ( ' 1 loss) (Peng et al., 2019; Tu et al., 2019; Lei et al., 2020). The MSE has also been used as a regularizer to match attention and ground-truth maps (Xie et al., 2020a).
+
+
+## 3.2.2. Cross-entropy Loss
+
+Semantic segmentation may be viewed as classification at the pixel level, i.e., as assigning a class label to each pixel. From this perspective, minimizing the negative log-likelihoods of pixel-wise predictions (i.e., maximizing their likelihood) may be achieved
+
+<!-- page_break -->
+
+by minimizing a cross-entropy loss L ce :
+
+$$\mathcal { L } _ { c e } ( X, Y ; \theta ) = - \sum _ { i = 1 } ^ { N } \sum _ { p \in \Omega _ { i } } y _ { i p } \log \hat { y } _ { i p } + ( 1 - y _ { i p } ) \log ( 1 - \hat { y } _ { i p } ), \ \hat { y } _ { i p } = P ( y _ { i p } = 1 | X ( i ) ; \theta ),$$
+
+where GLYPH&lt;10&gt; i is the set of all image i pixels, P is the probability, xip is p th image pixel in i th image and, yip 2 f 0 1 ; g and ˆ yip 2 [0 ; 1] are respectively the true and the predicted labels of xip . The cross-entropy loss appears in the majority of deep skin lesion segmentation works, e.g., Song et al. (2019), Singh et al. (2019), and Zhang et al. (2019a).
+
+Since the gradient of the cross-entropy loss function is inversely proportional to the predicted probabilities, hard-to-predict samples are weighted more in the parameter update equations, leading to faster convergence. A variant, the weighted crossentropy loss, penalizes pixels and class labels di GLYPH&lt;11&gt; erently. Nasr-Esfahani et al. (2019) used pixel weights inversely proportional to their distance to lesion boundaries to enforce sharper boundaries. Class weighting may also mitigate the class imbalance, which, left uncorrected, tends to bias models towards the background class, since lesions tend to occupy a relatively small portion of images. Chen et al. (2018b), Goyal et al. (2019a), and Wang et al. (2019b) apply such a correction, using class weights inversely proportional to the class pixel frequency. Mirikharaji et al. (2019) weighted the pixels according to annotation noise estimated using a set of cleanly annotated data. All the aforementioned losses treat pixels independently without enforcing spatial coherence, which motivates their combination with other consistency-seeking losses.
+
+
+## 3.2.3. Dice and Jaccard Loss
+
+The Dice score and the Jaccard index are two popular metrics for segmentation evaluation (Section 4.3), measuring the overlap between predicted segmentation and ground-truth. Models may employ di GLYPH&lt;11&gt; erentiable approximations of these metrics, known as soft Dice (He et al., 2017; Kaul et al., 2019; He et al., 2018; Wang et al., 2019a) and soft Jaccard (Venkatesh et al., 2018; Hasan et al., 2020; Sarker et al., 2019) to optimize an objective directly related to the evaluation metric.
+
+For two classes, these losses are defined as follows:
+
+$$\mathcal { L } _ { d i c e } ( X, Y ; \theta ) = 1 - \frac { 1 } { N } \sum _ { i = 1 } ^ { N } \frac { 2 \sum _ { p \in \Omega } y _ { i p } \hat { y } _ { i p } } { \sum _ { p \in \Omega } y _ { i p } + \hat { y } _ { i p } },$$
+
+$$\mathcal { L } _ { j a c c } ( X, Y ; \theta ) = 1 - \frac { 1 } { N } \sum _ { i = 1 } ^ { N } \frac { \sum _ { p \in \Omega } y _ { i p } \hat { y } _ { i p } } { \sum _ { p \in \Omega } y _ { i p } + \hat { y } _ { i p } - y _ { i p } \hat { y } _ { i p } }.$$
+
+Di GLYPH&lt;11&gt; erent variations of overlap-based loss functions address the class imbalance problem in medical image segmentation tasks. The Tanimoto distance loss, L td is a modified Jaccard loss optimized in some models (Canalini et al., 2019; Baghersalimi et al., 2019; Yuan et al., 2017):
+
+$$\mathcal { L } _ { t d } ( X, Y ; \theta ) = 1 - \frac { 1 } { N } \sum _ { i = 1 } ^ { N } \frac { \sum _ { p \in \Omega } y _ { i p } \hat { y } _ { i p } } { \sum _ { p \in \Omega } y _ { i p } ^ { 2 } + \hat { y } _ { i p } ^ { 2 } - y _ { i p } \hat { y } _ { i p } },$$
+
+which is equivalent to the Jaccard loss when both yip and ˆ yip are binary.
+
+The Tversky loss (Abraham and Khan, 2019), inspired by the Tversky index, is another Jaccard variant that penalizes false
+
+<!-- page_break -->
+
+positives and false negatives di GLYPH&lt;11&gt; erently to address the class imbalance problem:
+
+$$\mathcal { L } _ { \nu } ( X, Y ; \theta ) = 1 - \frac { 1 } { N } \sum _ { i = 1 } ^ { N } \frac { \sum _ { p \in \Omega } y _ { i p } \hat { y } _ { i p } } { \sum _ { p \in \Omega } y _ { i p } \hat { y } _ { i p } + \alpha y _ { i p } ( 1 - \hat { y } _ { i p } ) + \beta ( 1 - y _ { i p } ) \hat { y } _ { i p } },$$
+
+where GLYPH&lt;11&gt; and GLYPH&lt;12&gt; tune the contributions of false negatives and false positives with GLYPH&lt;11&gt; + GLYPH&lt;12&gt; = 1.
+
+Abraham and Khan (2019) combined the Tvserky and focal losses (Lin et al., 2017), the latter encouraging the algorithm to focus on the hard-to-predict pixels:
+
+$$\mathcal { L } _ { f t v } = \mathcal { L } _ { t v } ^ { \frac { 1 } { \gamma } },$$
+
+where GLYPH&lt;13&gt; controls the relative importance of the hard-to-predict samples.
+
+
+## 3.2.4. Matthews Correlation Coe GLYPH&lt;14&gt; cient Loss
+
+Matthews correlation coe GLYPH&lt;14&gt; cient ( MCC ) loss is a metric-based loss function based on the correlation between predicted and ground-truth labels (Abhishek and Hamarneh, 2021). In contrast to the overlap-based losses discussed in Section 3.2.3, MCC considers misclassifying the background pixels by penalizing false negative labels, making it more e GLYPH&lt;11&gt; ective in the presence of skewed class distributions. MCC loss is defined as:
+
+$$\mathcal { L } _ { M C C } ( X, Y ; \theta ) = 1 - \frac { 1 } { N } \sum _ { i = 1 } ^ { N } \frac { \sum _ { p \in \Delta } \hat { y } _ { i p } y _ { i p } \frac { \sum _ { p \in \Delta } \hat { y } _ { i p } \sum _ { p \in \Delta } y _ { i p } } { M _ { i } } } { f ( \hat { y } _ { i } y _ { i } ) },$$
+
+$$f ( \hat { y } _ { i }, y _ { i } ) = \sqrt { \sum _ { p \in \Omega } \hat { y } _ { i p } \sum _ { p \in \Omega } y _ { i p } - \frac { \sum _ { p \in \Omega } \hat { y } _ { i p } ( \sum _ { p \in \Omega } y _ { i p } ) ^ { 2 } } { M _ { i } } - \frac { ( \sum _ { p \in \Omega } \hat { y } _ { i p } ) ^ { 2 } \sum _ { p \in \Omega } y _ { i p } } { M _ { i } } + ( \frac { \sum _ { p \in \Omega } \hat { y } _ { i p } \sum _ { p \in \Omega } y _ { i p } } { M _ { i } } ) ^ { 2 } } \,,$$
+
+where Mi is the total number of pixels in the image i .
+
+
+## 3.2.5. Deep Supervision Loss
+
+In DL models, the loss may apply not only to the final decision layer, but also to the intermediate hidden layers. The supervision of hidden layers, known as deep supervision, guides the learning of intermediate features. Deep supervision also addresses the vanishing gradient problem, leading to faster convergence and improves segmentation performance by constraining the feature space. Deep supervision loss appears in several skin lesion segmentation works (He et al., 2017; Zeng and Zheng, 2018; Li et al., 2018a,b; He et al., 2018; Zhang et al., 2019a; Tang et al., 2019b), where it is computed in multiple layers, at di GLYPH&lt;11&gt; erent scales. The loss has the general form of a weighted summation of multi-scale segmentation losses:
+
+$$\mathcal { L } _ { d s } ( X, Y ; \theta ) = \sum _ { l = 1 } ^ { m } \gamma _ { l } \mathcal { L } _ { l } ( X, Y ; \theta ),$$
+
+where m is the number of scales, L l is the loss at the l th scale, and GLYPH&lt;13&gt; l adjusts the contribution of di GLYPH&lt;11&gt; erent losses.
+
+<!-- page_break -->

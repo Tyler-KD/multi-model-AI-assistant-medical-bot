@@ -1,0 +1,79 @@
+## Discussion
+
+Distinguishing COVID-19 from normal and other classes is one of the important issues since the pandemic in 2019. The contribution of this research is to develop a framework to classify Coronavirus suspected cases as normal or COVID-19 positive cases. Different pre-processing steps have been applied to improve the performance of the classification. After that, multiplication between the original images and the associated lung masks has been applied to get the segmented lungs. The same process of multiplication has been applied between different enhanced image versions and the associated masks to get different enhanced versions of segmented datasets. All these versions are introduced to CNN models which are VGG19 and EfficientNetB0. Therefore, two different approaches have been used to train pre-trained CNN models using transfer learning. The first approach uses full chest X-ray images, while the other approach uses lung segmented images.
+
+From the results of conducted experiments, it has been observed that the proposed framework has achieved a good performance using either full or segmented images, however the performance using full images is better than that using segmented. Moreover, it has been observed that the performance of the classification models has been improved after applying enhancement techniques.
+
+To evaluate the proposed framework with respect to the state-of-the-art works in COVID-19, it has been compared with the related works reviewed in this research as described in Table 6. It is worth mentioning that, the comparison is not an easy task in COVID research as the pandemic broke out in the world suddenly, all Covid research used different sources of data either local, public, or combined from different databases. Some of the public datasets are collected from different other databases. Even the research that used the same public
+
+
+## Training and Validation Accuracy Accuracy
+
+Figure 7. Training and validation accuracy of the best model.
+
+picture_counter_24 The image is a line graph showing the training and validation accuracy over epochs. The x-axis represents the number of epochs, ranging from 0 to 11. The y-axis represents accuracy, ranging from 0.88 to 1.0. There are two lines on the graph: a blue line indicating training accuracy and an orange line indicating validation accuracy. Both lines show an increase in accuracy over the epochs, with training accuracy generally higher than validation accuracy.
+
+Vol.:(0123456789)
+
+<!-- page_break -->
+
+Vol:.(1234567890)
+
+
+## Training and Validation Losses
+
+picture_counter_25 The image is a graph depicting training and validation losses over 11 epochs. The y-axis represents the loss values, ranging from 0 to 400, while the x-axis represents the number of epochs. Two lines are plotted: one for training loss (blue) and one for validation accuracy (orange). The training loss starts high and decreases sharply within the first epoch, then stabilizes. The validation accuracy fluctuates more, showing small peaks and troughs throughout the epochs. The title of the graph is "Training and Validation Losses."
+
+Figure 8. Training and validation losses of the best model.
+
+Figure 9. Training and test ROC curve of the best achieved model.
+
+picture_counter_26 The image depicts an ROC curve graph, which is used to evaluate the performance of a classification model. The graph plots the true positive rate against the false positive rate. There are two curves shown: one for the training data (blue line) with an area under the curve (AUC) of 0.99, and one for the test data (orange line) with an AUC of 0.95. A dashed diagonal line represents the line of no discrimination (random guessing).
+
+Figure10. Confusion matrix of the best model.
+
+picture_counter_27 The image is a confusion matrix used in a medical research paper or a research paper demonstrating the use of artificial intelligence techniques in diagnosing diseases. It shows the performance of a model in distinguishing between normal and COVID-19 cases. The matrix has four cells:
+- Top-left cell: True negatives (Normal predicted as Normal) - 188
+- Top-right cell: False positives (Normal predicted as COVID-19) - 12
+- Bottom-left cell: False negatives (COVID-19 predicted as Normal) - 8
+- Bottom-right cell: True positives (COVID-19 predicted as COVID-19) - 192
+
+<!-- page_break -->
+
+Table 6. Comparison of proposed method with the relevant researches.
+
+| Ref            | Techniques         | Modalities          | Task                                                                          | Accuracy                                                             |
+|----------------|--------------------|---------------------|-------------------------------------------------------------------------------|----------------------------------------------------------------------|
+| 19             | CNN(VGG16)         | 1248 chest X-ray    | 3-classes classification: (Healthy/COVID- 19pneumonia/non-COVID-19 pneumonia) | 83.6% accuracy, 90.9% sensitivity                                    |
+| 20             | SqueezeNet         | 5184 Chest X-rays   | Binary classification of images as COVID-19 or not                            | 98% sensitivity, 92.9 specificity                                    |
+| 21             | CNNmodel           | 13,824 X-ray images | Binary classification of images as COVID-19 or normal                         | 96.71% accuracy, 97% F1-score                                        |
+| 22             | CNNcalled COVID-Ne | 13,975X-ray         | Prediction of cases as (normal/pneumonia/COVID- 19)                           | 93.3% accuracy                                                       |
+| 23             | CNNcalled nCOVnet  | 284 X-ray images    | (Normal/COVID-19)                                                             | 88.1% accuracy                                                       |
+| 24             | EfficientNet       | 16,634 X-ray images | Classify cases as: (Normal/COVID-19/other)                                    | 93.48% accuracy                                                      |
+| 25             | VGG-16             | 700 X-ray images    | binary classification (Normal/COVID-19)                                       | 94.3% accuracy, 94.3% F1-score                                       |
+| Proposed model | VGG19              | 1600 X-ray images   | Binary classification (Normal/COVID-19)                                       | 95% accuracy, 0.9505% F1-score, 0.96% sensitivity, 0.94% specificity |
+
+Table 7. The results of best achieved models for 4-classes classification.
+
+| Dataset    | Model          |   F1 score |   Test acc |
+|------------|----------------|------------|------------|
+| Histeq     | EfficientNetB0 |   0.93495  |    0.935   |
+| CLAHE      | VGG19          |   0.9339   |    0.93375 |
+| Complement | VGG19          |   0.933786 |    0.93375 |
+
+datasets used different number of samples. Some research performed binary class classification, where others performed multi-class classification. Thus, the proposed work has been compared with others that used the same modality which is X-ray with mentioning the number of used samples and the task.
+
+By comparing the results of the proposed framework with recent literature, it was found that the proposed framework outperforms most of the state-of-the-art works. However, 21 slightly outperforms the proposed framework. Where the accuracy and F1-score   of 21 are 96.71% and 97% respectively, the corresponding values of the proposed framework are 95% and 0.9505 respectively. Taking in consideration that   in 21 un-balanced data has been used; the number of COVID images used is 3626 where the number of normal images is 10,198 as mentioned in the manuscript.
+
+For more validation, different classes of the datasets have been used for training the CNN models. To check the capability of the proposed framework for 4-classes classification. The dataset versions that achieved the highest binary classification have been utilized for multi-classes classification. Since the performance of all models that trained using enhanced full image versions is close to each other, therefore, these versions have been utilized for 4-classes classification. A set of 3200 X-ray images (800 of each class) have been used to train CNN models. The newly added classes are Viral Pneumonia and Lung Opacity in addition to COVID-19 and normal classes.
+
+It was found that the best-achieved accuracy of 4-classes classification using the full image versions reached 0.935 for histeq version by EfficientNetB0. While it reached 0.93375 for both CLAHE, and complement versions using VGG19. Table 7 shows the results of the best-achieved models for 4-classes classification.
+
+
+## Conclusion and future work
+
+In this research, a framework has been developed for automatically classifying chest X-ray images as COVID-19 positive cases or normal cases. Different techniques such as histeq, CLAHE, and complement have been applied to enhance the original X-ray images and therefore, both the original and enhanced versions have been introduced to the selected CNN pre-trained models. Two pre-trained CNN models which are VGG19 and EfficientNetB0 have been used to train different versions with the last dense layer set to (2/4) according to the number of classification classes.
+
+Two approaches have been utilized to train pre-trained CNN models which are using whole chest X-ray images and using lung segmented images with their enhanced versions. The best binary classification accuracy reached 95% for the model trained using CLAHE full images version utilizing VGG19. The best achieved accuracy for a model trained using a segmented dataset is 91% for the model trained using Histeq version utilizing VGG19. By testing the framework for 4-classes classification, it achieved promising results which reached 0.935 accuracy.
+
+It is obvious from the results that, the proposed framework can be employed in the future to support physicians and decrease the effect of doctors' shortages in the struggle against the disease. However, extra validations are required before applying any system, as more accuracy and more careful experiments are needed when things are related to human life. In the future, the authors are willing to try the proposed model on local data.

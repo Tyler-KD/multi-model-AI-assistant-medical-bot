@@ -1,0 +1,1575 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Assistant</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/chromatography.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chat-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eaeaea;
+            background-color: #f8f9fa;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .chat-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-footer {
+            padding: 15px;
+            border-top: 1px solid #eaeaea;
+            background-color: #f8f9fa;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        .message {
+            max-width: 80%;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            position: relative;
+        }
+        .user-message {
+            background-color: #e3f2fd;
+            color: #000;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+        .assistant-message {
+            background-color: #f5f5f5;
+            color: #000;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+        .agent-tag {
+            display: inline-block;
+            background-color: #ebf5ff;
+            color: #0d6efd;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .message-input {
+            border-radius: 20px;
+            padding: 10px 15px;
+            resize: none;
+        }
+        .file-upload-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .file-upload-btn {
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+        .file-upload-input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            filter: alpha(opacity=0);
+        }
+        .preview-container {
+            margin-top: 10px;
+            display: none;
+        }
+        .preview-image {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 5px;
+        }
+        .result-image {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 5px;
+            margin-top: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .image-side-by-side {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .image-container {
+            flex: 1;
+            min-width: 200px;
+        }
+        .image-caption {
+            font-size: 0.85em;
+            text-align: center;
+            margin-top: 5px;
+            color: #666;
+        }
+        .thinking {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+        .dot {
+            height: 8px;
+            width: 8px;
+            margin-right: 5px;
+            background-color: #0d6efd;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        .dot:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+        .dot:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+        .sidebar {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            height: 90vh;
+            overflow-y: auto;
+        }
+        .sidebar h5 {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 10px;
+        }
+        .agent-info {
+            margin-bottom: 15px;
+        }
+        .agent-info h6 {
+            color: #0d6efd;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                height: auto;
+                margin-bottom: 15px;
+            }
+        }
+        
+        /* Table styling for markdown tables */
+        .message table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+        
+        .message th, .message td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .message th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .message tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .message tr:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 mb-3">
+                <div class="sidebar">
+                    <h5>
+                        <i class="fas fa-robot me-2"></i>
+                        Medical Assistant
+                    </h5>
+                    <div class="agent-info">
+                        <h6>Available Agents</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-comment-medical me-2"></i> Medical Conversation Agent</li>
+                            <li><i class="fas fa-database me-2"></i> Medical RAG Agent</li>
+                            <li><i class="fas fa-search me-2"></i> Web Search Agent</li>
+                        </ul>
+                    </div>
+                    <div class="agent-info">
+                        <h6>Computer Vision Agents</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-brain me-2"></i> Brain Tumor Detection</li>
+                            <li><i class="fas fa-lungs me-2"></i> Chest X-ray Covid-19 Classification</li>
+                            <li><i class="fas fa-allergies me-2"></i> Skin Lesion Segmentation</li>
+                        </ul>
+                    </div>
+                    <div class="agent-info">
+                        <h6>Agent Capabilities</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>Medical RAG Agent:</strong>
+                                <ul>
+                                    <li>Docling based parsing to extract text, tables, and images from PDFs</li>
+                                    <li>Embedding markdown formatted text, tables and LLM based image summaries</li>
+                                    <li>LLM based semantic chunking with structural boundaries</li>
+                                    <li>LLM based query expansion with related medical terms</li>
+                                    <li>Qdrant Vector DB hybrid search</li>
+                                    <li>Input-output guardrails for safe responses</li>
+                                    <li>Confidence-based handoff to Web Search to prevent hallucinations</li>
+                                </ul>
+                            </li>
+                            <li><strong>Human-in-the-loop Verification:</strong>
+                                <ul>
+                                    <li>Human verification for CV agents</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="agent-info">
+                        <h6>Multi-Agent Orchestration</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-project-diagram me-2"></i> Coordinated interaction between agents</li>
+                            <li><i class="fas fa-tasks me-2"></i> Dynamic task allocation based on capabilities</li>
+                            <li><i class="fas fa-sync-alt me-2"></i> Seamless integration of agent responses</li>
+                        </ul>
+                    </div>
+                    <button id="clear-chat" class="btn btn-outline-danger w-100 mt-3">
+                        <i class="fas fa-trash me-2"></i> Clear Conversation
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Chat Container -->
+            <div class="col-md-9">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-stethoscope me-2"></i>
+                            Multi-Agent Medical Assistant
+                        </h5>
+                        <small class="text-muted">Upload medical images or ask health-related questions</small>
+                    </div>
+                    
+                    <div id="chat-body" class="chat-body">
+                        <div class="message assistant-message">
+                            <div class="agent-tag">System</div>
+                            <p>Hello! I'm your medical assistant. You can ask me health-related questions or upload medical images for analysis.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-footer">
+                        <form id="chat-form" class="d-flex align-items-end">
+                            <div class="file-upload-container me-2">
+                                <button type="button" class="file-upload-btn btn btn-primary">
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
+                                <input type="file" class="file-upload-input" id="image-upload" accept="image/*">
+                            </div>
+                            
+                            <div class="flex-grow-1">
+                                <div class="preview-container" id="preview-container">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <img id="preview-image" class="preview-image me-2" src="">
+                                        <button type="button" class="btn btn-sm btn-outline-danger" id="remove-image">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <textarea id="message-input" class="form-control message-input" rows="1" placeholder="Ask a medical question..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary rounded-circle ms-2" style="width: 40px; height: 40px;">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+    <script>
+
+        // let mediaRecorder;
+        // let audioChunks = [];
+        // let isRecording = false;
+        // let audioContext;
+        // let currentAudio = null;  // Store a single audio instance
+        // // let elevenlabsApiKey = 'sk_4c9d3dfca9e183c7e8a7c0b9c6f7483e074ded17251e5fe7'; // Replace with your actual API key
+        // let selectedVoiceId = '21m00Tcm4TlvDq8ikWAM'; // Default voice ID (Rachel)
+
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     const chatBody = document.getElementById('chat-body');
+        //     const chatForm = document.getElementById('chat-form');
+        //     const messageInput = document.getElementById('message-input');
+        //     const imageUpload = document.getElementById('image-upload');
+        //     const previewContainer = document.getElementById('preview-container');
+        //     const previewImage = document.getElementById('preview-image');
+        //     const removeImageBtn = document.getElementById('remove-image');
+        //     const clearChatBtn = document.getElementById('clear-chat');
+
+        //     // Add voice recording button to the UI
+        //     const fileUploadContainer = document.querySelector('.file-upload-container');
+        //     // const voiceButtonHTML = `
+        //     //     <button type="button" class="btn btn-warning rounded-circle ms-2" id="voice-record-btn" style="width: 40px; height: 40px;">
+        //     //         <i class="fas fa-microphone"></i>
+        //     //     </button>
+        //     // `;
+        //     const voiceButtonHTML = `
+        //         <button type="button" class="btn btn-warning rounded-circle ms-2 me-2" id="voice-record-btn" style="width: 40px; height: 40px;">
+        //             <i class="fas fa-microphone"></i>
+        //         </button>
+        //     `;
+        //     fileUploadContainer.insertAdjacentHTML('afterend', voiceButtonHTML);
+            
+        //     const voiceRecordBtn = document.getElementById('voice-record-btn');
+            
+        //     // Voice recording functionality
+        //     voiceRecordBtn.addEventListener('click', toggleRecording);
+            
+        //     // Initialize audio context
+        //     try {
+        //         window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        //         audioContext = new AudioContext();
+        //     } catch (e) {
+        //         console.error('Web Audio API is not supported in this browser');
+        //     }
+            
+        //     // We no longer need to store conversation history in frontend
+        //     // Only maintain display messages
+        //     let displayMessages = [];
+            
+        //     // Auto-resize textarea
+        //     messageInput.addEventListener('input', function() {
+        //         this.style.height = 'auto';
+        //         this.style.height = (this.scrollHeight) + 'px';
+        //     });
+            
+        //     // Handle image upload
+        //     imageUpload.addEventListener('change', function(e) {
+        //         if (e.target.files.length > 0) {
+        //             const file = e.target.files[0];
+        //             const reader = new FileReader();
+                    
+        //             reader.onload = function(e) {
+        //                 previewImage.src = e.target.result;
+        //                 previewContainer.style.display = 'block';
+        //             };
+                    
+        //             reader.readAsDataURL(file);
+        //         }
+        //     });
+            
+        //     // Remove image preview
+        //     removeImageBtn.addEventListener('click', function() {
+        //         imageUpload.value = '';
+        //         previewContainer.style.display = 'none';
+        //         previewImage.src = '';
+        //     });
+            
+        //     // Clear chat (only visual)
+        //     clearChatBtn.addEventListener('click', function() {
+        //         displayMessages = [];
+        //         chatBody.innerHTML = `
+        //             <div class="message assistant-message">
+        //                 <div class="agent-tag">System</div>
+        //                 <p>Hello! I'm your medical assistant. You can ask me health-related questions or upload medical images for analysis.</p>
+        //             </div>
+        //         `;
+        //     });
+            
+        //     // Handle form submission
+        //     chatForm.addEventListener('submit', async function(e) {
+        //         e.preventDefault();
+                
+        //         // Get message from input or transcribed text
+        //         const message = messageInput.value.trim();
+        //         if (!message && !imageUpload.files.length) return;
+                
+        //         // Store image data if available
+        //         let imageDataUrl = null;
+        //         if (imageUpload.files.length > 0) {
+        //             imageDataUrl = previewImage.src;
+        //         }
+                
+        //         // Add user message to chat
+        //         const userMessageElement = document.createElement('div');
+        //         userMessageElement.className = 'message user-message';
+                
+        //         // Create message content with image if available
+        //         let messageContent = `<p>${message}</p>`;
+        //         if (imageDataUrl) {
+        //             messageContent += `
+        //                 <div class="mt-2">
+        //                     <img src="${imageDataUrl}" alt="Uploaded image" class="img-fluid rounded" style="max-height: 200px;">
+        //                 </div>
+        //             `;
+        //         }
+                
+        //         userMessageElement.innerHTML = messageContent;
+        //         chatBody.appendChild(userMessageElement);
+                
+        //         // Add thinking indicator
+        //         const thinkingElement = document.createElement('div');
+        //         thinkingElement.className = 'message assistant-message thinking';
+        //         thinkingElement.innerHTML = `
+        //             <div class="dot"></div>
+        //             <div class="dot"></div>
+        //             <div class="dot"></div>
+        //         `;
+        //         chatBody.appendChild(thinkingElement);
+                
+        //         // Scroll to bottom
+        //         chatBody.scrollTop = chatBody.scrollHeight;
+                
+        //         // Clear input
+        //         messageInput.value = '';
+        //         messageInput.style.height = 'auto';
+                
+        //         // Create form data
+        //         const formData = new FormData();
+        //         formData.append('message', message);
+                
+        //         // Add image if available
+        //         if (imageUpload.files.length > 0) {
+        //             formData.append('file', imageUpload.files[0]);
+        //         }
+                
+        //         try {
+        //             // Send to backend
+        //             const response = await fetch('/send_message', {
+        //                 method: 'POST',
+        //                 body: formData,
+        //                 credentials: 'include' // Important for cookie handling
+        //             });
+                    
+        //             const data = await response.json();
+                    
+        //             // Remove thinking indicator
+        //             chatBody.removeChild(thinkingElement);
+                    
+        //             // Add response to chat
+        //             const assistantMessageElement = document.createElement('div');
+        //             assistantMessageElement.className = 'message assistant-message';
+                    
+        //             // Get clean text for TTS (without markdown)
+        //             const cleanText = removeMarkdown(data.response);
+                    
+        //             // Build HTML content for the response with audio controls
+        //             let assistantHtml = `
+        //                 <div class="agent-tag">${data.agent}</div>
+        //                 <div>${marked.parse(data.response)}</div>
+        //                 <div class="audio-controls mt-2">
+        //                     <button class="btn btn-sm btn-outline-primary play-tts-btn">
+        //                         <i class="fas fa-play"></i> Play Voice Response
+        //                     </button>
+        //                 </div>
+        //             `;
+
+        //             // After building the existing assistantHtml, add this:
+        //             if (data.agent.includes("HUMAN_VALIDATION")) {
+        //                 assistantHtml += `
+        //                     <div class="mt-3 p-3 border rounded bg-light">
+        //                         <p><strong>⚠️ Human Validation Required:</strong> Do you agree with this result?</p>
+        //                         <button class="btn btn-success btn-sm validate-btn" data-validation="yes">✔ Yes</button>
+        //                         <button class="btn btn-danger btn-sm validate-btn" data-validation="no">✖ No</button>
+        //                         <textarea class="form-control mt-2 validation-comments" rows="2" placeholder="Add comments (optional)"></textarea>
+        //                     </div>
+        //                 `;
+        //             }
+                    
+        //             // Add result image if it exists
+        //             if (data.result_image) {
+        //                 // If the skin lesion segmentation agent was used and both the user uploaded
+        //                 // an image and we have a result image, display them side by side
+        //                 if (data.agent === "SKIN_LESION_AGENT, HUMAN_VALIDATION" && imageDataUrl) {
+        //                     assistantHtml += `
+        //                         <div class="image-side-by-side">
+        //                             <div class="image-container">
+        //                                 <img src="${imageDataUrl}" alt="Original image" class="img-fluid rounded">
+        //                                 <div class="image-caption">Original Image</div>
+        //                             </div>
+        //                             <div class="image-container">
+        //                                 <img src="${data.result_image}" alt="Segmented image" class="img-fluid rounded">
+        //                                 <div class="image-caption">Segmentation Result</div>
+        //                             </div>
+        //                         </div>
+        //                     `;
+        //                 } else {
+        //                     // Otherwise just show the result image
+        //                     assistantHtml += `
+        //                         <div class="mt-3">
+        //                             <img src="${data.result_image}" alt="Result image" class="result-image">
+        //                         </div>
+        //                     `;
+        //                 }
+        //             }
+                    
+        //             assistantMessageElement.innerHTML = assistantHtml;
+        //             chatBody.appendChild(assistantMessageElement);
+
+        //             // Attach validation button events if human validation is required
+        //             if (data.agent.includes("HUMAN_VALIDATION")) {
+        //                 document.querySelectorAll('.validate-btn').forEach(button => {
+        //                     button.addEventListener('click', async function () {
+        //                         const validation = this.getAttribute('data-validation');
+        //                         // Use the closest container to get the textarea value
+        //                         const comments = this.closest('.p-3').querySelector('.validation-comments').value;
+        //                         await sendValidation(validation, comments);
+        //                     });
+        //                 });
+        //             }
+
+                    
+        //             // Get the play button and add click event to speak text
+        //             const playButton = assistantMessageElement.querySelector('.play-tts-btn');
+
+        //             playButton.addEventListener('click', async function () {
+        //                 // Get a reasonable amount of text to convert to speech (limit to 1000 chars to keep requests smaller)
+        //                 const textForSpeech = cleanText.length > 1000 ? cleanText.substring(0, 1000) + "..." : cleanText;
+
+        //                 // Disable the button while generating speech
+        //                 this.disabled = true;
+        //                 this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+
+        //                 try {
+        //                     // Get the new audio URL
+        //                     const audioUrl = await generateSpeech(textForSpeech);
+
+        //                     // Stop and clean up previous audio if playing
+        //                     if (currentAudio) {
+        //                         currentAudio.pause();
+        //                         currentAudio.currentTime = 0;
+        //                         URL.revokeObjectURL(currentAudio.src);  // Free up memory
+        //                         currentAudio = null;  // Clear the reference
+        //                     }
+
+        //                     // Create a new audio element for the new speech
+        //                     currentAudio = new Audio(audioUrl);
+
+        //                     // Set event listeners for button updates
+        //                     currentAudio.onplay = () => {
+        //                         this.innerHTML = '<i class="fas fa-pause"></i> Pause';
+        //                         this.classList.remove('btn-outline-primary');
+        //                         this.classList.add('btn-primary');
+        //                         this.disabled = false;
+        //                     };
+
+        //                     currentAudio.onpause = () => {
+        //                         this.innerHTML = '<i class="fas fa-play"></i> Play';
+        //                         this.classList.remove('btn-primary');
+        //                         this.classList.add('btn-outline-primary');
+        //                     };
+
+        //                     currentAudio.onended = () => {
+        //                         this.innerHTML = '<i class="fas fa-play"></i> Play Again';
+        //                         this.classList.remove('btn-primary');
+        //                         this.classList.add('btn-outline-primary');
+        //                         URL.revokeObjectURL(audioUrl);  // Free memory after playback
+        //                         currentAudio = null;  // Ensure reference is cleared
+        //                     };
+
+        //                     // Toggle play/pause on button click
+        //                     this.onclick = () => {
+        //                         if (currentAudio && currentAudio.paused) {
+        //                             currentAudio.play();
+        //                         } else {
+        //                             currentAudio.pause();
+        //                         }
+        //                     };
+
+        //                     // Play the generated speech
+        //                     currentAudio.play();
+        //                 } catch (error) {
+        //                     console.error("TTS Error:", error);
+        //                     this.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Voice failed';
+        //                     this.disabled = false;
+        //                 }
+        //             });
+
+                    
+        //             // Auto-play the voice response if needed
+        //             // Uncomment the next line to automatically play the voice response
+        //             // playButton.click();
+                    
+        //             // Store messages for display purposes only
+        //             displayMessages.push({
+        //                 role: "user",
+        //                 content: message,
+        //                 image: imageDataUrl
+        //             });
+                    
+        //             displayMessages.push({
+        //                 role: "assistant",
+        //                 content: data.response,
+        //                 agent: data.agent,
+        //                 resultImage: data.result_image
+        //             });
+                    
+        //             // Clear file upload preview
+        //             imageUpload.value = '';
+        //             previewContainer.style.display = 'none';
+                    
+        //         } catch (error) {
+        //             console.error("Error:", error);
+        //             // Remove thinking indicator
+        //             chatBody.removeChild(thinkingElement);
+                    
+        //             // Add error message
+        //             const errorElement = document.createElement('div');
+        //             errorElement.className = 'message assistant-message';
+        //             errorElement.innerHTML = `
+        //                 <div class="agent-tag">System</div>
+        //                 <p class="text-danger">Sorry, there was an error processing your request. Please try again.</p>
+        //             `;
+        //             chatBody.appendChild(errorElement);
+        //         }
+                
+        //         // Scroll to bottom again
+        //         chatBody.scrollTop = chatBody.scrollHeight;
+        //     });
+
+        //     // Allow sending message with Enter key
+        //     messageInput.addEventListener('keydown', function(e) {
+        //         if (e.key === 'Enter' && !e.shiftKey) {
+        //             e.preventDefault();
+        //             chatForm.dispatchEvent(new Event('submit'));
+        //         }
+        //     });
+        // });
+
+        // // Speech Recorder button function
+        // function toggleRecording() {
+        //     const voiceButton = document.getElementById('voice-record-btn');
+            
+        //     if (!isRecording) {
+        //         // Start recording
+        //         navigator.mediaDevices.getUserMedia({ audio: true })
+        //             .then(stream => {
+        //                 // mediaRecorder = new MediaRecorder(stream);
+        //                 mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+        //                 audioChunks = [];
+                        
+        //                 mediaRecorder.addEventListener('dataavailable', event => {
+        //                     audioChunks.push(event.data);
+        //                 });
+                        
+        //                 mediaRecorder.addEventListener('stop', () => {
+        //                     // const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        //                     const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType });
+        //                     transcribeSpeech(audioBlob);
+                            
+        //                     // Reset UI
+        //                     voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+        //                     voiceButton.classList.remove('btn-danger');
+        //                     voiceButton.classList.add('btn-warning');
+        //                 });
+                        
+        //                 // Start recording
+        //                 mediaRecorder.start();
+        //                 isRecording = true;
+                        
+        //                 // Update UI
+        //                 voiceButton.innerHTML = '<i class="fas fa-stop"></i>';
+        //                 voiceButton.classList.remove('btn-warning');
+        //                 voiceButton.classList.add('btn-danger');
+        //             })
+        //             .catch(error => {
+        //                 console.error('Error accessing microphone:', error);
+        //                 alert('Could not access microphone. Please check your browser permissions.');
+        //             });
+        //     } else {
+        //         // Stop recording
+        //         mediaRecorder.stop();
+        //         isRecording = false;
+                
+        //         // Update UI to show processing
+        //         voiceButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        //         voiceButton.disabled = true;
+                
+        //         // Each track needs to be stopped to turn off the microphone
+        //         mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        //     }
+        // }
+
+        // function transcribeSpeech(audioBlob) {
+        //     const voiceButton = document.getElementById('voice-record-btn');
+        //     const messageInput = document.getElementById('message-input');
+            
+        //     // Create a temporary element to display processing status
+        //     const statusElement = document.createElement('div');
+        //     statusElement.className = 'alert alert-info mt-2';
+        //     statusElement.innerHTML = 'Processing voice input...';
+        //     document.querySelector('.chat-footer').prepend(statusElement);
+            
+        //     // Always use server-side transcription for recorded audio
+        //     const formData = new FormData();
+        //     formData.append('audio', audioBlob);
+            
+        //     fetch('/transcribe', {
+        //         method: 'POST',
+        //         body: formData
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         if (data.transcript) {
+        //             messageInput.value = data.transcript;
+        //             messageInput.focus();
+        //         } else {
+        //             throw new Error('Transcription failed');
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error('Transcription error:', error);
+        //         statusElement.className = 'alert alert-danger mt-2';
+        //         statusElement.innerHTML = 'Failed to transcribe speech. Please try again or type your message.';
+        //     })
+        //     .finally(() => {
+        //         // Clean up
+        //         setTimeout(() => {
+        //             statusElement.remove();
+        //             voiceButton.disabled = false;
+        //             voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+        //         }, 3000);
+        //     });
+        // }
+
+        // // Function to generate speech using ElevenLabs API
+        // // Function to generate speech using the secure backend
+        // async function generateSpeech(text) {
+        //     try {
+        //         const response = await fetch('/generate-speech', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify({
+        //                 text: text,
+        //                 voice_id: selectedVoiceId  // Replace with the correct voice ID
+        //             })
+        //         });
+
+        //         if (!response.ok) {
+        //             throw new Error(`HTTP error! status: ${response.status}`);
+        //         }
+
+        //         // Convert response to a playable audio blob
+        //         const audioBlob = await response.blob();
+        //         return URL.createObjectURL(audioBlob);
+        //     } catch (error) {
+        //         console.error("Error generating speech:", error);
+        //         throw error;
+        //     }
+        // }
+
+        // // Function to send human validated response
+        // async function sendValidation(validation, comments) {
+        //     try {
+        //         // Create and display a waiting element
+        //         const waitingEl = document.createElement('div');
+        //         waitingEl.className = 'alert alert-info mt-2';
+        //         waitingEl.innerHTML = '⏳ Processing validation...';
+        //         document.getElementById("chat-body").appendChild(waitingEl);
+
+        //         const formData = new FormData();
+        //         formData.append("validation_result", validation);
+        //         formData.append("comments", comments);
+
+        //         const response = await fetch("/send_validation", {
+        //             method: "POST",
+        //             body: formData,
+        //             credentials: 'include'
+        //         });
+
+        //         const result = await response.json();
+
+        //         // Remove waiting indicator
+        //         waitingEl.remove();
+
+        //         // Build validated message HTML with audio controls added
+        //         const validationMsg = document.createElement("div");
+        //         validationMsg.className = "message assistant-message";
+        //         validationMsg.innerHTML = `
+        //             <div class="agent-tag">HUMAN_VALIDATED</div>
+        //             <div>${marked.parse(result.message)}</div>
+        //             <div>${marked.parse(result.response)}</div>
+        //             <div class="audio-controls mt-2">
+        //                 <button class="btn btn-sm btn-outline-primary play-tts-btn">
+        //                     <i class="fas fa-play"></i> Play Voice Response
+        //                 </button>
+        //             </div>
+        //         `;
+        //         document.getElementById("chat-body").appendChild(validationMsg);
+
+        //         // Get clean text for TTS (without markdown)
+        //         const cleanText = removeMarkdown(result.response);
+
+        //         // Attach event listener for TTS for validation message
+        //         const playButton = validationMsg.querySelector('.play-tts-btn');
+        //         if (playButton) {
+        //             playButton.addEventListener('click', async function () {
+
+        //                 // Get a reasonable amount of text to convert to speech (limit to 1000 chars to keep requests smaller)
+        //                 const textForSpeech = cleanText.length > 1000 ? cleanText.substring(0, 1000) + "..." : cleanText;
+
+        //                 // Disable the button while generating speech
+        //                 this.disabled = true;
+        //                 this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+
+
+        //                 try {
+        //                     // Get the new audio URL
+        //                     const audioUrl = await generateSpeech(textForSpeech);
+
+        //                     // Stop and clean up previous audio if playing
+        //                     if (currentAudio) {
+        //                         currentAudio.pause();
+        //                         currentAudio.currentTime = 0;
+        //                         URL.revokeObjectURL(currentAudio.src);  // Free up memory
+        //                         currentAudio = null;  // Clear the reference
+        //                     }
+
+        //                     // Create a new audio element for the new speech
+        //                     currentAudio = new Audio(audioUrl);
+
+        //                     // Set event listeners for button updates
+        //                     currentAudio.onplay = () => {
+        //                         this.innerHTML = '<i class="fas fa-pause"></i> Pause';
+        //                         this.classList.remove('btn-outline-primary');
+        //                         this.classList.add('btn-primary');
+        //                         this.disabled = false;
+        //                     };
+
+        //                     currentAudio.onpause = () => {
+        //                         this.innerHTML = '<i class="fas fa-play"></i> Play';
+        //                         this.classList.remove('btn-primary');
+        //                         this.classList.add('btn-outline-primary');
+        //                     };
+
+        //                     currentAudio.onended = () => {
+        //                         this.innerHTML = '<i class="fas fa-play"></i> Play Again';
+        //                         this.classList.remove('btn-primary');
+        //                         this.classList.add('btn-outline-primary');
+        //                         URL.revokeObjectURL(audioUrl);  // Free memory after playback
+        //                         currentAudio = null;  // Ensure reference is cleared
+        //                     };
+
+        //                     // Toggle play/pause on button click
+        //                     this.onclick = () => {
+        //                         if (currentAudio && currentAudio.paused) {
+        //                             currentAudio.play();
+        //                         } else {
+        //                             currentAudio.pause();
+        //                         }
+        //                     };
+
+        //                     // Play the generated speech
+        //                     currentAudio.play();
+        //                 } catch (error) {
+        //                     console.error("TTS Error:", error);
+        //                     this.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Voice failed';
+        //                     this.disabled = false;
+        //                 }
+
+        //             });
+        //         }
+        //     } catch (error) {
+        //         console.error("Validation submission failed:", error);
+        //     }
+        // }
+
+        // // Helper function to remove markdown for clean TTS
+        // function removeMarkdown(text) {
+        //     if (!text) return '';
+            
+        //     // Remove code blocks
+        //     text = text.replace(/```[\s\S]*?```/g, 'Code block omitted for speech.');
+            
+        //     // Remove inline code
+        //     text = text.replace(/`([^`]+)`/g, '$1');
+            
+        //     // Remove headers
+        //     text = text.replace(/#{1,6}\s+/g, '');
+            
+        //     // Remove bold/italic markers
+        //     text = text.replace(/(\*\*|__)(.*?)\1/g, '$2');
+        //     text = text.replace(/(\*|_)(.*?)\1/g, '$2');
+            
+        //     // Remove list markers
+        //     text = text.replace(/^\s*[\*\-+]\s+/gm, '');
+        //     text = text.replace(/^\s*\d+\.\s+/gm, '');
+            
+        //     // Remove links, keep text
+        //     text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+            
+        //     // Remove images
+        //     text = text.replace(/!\[([^\]]+)\]\([^)]+\)/g, 'Image: $1');
+            
+        //     // Remove blockquotes
+        //     text = text.replace(/^\>\s+/gm, '');
+            
+        //     // Handle line breaks sensibly for speech
+        //     text = text.replace(/\n{2,}/g, '. ');
+        //     text = text.replace(/\n/g, ' ');
+            
+        //     return text;
+        // }
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+        let audioContext;
+        let currentAudio = null;  // Store a single audio instance
+        let selectedVoiceId = '21m00Tcm4TlvDq8ikWAM'; // Default voice ID (Rachel)
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatBody = document.getElementById('chat-body');
+            const chatForm = document.getElementById('chat-form');
+            const messageInput = document.getElementById('message-input');
+            const imageUpload = document.getElementById('image-upload');
+            const previewContainer = document.getElementById('preview-container');
+            const previewImage = document.getElementById('preview-image');
+            const removeImageBtn = document.getElementById('remove-image');
+            const clearChatBtn = document.getElementById('clear-chat');
+
+            // Add voice recording button to the UI
+            const fileUploadContainer = document.querySelector('.file-upload-container');
+            const voiceButtonHTML = `
+                <button type="button" class="btn btn-warning rounded-circle ms-2 me-2" id="voice-record-btn" style="width: 40px; height: 40px;">
+                    <i class="fas fa-microphone"></i>
+                </button>
+            `;
+            fileUploadContainer.insertAdjacentHTML('afterend', voiceButtonHTML);
+            
+            const voiceRecordBtn = document.getElementById('voice-record-btn');
+            
+            // Voice recording functionality
+            voiceRecordBtn.addEventListener('click', toggleRecording);
+            
+            // Initialize audio context
+            try {
+                window.AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioContext = new AudioContext();
+            } catch (e) {
+                console.error('Web Audio API is not supported in this browser');
+            }
+            
+            // We only maintain display messages
+            let displayMessages = [];
+            
+            // Auto-resize textarea
+            messageInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            // Handle image upload
+            imageUpload.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
+                        previewContainer.style.display = 'block';
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Remove image preview
+            removeImageBtn.addEventListener('click', function() {
+                imageUpload.value = '';
+                previewContainer.style.display = 'none';
+                previewImage.src = '';
+            });
+            
+            // Clear chat (only visual)
+            clearChatBtn.addEventListener('click', function() {
+                displayMessages = [];
+                chatBody.innerHTML = `
+                    <div class="message assistant-message">
+                        <div class="agent-tag">System</div>
+                        <p>Hello! I'm your medical assistant. You can ask me health-related questions or upload medical images for analysis.</p>
+                    </div>
+                `;
+            });
+            
+            // Handle form submission
+            chatForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Get message from input or transcribed text
+                const message = messageInput.value.trim();
+                if (!message && !imageUpload.files.length) return;
+                
+                // Store image data if available
+                let imageDataUrl = null;
+                if (imageUpload.files.length > 0) {
+                    imageDataUrl = previewImage.src;
+                }
+                
+                // Add user message to chat
+                const userMessageElement = document.createElement('div');
+                userMessageElement.className = 'message user-message';
+                
+                // Create message content with image if available
+                let messageContent = `<p>${message}</p>`;
+                if (imageDataUrl) {
+                    messageContent += `
+                        <div class="mt-2">
+                            <img src="${imageDataUrl}" alt="Uploaded image" class="img-fluid rounded" style="max-height: 200px;">
+                        </div>
+                    `;
+                }
+                
+                userMessageElement.innerHTML = messageContent;
+                chatBody.appendChild(userMessageElement);
+                
+                // Add thinking indicator
+                const thinkingElement = document.createElement('div');
+                thinkingElement.className = 'message assistant-message thinking';
+                thinkingElement.innerHTML = `
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                `;
+                chatBody.appendChild(thinkingElement);
+                
+                // Scroll to bottom
+                chatBody.scrollTop = chatBody.scrollHeight;
+                
+                // Clear input
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                
+                try {
+                    let response;
+                    
+                    // Check if there's an image or just text
+                    if (imageUpload.files.length > 0) {
+                        // Create form data for image upload with optional text
+                        const formData = new FormData();
+                        formData.append('text', message);
+                        formData.append('image', imageUpload.files[0]);
+                        
+                        // Send to backend using the /upload endpoint
+                        response = await fetch('/upload', {
+                            method: 'POST',
+                            body: formData,
+                            credentials: 'include' // Important for cookie handling
+                        });
+                    } else {
+                        // Text-only query using the /chat endpoint with JSON
+                        response = await fetch('/chat', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                query: message,
+                                conversation_history: [] // You might want to maintain this if needed
+                            }),
+                            credentials: 'include' // Important for cookie handling
+                        });
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // Remove thinking indicator
+                    chatBody.removeChild(thinkingElement);
+                    
+                    // Add response to chat
+                    const assistantMessageElement = document.createElement('div');
+                    assistantMessageElement.className = 'message assistant-message';
+                    
+                    // Get clean text for TTS (without markdown)
+                    const cleanText = removeMarkdown(data.response);
+                    
+                    // Build HTML content for the response with audio controls
+                    let assistantHtml = `
+                        <div class="agent-tag">${data.agent}</div>
+                        <div>${marked.parse(data.response)}</div>
+                        <div class="audio-controls mt-2">
+                            <button class="btn btn-sm btn-outline-primary play-tts-btn">
+                                <i class="fas fa-play"></i> Play Voice Response
+                            </button>
+                        </div>
+                    `;
+
+                    // Add human validation UI if required
+                    if (data.agent.includes("HUMAN_VALIDATION")) {
+                        assistantHtml += `
+                            <div class="mt-3 p-3 border rounded bg-light">
+                                <p><strong>⚠️ Human Validation Required:</strong> Do you agree with this result?</p>
+                                <button class="btn btn-success btn-sm validate-btn" data-validation="yes">✔ Yes</button>
+                                <button class="btn btn-danger btn-sm validate-btn" data-validation="no">✖ No</button>
+                                <textarea class="form-control mt-2 validation-comments" rows="2" placeholder="Add comments (optional)"></textarea>
+                            </div>
+                        `;
+                    }
+                    
+                    // Add result image if it exists
+                    if (data.result_image) {
+                        // If the skin lesion segmentation agent was used and both the user uploaded
+                        // an image and we have a result image, display them side by side
+                        if (data.agent === "SKIN_LESION_AGENT, HUMAN_VALIDATION" && imageDataUrl) {
+                            assistantHtml += `
+                                <div class="image-side-by-side">
+                                    <div class="image-container">
+                                        <img src="${imageDataUrl}" alt="Original image" class="img-fluid rounded">
+                                        <div class="image-caption">Original Image</div>
+                                    </div>
+                                    <div class="image-container">
+                                        <img src="${data.result_image}" alt="Segmented image" class="img-fluid rounded">
+                                        <div class="image-caption">Segmentation Result</div>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            // Otherwise just show the result image
+                            assistantHtml += `
+                                <div class="mt-3">
+                                    <img src="${data.result_image}" alt="Result image" class="result-image">
+                                </div>
+                            `;
+                        }
+                    }
+                    
+                    assistantMessageElement.innerHTML = assistantHtml;
+                    chatBody.appendChild(assistantMessageElement);
+
+                    // Attach validation button events if human validation is required
+                    if (data.agent.includes("HUMAN_VALIDATION")) {
+                        document.querySelectorAll('.validate-btn').forEach(button => {
+                            button.addEventListener('click', async function () {
+                                const validation = this.getAttribute('data-validation');
+                                // Use the closest container to get the textarea value
+                                const comments = this.closest('.p-3').querySelector('.validation-comments').value;
+                                await sendValidation(validation, comments);
+                            });
+                        });
+                    }
+                    
+                    // Get the play button and add click event to speak text
+                    const playButton = assistantMessageElement.querySelector('.play-tts-btn');
+
+                    playButton.addEventListener('click', async function () {
+                        // Get a reasonable amount of text to convert to speech (limit to 1000 chars to keep requests smaller)
+                        const textForSpeech = cleanText.length > 1000 ? cleanText.substring(0, 1000) + "..." : cleanText;
+
+                        // Disable the button while generating speech
+                        this.disabled = true;
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+
+                        try {
+                            // Get the new audio URL
+                            const audioUrl = await generateSpeech(textForSpeech);
+
+                            // Stop and clean up previous audio if playing
+                            if (currentAudio) {
+                                currentAudio.pause();
+                                currentAudio.currentTime = 0;
+                                URL.revokeObjectURL(currentAudio.src);  // Free up memory
+                                currentAudio = null;  // Clear the reference
+                            }
+
+                            // Create a new audio element for the new speech
+                            currentAudio = new Audio(audioUrl);
+
+                            // Set event listeners for button updates
+                            currentAudio.onplay = () => {
+                                this.innerHTML = '<i class="fas fa-pause"></i> Pause';
+                                this.classList.remove('btn-outline-primary');
+                                this.classList.add('btn-primary');
+                                this.disabled = false;
+                            };
+
+                            currentAudio.onpause = () => {
+                                this.innerHTML = '<i class="fas fa-play"></i> Play';
+                                this.classList.remove('btn-primary');
+                                this.classList.add('btn-outline-primary');
+                            };
+
+                            currentAudio.onended = () => {
+                                this.innerHTML = '<i class="fas fa-play"></i> Play Again';
+                                this.classList.remove('btn-primary');
+                                this.classList.add('btn-outline-primary');
+                                URL.revokeObjectURL(audioUrl);  // Free memory after playback
+                                currentAudio = null;  // Ensure reference is cleared
+                            };
+
+                            // Toggle play/pause on button click
+                            this.onclick = () => {
+                                if (currentAudio && currentAudio.paused) {
+                                    currentAudio.play();
+                                } else {
+                                    currentAudio.pause();
+                                }
+                            };
+
+                            // Play the generated speech
+                            currentAudio.play();
+                        } catch (error) {
+                            console.error("TTS Error:", error);
+                            this.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Voice failed';
+                            this.disabled = false;
+                        }
+                    });
+                    
+                    // Store messages for display purposes only
+                    displayMessages.push({
+                        role: "user",
+                        content: message,
+                        image: imageDataUrl
+                    });
+                    
+                    displayMessages.push({
+                        role: "assistant",
+                        content: data.response,
+                        agent: data.agent,
+                        resultImage: data.result_image
+                    });
+                    
+                    // Clear file upload preview
+                    imageUpload.value = '';
+                    previewContainer.style.display = 'none';
+                    
+                } catch (error) {
+                    console.error("Error:", error);
+                    // Remove thinking indicator
+                    chatBody.removeChild(thinkingElement);
+                    
+                    // Add error message
+                    const errorElement = document.createElement('div');
+                    errorElement.className = 'message assistant-message';
+                    errorElement.innerHTML = `
+                        <div class="agent-tag">System</div>
+                        <p class="text-danger">Sorry, there was an error processing your request. Please try again.</p>
+                    `;
+                    chatBody.appendChild(errorElement);
+                }
+                
+                // Scroll to bottom again
+                chatBody.scrollTop = chatBody.scrollHeight;
+            });
+
+            // Allow sending message with Enter key
+            messageInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    chatForm.dispatchEvent(new Event('submit'));
+                }
+            });
+        });
+
+        // Speech Recorder button function
+        function toggleRecording() {
+            const voiceButton = document.getElementById('voice-record-btn');
+            
+            if (!isRecording) {
+                // Start recording
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(stream => {
+                        mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+                        audioChunks = [];
+                        
+                        mediaRecorder.addEventListener('dataavailable', event => {
+                            audioChunks.push(event.data);
+                        });
+                        
+                        mediaRecorder.addEventListener('stop', () => {
+                            const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType });
+                            transcribeSpeech(audioBlob);
+                            
+                            // Reset UI
+                            voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+                            voiceButton.classList.remove('btn-danger');
+                            voiceButton.classList.add('btn-warning');
+                        });
+                        
+                        // Start recording
+                        mediaRecorder.start();
+                        isRecording = true;
+                        
+                        // Update UI
+                        voiceButton.innerHTML = '<i class="fas fa-stop"></i>';
+                        voiceButton.classList.remove('btn-warning');
+                        voiceButton.classList.add('btn-danger');
+                    })
+                    .catch(error => {
+                        console.error('Error accessing microphone:', error);
+                        alert('Could not access microphone. Please check your browser permissions.');
+                    });
+            } else {
+                // Stop recording
+                mediaRecorder.stop();
+                isRecording = false;
+                
+                // Update UI to show processing
+                voiceButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                voiceButton.disabled = true;
+                
+                // Each track needs to be stopped to turn off the microphone
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+        }
+
+        function transcribeSpeech(audioBlob) {
+            const voiceButton = document.getElementById('voice-record-btn');
+            const messageInput = document.getElementById('message-input');
+            
+            // Create a temporary element to display processing status
+            const statusElement = document.createElement('div');
+            statusElement.className = 'alert alert-info mt-2';
+            statusElement.innerHTML = 'Processing voice input...';
+            document.querySelector('.chat-footer').prepend(statusElement);
+            
+            // Use server-side transcription for recorded audio
+            const formData = new FormData();
+            formData.append('audio', audioBlob);
+            
+            fetch('/transcribe', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.transcript) {
+                    messageInput.value = data.transcript;
+                    messageInput.focus();
+                } else {
+                    throw new Error('Transcription failed');
+                }
+            })
+            .catch(error => {
+                console.error('Transcription error:', error);
+                statusElement.className = 'alert alert-danger mt-2';
+                statusElement.innerHTML = 'Failed to transcribe speech. Please try again or type your message.';
+            })
+            .finally(() => {
+                // Clean up
+                setTimeout(() => {
+                    statusElement.remove();
+                    voiceButton.disabled = false;
+                    voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+                }, 3000);
+            });
+        }
+
+        // Function to generate speech using the backend
+        async function generateSpeech(text) {
+            try {
+                const response = await fetch('/generate-speech', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: text,
+                        voice_id: selectedVoiceId
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // Convert response to a playable audio blob
+                const audioBlob = await response.blob();
+                return URL.createObjectURL(audioBlob);
+            } catch (error) {
+                console.error("Error generating speech:", error);
+                throw error;
+            }
+        }
+
+        // Function to send human validated response
+        async function sendValidation(validation, comments) {
+            try {
+                // Create and display a waiting element
+                const waitingEl = document.createElement('div');
+                waitingEl.className = 'alert alert-info mt-2';
+                waitingEl.innerHTML = '⏳ Processing validation...';
+                document.getElementById("chat-body").appendChild(waitingEl);
+
+                const formData = new FormData();
+                formData.append("validation_result", validation);
+                formData.append("comments", comments);
+
+                const response = await fetch("/validate", {
+                    method: "POST",
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+
+                // Remove waiting indicator
+                waitingEl.remove();
+
+                // Build validated message HTML with audio controls added
+                const validationMsg = document.createElement("div");
+                validationMsg.className = "message assistant-message";
+                validationMsg.innerHTML = `
+                    <div class="agent-tag">HUMAN_VALIDATED</div>
+                    <div>${marked.parse(result.message)}</div>
+                    <div>${marked.parse(result.response)}</div>
+                    <div class="audio-controls mt-2">
+                        <button class="btn btn-sm btn-outline-primary play-tts-btn">
+                            <i class="fas fa-play"></i> Play Voice Response
+                        </button>
+                    </div>
+                `;
+                document.getElementById("chat-body").appendChild(validationMsg);
+
+                // Get clean text for TTS (without markdown)
+                const cleanText = removeMarkdown(result.response);
+
+                // Attach event listener for TTS for validation message
+                const playButton = validationMsg.querySelector('.play-tts-btn');
+                if (playButton) {
+                    playButton.addEventListener('click', async function () {
+                        // Get a reasonable amount of text to convert to speech (limit to 1000 chars to keep requests smaller)
+                        const textForSpeech = cleanText.length > 1000 ? cleanText.substring(0, 1000) + "..." : cleanText;
+
+                        // Disable the button while generating speech
+                        this.disabled = true;
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+
+                        try {
+                            // Get the new audio URL
+                            const audioUrl = await generateSpeech(textForSpeech);
+
+                            // Stop and clean up previous audio if playing
+                            if (currentAudio) {
+                                currentAudio.pause();
+                                currentAudio.currentTime = 0;
+                                URL.revokeObjectURL(currentAudio.src);  // Free up memory
+                                currentAudio = null;  // Clear the reference
+                            }
+
+                            // Create a new audio element for the new speech
+                            currentAudio = new Audio(audioUrl);
+
+                            // Set event listeners for button updates
+                            currentAudio.onplay = () => {
+                                this.innerHTML = '<i class="fas fa-pause"></i> Pause';
+                                this.classList.remove('btn-outline-primary');
+                                this.classList.add('btn-primary');
+                                this.disabled = false;
+                            };
+
+                            currentAudio.onpause = () => {
+                                this.innerHTML = '<i class="fas fa-play"></i> Play';
+                                this.classList.remove('btn-primary');
+                                this.classList.add('btn-outline-primary');
+                            };
+
+                            currentAudio.onended = () => {
+                                this.innerHTML = '<i class="fas fa-play"></i> Play Again';
+                                this.classList.remove('btn-primary');
+                                this.classList.add('btn-outline-primary');
+                                URL.revokeObjectURL(audioUrl);  // Free memory after playback
+                                currentAudio = null;  // Ensure reference is cleared
+                            };
+
+                            // Toggle play/pause on button click
+                            this.onclick = () => {
+                                if (currentAudio && currentAudio.paused) {
+                                    currentAudio.play();
+                                } else {
+                                    currentAudio.pause();
+                                }
+                            };
+
+                            // Play the generated speech
+                            currentAudio.play();
+                        } catch (error) {
+                            console.error("TTS Error:", error);
+                            this.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Voice failed';
+                            this.disabled = false;
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Validation submission failed:", error);
+            }
+        }
+
+        // Helper function to remove markdown for clean TTS
+        function removeMarkdown(text) {
+            if (!text) return '';
+            
+            // Remove code blocks
+            text = text.replace(/```[\s\S]*?```/g, 'Code block omitted for speech.');
+            
+            // Remove inline code
+            text = text.replace(/`([^`]+)`/g, '$1');
+            
+            // Remove headers
+            text = text.replace(/#{1,6}\s+/g, '');
+            
+            // Remove bold/italic markers
+            text = text.replace(/(\*\*|__)(.*?)\1/g, '$2');
+            text = text.replace(/(\*|_)(.*?)\1/g, '$2');
+            
+            // Remove list markers
+            text = text.replace(/^\s*[\*\-+]\s+/gm, '');
+            text = text.replace(/^\s*\d+\.\s+/gm, '');
+            
+            // Remove links, keep text
+            text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+            
+            // Remove images
+            text = text.replace(/!\[([^\]]+)\]\([^)]+\)/g, 'Image: $1');
+            
+            // Remove blockquotes
+            text = text.replace(/^\>\s+/gm, '');
+            
+            // Handle line breaks sensibly for speech
+            text = text.replace(/\n{2,}/g, '. ');
+            text = text.replace(/\n/g, ' ');
+            
+            return text;
+        }
+    </script>
+</body>
+</html>

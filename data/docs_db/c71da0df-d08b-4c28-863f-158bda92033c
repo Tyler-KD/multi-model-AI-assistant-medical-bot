@@ -1,0 +1,119 @@
+## Limitation
+
+With our motivation to investigate how it will work in single CNN and multilayer CNN based transfer learning models, we subjected the dataset to classification as it is without rotation and cropping operations, which is the most important limitation of our study.
+
+Vol.:(0123456789)
+
+<!-- page_break -->
+
+Vol:.(1234567890)
+
+Figure 5. The confusion metrics of ( a ) CNN model, ( b ) EfficientNetB4 model, ( c ) VGG19 model ( d ) InceptionV3 model, ( e ) VGG16.
+
+picture_counter_6 The image consists of five confusion matrices comparing the performance of different AI models in diagnosing medical conditions. Each matrix plots the true labels against the predicted labels for four categories: glioma tumor, meningioma tumor, no tumor, and pituitary tumor. The models evaluated are:
+
+(a) CNN
+(b) EfficientNetB4
+(c) VGG19
+(d) InceptionV3
+(e) VGG16
+
+Each matrix shows the number of correct and incorrect predictions for each category, with darker colors indicating higher values.
+
+Table 4. Comparison with previous studies on brain tumor. Best results obtained in the study.
+
+| Authors                 | Dataset                          | Models                                     | Accuracy (%)                        |
+|-------------------------|----------------------------------|--------------------------------------------|-------------------------------------|
+| Wallis and Buvat 1      | Brain Tumor Dataset 28           | SVM                                        | 74                                  |
+| Seere and Karibasappa 2 | Their own Brain Tumor dataset    | SVM                                        | 85.32                               |
+| Ortiz-Ramón et al. 3    | Their own Brain Tumor dataset    | SVM                                        | 89.6                                |
+| Gupta and Sasidhar 4    | MICCAI 2012 Challenge database 4 | SVM                                        | 87                                  |
+| Gumaei et al. 5         | Brain Tumor Dataset 28           | RELM                                       | 92.61                               |
+| Shahajad et al. 6       | Kaggle brain dataset 17          | SVM                                        | 92                                  |
+| Vankdothu et al. 7      | Brain Tumor Dataset 17           | CNN, LSTM CNN-LSTM                         | CNN89 LSTM 90.02 CNN-LSTM 92        |
+| Sirinivas et al. 8      | Brain Tumor Dataset 17           | InceptionV3 VGG16 ResNET50                 | InceptionV3 78 VGG16 96 ResNET50 95 |
+| Choudhury et al. 9      | Their own Brain Tumor dataset    | CNN                                        | 96.08                               |
+| Martini and Oermann 10  | Their own Brain Tumor dataset    | CNN                                        | 93.09                               |
+| Sarkar et al. 11        | Their own Brain Tumor dataset    | CNN                                        | 91.03                               |
+| Arunkumar et al. 12     | None                             | SVM, KNN                                   | 92.14                               |
+| Zacharaki et al. 13     | Their own Brain Tumor dataset    | SVM, KNN                                   | 88                                  |
+| Cheng et al. 14         | Their own Brain Tumor dataset    | SVM, KNN                                   | 91.28                               |
+| Paul et al. 15          | Their own Brain Tumor dataset    | CNN                                        | 91.43                               |
+| Afshar et al. 16        | Brain Tumor Dataset 28           | CapsNet                                    | 90.89                               |
+| This study              | Brain Tumor Dataset 17           | EfficientNetB4 InceptionV3 VGG19 VGG16 CNN | 97 95 96 98 91                      |
+
+<!-- page_break -->
+
+
+## Data availability
+
+The dataset is shared open source. Availability Link: https://  doi.  org/https://  doi.  org/  10.  34740/  kaggle/  dsv/  11831  65.
+
+Received: 15 September 2023; Accepted: 24 January 2024
+
+
+## References
+
+- 1.  Wallis, D. &amp; Buvat, I. Clever Hans effect found in a widely used brain tumour MRI dataset. Med. Image Anal. 77 , 102368. https:// doi.  org/  10.  1016/j.  media.  2022.  102368 (2022).
+- 2.  Hatcholli Seere, S. K. &amp; Karibasappa, K. Threshold segmentation and watershed segmentation algorithm for brain tumor detection using support vector machine. Eur. J. Eng. Technol. Res. 5 (4), 516-519. https://  doi.  org/  10.  24018/  ejeng.  2020.5.  4.  1902 (2020).
+- 3.  Ortiz-Ramón, R., Ruiz-España, S., Mollá-Olmos, E. &amp; Moratal, D. Glioblastomas and brain metastases differentiation following an MRI texture analysis-based radiomics approach. Phys. Med. 76 , 44-54. https://  doi.  org/  10.  1016/j.  ejmp.  2020.  06.  016 (2020).
+- 4.  Gupta, M. &amp; Sasidhar, K. Non-invasive brain tumor detection using magnetic resonance imaging based fractal texture features and shape measures. In 2020 3rd International Conference on Emerging Technologies in Computer Engineering: Machine Learning and Internet of Things (ICETCE) , IEEE, 2020, 93-97. https://  doi.  org/  10.  1109/  ICETC  E48199.  2020.  90917  56.
+- 5.  Gumaei, A., Hassan, M. M., Hassan, M. R., Alelaiwi, A. &amp; Fortino, G. A hybrid feature extraction method with regularized extreme learning machine for brain tumor classification. IEEE Access 7 , 36266-36273. https://  doi.  org/  10.  1109/  ACCESS.  2019.  29041  45 (2019).
+- 6.  Shahajad, M., Gambhir, D. &amp; Gandhi, R. Features extraction for classification of brain tumor MRI images using support vector machine. In 2021 11th International Conference on Cloud Computing, Data Science and Engineering (Confluence) , IEEE, 2021, 767-772. https://  doi.  org/  10.  1109/  Confl  uence  51648.  2021.  93771  11.
+- 7.  Vankdothu, R., Hameed, M. A. &amp; Fatima, H. A brain tumor identification and classification using deep learning based on CNNLSTM method. Comput. Electr. Eng. 101 , 107960. https://  doi.  org/  10.  1016/j.  compe  leceng.  2022.  107960 (2022).
+- 8.  Srinivas, C. et al. Deep transfer learning approaches in performance analysis of brain tumor classification using MRI images. J. Healthc. Eng. 2022 , 1-17. https://  doi.  org/  10.  1155/  2022/  32643  67 (2022).
+- 9.  Choudhury, C. L., Mahanty, C., Kumar, R. &amp; Mishra, B. K. Brain tumor detection and classification using convolutional neural network and deep neural network. In 2020 International Conference on Computer Science, Engineering and Applications (ICCSEA) , IEEE, 2020, 1-4. https://  doi.  org/  10.  1109/  ICCSE  A49143.  2020.  91328  74.
+- 10. Martini, M. L. &amp; Oermann, E. K. Intraoperative brain tumour identification with deep learning. Nat. Rev. Clin. Oncol. 17 (4), 200-201. https://  doi.  org/  10.  1038/  s41571-  020-  0343-9 (2020).
+- 11. Sarkar, S., Kumar, A., Aich, S., Chakraborty, S., Sim, J.-S., &amp; Kim, H.-C. A CNN based approach for the detection of brain tumor using MRI scans prediction of idiopathic pulmonary fibrosis (IPF) disease severity in lungs disease patients view project IoT based cyber physical system view project A CNN based approach for the detection of brain tumor using MRI scans. 2020, [Online]. https://  www.  resea  rchga  te.  net/  publi  cation/  34204  8436.
+- 12. Arunkumar, N. et al. Fully automatic model-based segmentation and classification approach for MRI brain tumor using artificial neural networks. Concurr. Comput. 32 , 1. https://  doi.  org/  10.  1002/  cpe.  4962 (2020).
+- 13. Zacharaki, E. I. et al. Classification of brain tumor type and grade using MRI texture and shape in a machine learning scheme. Magn. Reson. Med. 62 (6), 1609-1618. https://  doi.  org/  10.  1002/  mrm.  22147 (2009).
+- 14. Cheng, J. et al. Enhanced performance of brain tumor classification via tumor region augmentation and partition. PLoS One 10 (10), e0140381. https://  doi.  org/  10.  1371/  journ  al.  pone.  01403  81 (2015).
+- 15. Paul, J. S., Plassard, A. J., Landman, B. A., &amp; Fabbri, D. Deep learning for brain tumor classification. In (Krol, A. &amp; Gimi, B., Eds.), 2017, 1013710. https://  doi.  org/  10.  1117/  12.  22541  95.
+- 16. Afshar, P ., Plataniotis, K. N., &amp; Mohammadi, A. Capsule networks for brain tumor classification based on MRI images and course tumor boundaries, 2018.
+- 17. Sartaj, B., Ankita, K., Prajakta, B., Sameer, D., &amp; Swati, K. Brain tumor classification (MRI). Kaggle (2020). https://  doi.  org/  10. 34740/  kaggle/  dsv/  11831  65.
+- 18. Basarslan, M. S. &amp; Kayaalp, F. Sentiment analysis with machine learning methods on social media. Adv. Distrib. Comput. Artif. Intell. J. 9 (3), 5-15. https://  doi.  org/  10.  14201/  ADCAI  J2020  93515 (2020).
+- 19. LeCun, Y., Bengio, Y. &amp; Hinton, G. Deep learning. Nature 521 (7553), 436-444. https://  doi.  org/  10.  1038/  natur  e14539 (2015).
+- 20. Sevik, A., Erdogmus, P., &amp; Yalein, E. Font and Turkish letter recognition in images with deep learning. In 2018 International Congress on Big Data, Deep Learning and Fighting Cyber Terrorism (IBIGDELFT) , IEEE, 2018, 61-64. https://  doi.  org/  10.  1109/ IBIGD  ELFT.  2018.  86253  33.
+- 21. Bal, F. &amp; Kayaalp, F. A novel deep learning-based hybrid method for the determination of productivity of agricultural products: Apple case study. IEEE Access 11 , 7808-7821. https://  doi.  org/  10.  1109/  ACCESS.  2023.  32385  70 (2023).
+- 22. Kabakus, A. T. &amp; Erdogmus, P. An experimental comparison of the widely used pre-trained deep neural networks for image classification tasks towards revealing the promise of transfer-learning. Concurr. Comput. https://  doi.  org/  10.  1002/  cpe.  7216 (2022).
+- 23. Ba/uni015Farslan, M. S. &amp; Kayaalp, F. MBi-GRUMCONV: A novel Multi Bi-GRU and Multi CNN-Based deep learning model for social media sentiment analysis. J. Cloud Comput. 12 (1), 5. https://  doi.  org/  10.  1186/  s13677-  022-  00386-3 (2023).
+- 24. Simonyan, K. &amp; Zisserman, A. Very deep convolutional networks for large-scale image recognition, 2014.
+- 25. Chollet, F. Xception: Deep learning with depthwise separable convolutions, 2016.
+- 26. Kayaalp, F., Basarslan, M. S., &amp; Polat, K. TSCBAS: A novel correlation based attribute selection method and application on telecommunications churn analysis. In 2018 International Conference on Artificial Intelligence and Data Processing (IDAP) , IEEE, 2018, 1-5. https://  doi.  org/  10.  1109/  IDAP .  2018.  86209  35.
+- 27. Gulmez, S., Kakisim, A. G., &amp; Sogukpinar, I. Analysis of the dynamic features on ransomware detection using deep learning-based methods. In 2023 11th International Symposium on Digital Forensics and Security (ISDFS), Chattanooga, TN, USA , 2023, 1-6. https://  doi.  org/  10.  1109/  ISDFS  58141.  2023.  10131  862.
+- 28. Cheng, J. et al. Enhanced performance of brain tumor classification via tumor region augmentation and partition. PLoS One 10 (10), e0140381 (2015).
+
+
+## Author contributions
+
+M.Z.K., data analysis, experiments and evaluations, manuscript draft preparation M.S.B., conceptualization, defining the methodology, evaluations of the results, and original draft and reviewing, supervision. The authors affirm there is no figure of any participant in the article.
+
+
+## Competing interests
+
+The authors declare no competing interests.
+
+Scientific Reports
+
+|         (2024) 14:2664  |
+
+Vol.:(0123456789)
+
+<!-- page_break -->
+
+Vol:.(1234567890)
+
+
+## Additional information
+
+Correspondence and requests for materials should be addressed to M.S.B.
+
+Reprints and permissions information is available at www.nature.com/reprints.
+
+Publisher's note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.
+
+
+
+Open Access This  article  is  licensed  under  a  Creative  Commons  Attribution  4.0  International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article's Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article's Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://  creat  iveco  mmons.  org/  licen  ses/  by/4.  0/.
+
+© The Author(s) 2024

@@ -1,0 +1,110 @@
+## Approval for participation
+
+As the data is open source, there are no experiments on humans conducted by the authors. Open source has been studied on MRI images.
+
+
+## Experimental settings and results
+
+This study addresses the problem of image classification using deep learning methods. The most important and widely studied of these problems is that of health images. In this context, five different models (InceptionV3, EfficientNetB4, VGG16, VGG19, Multi-Layer CNN) were selected for the classification of brain tumors and their performances were compared on the same dataset. 10% of the dataset was used for testing, 15% for validation and 75% for training. All experimental setup and results were done at Google Colab.
+
+
+## Multi-layer CNN
+
+First, we need to determine the architecture of our model. The input form of our data is 400 × 400 and has 3 channels. Since we have a total of 4 different classes, the number of output classes is set to 4. Our model has a structure that includes convolutional and pooling layers. First, there is a 3 × 3 convolutional layer with 32 filters. This is followed by a 2 × 2 max pooling layer. This reduces the size by emphasizing lower-level features. To deepen our model, this structure is repeated twice, adding convolutional layers with 64 and 128 filters, respectively, and maximum pooling layers of size 2 × 2.
+
+Table 2. Confusion matrix.
+
+picture_counter_2 The image is a confusion matrix used in the context of evaluating the performance of a classification model. It displays the actual values (Positive, Negative, Total) and the estimated values (Positive, Negative, Total). The matrix includes True Positives (Tp), False Positives (Fp), True Negatives (Tn), and False Negatives (Fn), along with their respective totals (TPos, TNeg, Pos, Neg, M).
+
+|                | Actual value   | Actual value   | Actual value   |
+|----------------|----------------|----------------|----------------|
+|                | Positive       | Negative       | Total          |
+| Estimate value | Estimate value | Estimate value | Estimate value |
+| Positive       | T p            | F p            | TPos           |
+| Negative       | F N            | T N            | TNeg           |
+| Total          | Pos            | Neg            | M              |
+
+<!-- page_break -->
+
+The resulting feature map is transformed into a flat vector with a flattening layer. A hidden (dense) layer of 128 neurons is then added. This layer deepens the learned features and increases generalization. Finally, the output layer has 4 neurons and calculates the probabilities between classes with the softmax activation function. To train our model, we need to determine the optimal function and metrics. In this paper, we use the Rectified Adam optimization algorithm. This algorithm dynamically adjusts the learning rate and helps to use gradients more efficiently. Also, categorical cross-entropy is used as the loss function during training, as it is widely used in multiclass classification task.
+
+The metrics tracked during training are accuracy, as well as precision and recall. These metrics are important for evaluating the classification performance of the model. In addition, a reduced learning rate recall (ReduceLROnPlateau) is used to dynamically adjust the learning rate. This recall reduces the learning rate when the loss function flattens out during the training process, resulting in more stable training. The epoch is set to 14 and the batch size to 10.
+
+
+## CNN-based transfer learning
+
+In transfer learning architectures, all parameters and layers outside the model are the same, but after the last 3 layers of transfer learning models are removed, layers unique to the dataset are added instead: the GlobalAveragePooling2D layer contains fewer parameters than the Flatten layer, which reduces the risk of overfitting and helps build a more efficient model. Also, while the Flatten layer is used to organize the data, the GlobalAveragePooling2D layer is used for feature extraction, making the network learning process more efficient.
+
+Due to the fact that the training data tends to learn very fast compared to the validation data, we modified the ratio of the dropout layers in the original architectures. For all models, the dilution rate was set to 0.05. During the model training process, the designated optimizer was "RectifiedAdam", with the optimizer parameters configured as follows: learning\_rate = 0.0001, beta\_1 = 0.9, beta\_2 = 0.999, and epsilon = 1e-08. The loss function selected is categorical\_crossentropy, while the metrics used include precision, recall, categorical accuracy, and accuracy. This completes the pre-training of the model. The final layer of the model is the dense layer, which contains 4 neurons, which is usually the number of output classes in classification problems. The activation function of this layer is "softmax". The softmax function makes the output values interpretable as probabilities between classes. Furthermore, the data type of this layer is "float64", which means that the output values are of a 64-bit double precision type. The layer also applies regularization using the "kernel\_regularizer" property. The L2 regularization used here aims to reduce the risk of overfitting by limiting the size of the weights. The regularization coefficient of 0.1, denoted by "regulars. l2 (0.1)", controls the effectiveness of the regularization.
+
+During the model training process, the "ReduceLROnPlateau" function of the Keras library was used as a backpropagation algorithm. This function automatically reduced the learning rate when the model approached a local optimum or when the loss value did not decrease. The parameters of the "ReduceLROnPlateau" function are as follows monitor: The metric monitored is usually "val\_loss" (validation loss). This is the metric used to determine if the learning rate should be reduced:
+
+- · patience: The expected patience time for lowering the learning rate, i.e. how long the metric should not improve.
+- · factor: The factor used to reduce the learning rate. For example, a value of 0.3 reduces the learning rate by 30%.
+- · min\_lr: Specifies the minimum achievable learning rate. This limits the learning rate without making it infinitesimal.
+
+Using this feature allows for more stable and efficient model training, streamlining the process of fine-tuning training parameters without the need to manually adjust the learning rate. The training program was run over 14 epochs with batches of size 10. Details of the multilayer CNN model used in the study are presented in Fig. 2, which outlines its architectural features.
+
+The training and validation accuracy loss graphs of the models created with VGG19, EfficientNetB4, InceptionV3 transfer learning, and CNN are shown in Fig. 3.
+
+Table 3 shows the accuracy, F-score, Recall, Precision and AUC results of the models created in the study.
+
+Figure 2. Multi-layer CNN model arthitecture.
+
+picture_counter_3 The image depicts a neural network architecture for medical imaging analysis. It starts with an MRI brain scan, followed by layers of convolution and max pooling operations. These layers are then flattened and fed into a fully connected neural network. The output layer classifies the input into four categories: Glioma, Meningioma, No Tumor, and Pituitary.
+
+Vol.:(0123456789)
+
+<!-- page_break -->
+
+Vol:.(1234567890)
+
+Figure 3. Learning curves of losses and accuracies of ( a ) CNN model, ( b ) EfficientNetB4 model, ( c ) VGG19 model, ( d ) InceptionV3, ( e ) VGG16 model.
+
+picture_counter_4 The image contains ten line graphs organized into five pairs, each pair representing a different neural network model used for medical diagnosis: CNN, EfficientNetB4, VGG19, InceptionV3, and VGG16. Each pair includes:
+
+1. Training and Validation Accuracy: Displays accuracy trends over 14 epochs.
+2. Training and Validation Loss: Shows loss trends over 14 epochs.
+
+The graphs compare the performance of training (blue lines) and validation (red lines) datasets.
+
+Table 3. Performances (%) of the models created in the study.
+
+| Models         |   Accuracy |   F-score |   Recall |   Precision |   AUC |
+|----------------|------------|-----------|----------|-------------|-------|
+| VGG19          |         96 |        96 |       96 |          96 |    99 |
+| EfficientNETB4 |         97 |        96 |       97 |          97 |    99 |
+| InceptionV3    |         96 |        96 |       96 |          96 |    99 |
+| 3 CNNModel     |         91 |        90 |       91 |          91 |    98 |
+| VGG16          |         98 |        97 |       98 |          98 |    99 |
+
+According to Table 3, the best accuracy result was obtained by VGG16 with 97%. It is ahead of other methods with F-score value of 97%, AUC value of 99%, recall value of 98% and precision values of 98%. The ROC curves of the models created in the study are shown in Fig. 4.
+
+According to the AUC values in Fig. 4, the transfer learning models VGG, InceptionV3, and EfficientNetB4 and the models built with CNN have distinctive features. The confusion matrix of the study on the classification of glioma, meningioma, non-tumor normal patients, pituitary tumor patients in the dataset by tumor type is shown in Fig. 5.
+
+As shown in the confusion matrix in Fig. 5, the classification performance is high for all four models (VGG16 and VGG19 models, CNN model, EfficientNetB4 model, InceptionV3 model).
+
+
+## Results and discussion
+
+As part of the study, CNN and CNN-based transfer learning models such as InceptionV3, EfficientNetB4, VGG19 were trained on open-source shared brain tumor patients. The best accuracy result was obtained with EfficientNetB4 with 95%. The comparison of the brain tumor studies with the literature is shown in Table 4.
+
+As shown in Table 4, the CNN-based transfer learning models used in the study performed better. AI in healthcare plays an important role in the management of complex diseases such as brain tumors. AI enables faster, more accurate, and more effective diagnosis and treatment processes. However, AI technology is not intended to completely replace doctors, but to support and enhance their work. To realize the full potential of AI, it is important to consider issues such as ethics, security and privacy. In the future, AI-based solutions will continue to contribute to better management of brain tumors and other health problems, and improve the quality of life
+
+<!-- page_break -->
+
+Figure 4. The ROC curve of ( a ) CNN model, ( b ) EfficientNetB4 model, ( c ) VGG19 model ( d ) InceptionV3 model, ( e ) VGG16.
+
+picture_counter_5 The image consists of five Receiver Operating Characteristic (ROC) curves, each representing the performance of different machine learning models in diagnosing various types of tumors. 
+
+- (a) CNN: Shows ROC curves for glioma tumor (AUC = 0.99), meningioma tumor (AUC = 0.98), no tumor (AUC = 1.00), and pituitary tumor (AUC = 1.00).
+- (b) EfficientNetB4: Shows ROC curves for glioma tumor (AUC = 0.99), meningioma tumor (AUC = 0.99), no tumor (AUC = 1.00), and pituitary tumor (AUC = 1.00).
+- (c) VGG19: Shows ROC curves for glioma tumor (AUC = 1.00), meningioma tumor (AUC = 0.99), no tumor (AUC = 1.00), and pituitary tumor (AUC = 1.00).
+- (d) InceptionV3: Shows ROC curves for glioma tumor (AUC = 0.99), meningioma tumor (AUC = 0.99), no tumor (AUC = 1.00), and pituitary tumor (AUC = 1.00).
+- (e) VGG16: Shows ROC curves for glioma tumor (AUC = 1.00), meningioma tumor (AUC = 0.99), no tumor (AUC = 1.00), and pituitary tumor (AUC = 1.00).
+
+Each graph plots the true positive rate against the false positive rate for the respective model.
+
+for patients. As seen in this study, AI-based studies will increase their importance to human health, from early diagnosis to positive progress in the treatment process.
+
+Based on the results of this study, transfer learning methods should be preferred especially in image processing-based applications to support health decision makers. The data obtained from MRI or CT can be used as an early warning system to help health decision makers make quick and accurate decisions. Therefore, in addition to empirical analysis, AI-based applications should take a more active role as soon as possible. To this end, the diagnosis of diseases from instant CT or MR images will be investigated in the coming years.

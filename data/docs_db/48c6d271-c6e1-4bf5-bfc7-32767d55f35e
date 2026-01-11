@@ -1,0 +1,49 @@
+## Transfer learning
+
+Transfer learning stands as a fundamental concept within both machine learning and deep learning, involving the utilization of knowledge garnered from training a model on a particular task and subsequently applying that knowledge to another related task. In the realm of neural networks, transfer learning manifests significant potency. It encompasses the process of employing a pre-trained model, typically trained on a comprehensive and varied dataset, and fine-tuning it on a fresh dataset or task 21-23 .
+
+In this study, transfer learning models InceptionV3, VGG16, VGG19, and EfficientNetB4 were used in the classification process.
+
+
+## VGG
+
+This architecture stands as a notable CNN model introduced   by 24 , which builds upon its predecessor, the AlexNet model. It achieves this enhancement by replacing the initial 11 × 11 and 5 × 5 kernels in the first two convolutional layers with a series of consecutive 3 × 3 kernels. The model occupies approximately 528 MB of storage space and has achieved a documented top-5 accuracy of 90.1% on ImageNet data, encompassing approximately 138.4 million parameters. The ImageNet dataset comprises approximately 14 million images categorized across 1000 classes. The training of VGG16 was conducted on robust GPUs over the span of several weeks. This study used VGG16 and VGG19.
+
+
+## EfficientNET
+
+EfficientNet is a family of scalable and efficient CNN models. The main goal of this series is to achieve better performance with fewer parameters. The term "EfficientNet" is a combination of the words "efficiency" and "network". The model series is mainly used in visual processing tasks such as image classification.
+
+EfficientNet is a family of models that delivers competitive results in both performance and computational cost. It offers variations of different size and complexity at different scales. Higher numbered models are typically larger and more complex, but require more computing power. It was the top performing model in the ImageNet ompetition c 24 .
+
+
+## Inception
+
+The Inception architecture is an architecture used in the field of deep learning and CNN. It is designed to perform feature extraction and classification tasks more efficiently. First introduced in a paper titled "Going Deeper with Convolutions", the Inception architecture aims to provide better performance when processing complex visual datasets 25 . The Inception architecture has a structure that includes parallel convolution layers and combines the outputs of these layers. In this way, features of different sizes can be captured and processed   simultaneously 25 .
+
+Vol.:(0123456789)
+
+<!-- page_break -->
+
+Vol:.(1234567890)
+
+
+## Performance metric
+
+Performance evaluation methods such as Accuracy, Precision, Recall, and F-score are used to evaluate models created for classification problems such as image processing. These methods are obtained from the confusion matrix. The confusion matrix is given in Table 2 26 .
+
+In Table 2, the symbols TN , TP , FP ,  and FN correspond to the true negative, true positive, false positive, and false negative values, respectively. From Eqs. (1) to (4), Accuracy, Precision, Recall and F-score is given respectively.
+
+$$\ A c c u r a c y = \frac { T _ { P } + T _ { N } } { T _ { P } + F _ { P } + F _ { N } + T _ { N } }$$
+
+$$P r e c i s i o n = \frac { T _ { P } } { T P o s }$$
+
+$$R e c a l l & = \frac { T _ { P } } { P o s }$$
+
+$$F \text{-score} = \frac { 2 * P r e c i s i o n * R e c a l l } { P r e c i s i o n + R e c e l l }$$
+
+Receiver operating characteristic (ROC) curve
+
+The ROC Curve is a graphical tool used to evaluate the performance of a classification model, particularly in binary classification scenarios. It provides a visualization of the sensitivity and specificity of the model, showing their variation as thresholds are changed 27 . The ROC curve is plotted with the false positive rate on the x-axis and the True Positive Rate (TPR) on the y-axis. An optimal classifier, characterized by a TPR of one and a false positive rate of zero, lies in the upper left corner of the graph. The curve takes shape around this point, illustrating the performance of the model across different   thresholds 26 .
+
+In addition, the area under the receiver operating characteristic (ROC) curve, commonly referred to as the "area under the curve", succinctly summarizes the overall model performance in a single metric. The AUC value ranges from 0 to 1, with values closer to 1 indicating the increased discriminative ability of the   model 26 . The ROC curve and AUC value serve as essential tools for comparing models and understanding classification model performance. A higher AUC value generally indicates superior model performance, while the curve illustrates the model's performance strengths and weaknesses at various   thresholds 26 .

@@ -1,0 +1,49 @@
+## 3.2.6. Star-Shape Loss
+
+In contrast to pixel-wise losses which act on pixels independently and cannot enforce spatial constraints, the star-shape loss (Mirikharaji and Hamarneh, 2018) aims to capture class label dependencies and preserve the target object structure in the predicted segmentation masks. Based upon prior knowledge about the shape of skin lesions, the star-shape loss, L ssh penalizes discontinuous decisions in the estimated output as follows:
+
+$$\mathcal { L } _ { s s h } ( X, Y ; \theta ) = \sum _ { i = 1 } ^ { N } \sum _ { p \in \Omega } \sum _ { q \in \mathcal { I } _ { p c } } \mathbb { 1 } _ { y _ { i p } = y _ { i q } } \times | y _ { i p } - \hat { y } _ { i p } | \times | \hat { y } _ { i p } - \hat { y } _ { i q } |, \\ \intertext { n center. } \mathcal { I } _ { s s h } \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$ } \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime`} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime$} \, \text{$\prime`}}$$
+
+where c is the lesion center, ' pc is the line segment connecting pixels p and c and, q is any pixel lying on ' pc . This loss encourages all pixels lying between p and q on ' pc to be assigned the same estimator whenever p and q have the same ground-truth label. The result is a radial spatial coherence from the lesion center.
+
+
+## 3.2.7. End-Point Error Loss
+
+Many authors consider the lesion boundary the most challenging region to segment. The end-point error loss (Sarker et al., 2018; Singh et al., 2019) underscores borders by using the first derivative of the segmentation masks instead of their raw values:
+
+$$\mathcal { L } _ { e p e } ( X, Y ; \theta ) & = \sum _ { i = 1 } ^ { N } \sum _ { p \in \Omega } \sqrt { ( \xi _ { i p } ^ { 0 } - y _ { i p } ^ { 0 } ) ^ { 2 } + ( \xi _ { i p } ^ { 1 } - y _ { i p } ^ { 1 } ) ^ { 2 } } ),$$
+
+where ˆ 0 y ip and ˆ y 1 ip are the directional first derivatives of the estimated segmentation map in the x and y spatial directions, respectively and, similarly, y 0 ip and y 1 ip for the ground-truth derivatives. Thus, this loss function encourages the magnitude and orientation of edges of estimation and ground-truth to match, thereby mitigating vague boundaries in skin lesion segmentation.
+
+
+## 3.2.8. Adversarial Loss
+
+Another way to add high-order class-label consistency is adversarial training. Adversarial training may be employed along with traditional supervised training to distinguish estimated segmentation from ground-truths using a discriminator. The optimization objective will weight a pixel-wise loss L s matching prediction to ground-truth, and an adversarial loss, as follows:
+
+$$\mathcal { L } _ { a d v } ( X, Y ; \theta, \theta _ { a } ) = \mathcal { L } _ { s } ( X, Y ; \theta ) = \lambda [ \mathcal { L } _ { c e } ( Y, 1 ; \theta _ { a } ) + \mathcal { L } _ { c e } ( \hat { Y }, 0 ; \theta, \theta _ { a } ) ],$$
+
+where GLYPH&lt;18&gt; a are the adversarial model parameters. The adversarial loss employs a binary cross-entropy loss to encourage the segmentation model to produce indistinguishable prediction maps from ground-truth maps. The adversarial objective (Eqn. (16)) is optimized in a mini-max game by simultaneously minimizing it with respect to GLYPH&lt;18&gt; and maximizing it with respect to GLYPH&lt;18&gt; a .
+
+Pixel-wise losses, such as cross-entropy (Izadi et al., 2018; Singh et al., 2019; Jiang et al., 2019), soft Jaccard (Sarker et al., 2019; Tu et al., 2019; Wei et al., 2019), end-point error (Tu et al., 2019; Singh et al., 2019), MSE (Peng et al., 2019) and MAE (Sarker et al., 2019; Singh et al., 2019; Jiang et al., 2019) losses have all been incorporated in adversarial learning of skin lesion segmentation. In addition, Xue et al. (2018) and Tu et al. (2019) presented a multi-scale adversarial term to match a hierarchy of
+
+<!-- page_break -->
+
+local and global contextual features in the predicted maps and ground-truths. In particular, they minimize the MAE of multi-scale features extracted from di GLYPH&lt;11&gt; erent layers of the adversarial model.
+
+
+## 3.2.9. Rank Loss
+
+Assuming that hard-to-predict pixels lead to larger prediction errors while training the model, rank loss (Xie et al., 2020b) is proposed to encourage learning more discriminative information for harder pixels. The image pixels are ranked based on their prediction errors, and the top K pixels with the largest prediction errors from the lesion or background areas are selected. Let ˆ y 0 i j and ˆ y 1 il are respectively the selected j th hard-to-predict pixel of background and l th hard-to-predict pixel of lesion in the image i , we have:
+
+$$\mathcal { L } _ { r a n k } ( X, Y ; \theta ) = \sum _ { i = 1 } ^ { N } \sum _ { j = 1 } ^ { K } \sum _ { l = 1 } ^ { K } \max \{ 0, \hat { y } _ { i j } ^ { 0 } - \hat { y } _ { i l } ^ { 1 } + m a r g i n \},$$
+
+which encourages ˆ 1 y il to be greater than ˆ y 0 i j plus margin.
+
+Similar to rank loss, narrowband suppression loss (Deng et al., 2020) also adds a constraint between hard-to-predict pixels of background and lesion. Di GLYPH&lt;11&gt; erent from rank loss, narrowband suppression loss collects pixels in a narrowband along the groundtruth lesion boundary with radius r instead of all image pixels and then selects the top K pixels with the largest prediction errors.
+
+
+## 4. Evaluation
+
+Evaluation is one of the main challenges for any image segmentation task, skin lesions included (Celebi et al., 2015b). Segmentation evaluation may be subjective or objective (Zhang et al., 2008), the former involving the visual assessment of the results by a panel of human experts, and the latter involving the comparison of the results with ground-truth segmentations using quantitative evaluation metrics.
+
+Subjective evaluation may provide a nuanced assessment of results, but because experts must grade each batch of results, it is usually too laborious to be applied, except in limited settings. In objective assessment, experts are consulted once, to provide the ground-truth segmentations, and that knowledge can then be reused indefinitely. However, due to intra- and inter-annotator variations, it raises the question of whether any individual ground-truth segmentation reflects the ideal 'true' segmentation, an issue we address in Section 4.2. It also raises the issue of choosing one or more evaluation metrics (Section 4.3).

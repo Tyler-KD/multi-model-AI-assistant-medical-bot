@@ -1,0 +1,97 @@
+## A R T I C L E I N F O
+
+
+## A B S T R A C T
+
+Article history :
+
+Skin cancer is a major public health problem that could benefit from computer-aided diagnosis to reduce the burden of this common disease. Skin lesion segmentation from images is an important step toward achieving this goal. However, the presence of natural and artificial artifacts (e.g., hair and air bubbles), intrinsic factors (e.g., lesion shape and contrast), and variations in image acquisition conditions make skin lesion segmentation a challenging task. Recently, various researchers have explored the applicability of deep learning models to skin lesion segmentation. In this survey, we cross-examine 177 research papers that deal with deep learning-based segmentation of skin lesions. We analyze these works along several dimensions, including input data (datasets, preprocessing, and synthetic data generation), model design (architecture, modules, and losses), and evaluation aspects (data annotation requirements and segmentation performance). We discuss these dimensions both from the viewpoint of select seminal works, and from a systematic viewpoint, examining how those choices have influenced current trends, and how their limitations should be addressed. To facilitate comparisons, we summarize all examined works in a comprehensive table as well as an interactive table available online 1 .
+
+' 2023 Elsevier B. V. All rights reserved.
+
+
+## 1. Introduction
+
+Segmentation is a challenging and critical operation in the automated skin lesion analysis workflow. Shape information, such as size, symmetry, border definition and irregularity are important criteria for diagnosing skin cancer. Both surgical excision and radiation therapy require localization and delineation of lesions (American Cancer Society, 2023). Manual delineation is a laborious task su GLYPH&lt;11&gt; ering from significant inter- and intra-observer variability. A fast and reliable segmentation algorithm is thus an integral
+
+1 https://github.com/sfu-mial/skin-lesion-segmentation-survey
+
+GLYPH&lt;3&gt; Corresponding authors: ecelebi@uca.edu (M. Emre Celebi) and hamarneh@sfu.ca (Ghassan Hamarneh)
+
+1 Joint first authors
+
+2 Joint senior authors
+
+<!-- page_break -->
+
+part of an e GLYPH&lt;11&gt; ective computer-aided diagnosis ( CAD ) system for skin cancer. In addition to serving as an intermediate step in several CAD systems, including as a pre-processing step when analyzing wide-field images with multiple lesions (Birkenfeld et al., 2020), and enhancing the explainability and the robustness of diagnosis methods (Jaworek-Korjakowska et al., 2021), recent studies show the utility of segmentation in improving the classification performance for certain diagnostic categories by regularizing attention maps (Yan et al., 2019), allowing the cropping of lesion images (Mahbod et al., 2020), and the removal of imaging artifacts (Maron et al., 2021a; Bissoto et al., 2022). Moreover, rule-based diagnostic systems, such as ABCD (Asymmetry, Border, Color, Diameter of lesions) (Friedman et al., 1985; Nachbar et al., 1994) and its derivatives: ABCDE ABCD ( plus Evolution of lesions) (Abbasi et al., 2004) and ABCDEF ABCDE ( plus the 'ugly duckling' sign) (Jensen and Elewski, 2015), rely on an accurate lesion segmentation for the estimation of diagnostic criteria such as asymmetry, border irregularity, lesion size, etc..
+
+Skin cancer and its associated expenses, $8 1 billion annually in U.S. (Guy Jr et al., 2015), have grown into a major public : health issue in the past decades. In the USA alone, 97 610 new cases of melanoma are expected in 2023 (Siegel et al., 2023). ; Broadly speaking, there are two types of skin cancer: melanomas and non-melanomas, the former making up just 1% of the cases, but the majority of the deaths due to its aggressiveness. Early diagnosis is critical for a good prognosis: melanoma can be cured with a simple outpatient surgery if detected early, but its five-year survival rate drops from over 99% to 32% if it is diagnosed at an advanced stage (American Cancer Society, 2023).
+
+Two imaging modalities are commonly employed in automated skin lesion analysis (Daneshjou et al., 2022): dermoscopic (microscopic) images and clinical (macroscopic) images. While dermoscopic images allow the inspection of lesion properties that are invisible to the naked eye, they are not always accessible even to dermatologists (Engasser and Warshaw, 2010). On the other hand, clinical images acquired using conventional cameras are easily accessible but su GLYPH&lt;11&gt; er from lower quality. Dermoscopy is a non-invasive skin imaging technique that aids in the diagnosis of skin lesions by allowing dermatologists to visualize sub-surface structures (Kittler et al., 2002). However, even with dermoscopy, diagnostic accuracy can vary widely, ranging from 24% to 77%, depending on the clinician's level of expertise (Tran et al., 2005). Moreover, dermoscopy may actually lower the diagnostic accuracy in the hands of inexperienced dermatologists (Binder et al., 1995). Therefore, to minimize the diagnostic errors that result from the di GLYPH&lt;14&gt; culty and the subjectivity of visual interpretation and to reduce the burden of skin diseases and limited access to dermatologists, the development of CAD systems is crucial.
+
+Segmentation is the partitioning of an image into meaningful regions. Semantic segmentation, in particular, assigns appropriate class labels to each region. For skin lesions, the task is almost always binary, separating the lesion from the surrounding skin. Automated skin lesion segmentation is hindered by illumination and contrast issues, intrinsic inter-class similarities and intra-class variability, occlusions, artifacts, and the diversity of imaging tools used. The lack of large datasets with ground-truth segmentation masks generated by experts compounds the problem, impeding both the training of models and their reliable evaluation. Skin lesion images are occluded by natural artifacts such as hair (Fig. 1(a)), blood vessels (Fig. 1(b)), and artificial ones such as surgical marker annotations (Fig. 1(c)), lens artifacts (dark corners) (Fig. 1(d)), and air bubbles (Fig. 1(e)). Intrinsic factors such as lesion size and shape variation (Fig. 1(f) and 1(g)), di GLYPH&lt;11&gt; erent skin colors (Fig. 1(h)), low contrast (Fig. 1(i)), and ambiguous boundaries (Fig. 1(h)) complicate the automated segmentation of skin lesions.
+
+Before the deep learning ( DL ) revolution, segmentation was based on classical image processing and machine learning tech-
+
+<!-- page_break -->
+
+picture_counter_2 The image shows a close-up view of a patch of skin with hair, featuring a dark, irregularly-shaped mole or lesion. This image is likely used in a medical research paper or a study demonstrating the use of artificial intelligence techniques for diagnosing skin diseases such as melanoma.
+
+(a) Hairs
+
+picture_counter_3 The image shows a close-up view of a skin lesion with irregular borders and varying shades of brown and black. The lesion appears to have some hair strands over it. This type of image is typically used in medical research papers focused on dermatology or the application of artificial intelligence techniques in diagnosing skin conditions like melanoma.
+
+(d) Irregular border and black frame
+
+picture_counter_4 The image depicts a close-up of a skin lesion with irregular borders and varying shades of red and brown. It appears to be a dermoscopic image that might be used in the context of diagnosing skin conditions such as melanoma using artificial intelligence techniques.
+
+picture_counter_5 The image shows a microscopic view of a skin tissue sample, featuring a central area with brown pigmentation surrounded by a lighter region. The sample appears to be stained for better visualization of cellular structures. This image is relevant to medical research, particularly in the context of diagnosing skin-related diseases using imaging techniques.
+
+(c) Surgical marking
+
+picture_counter_6 The image shows a close-up of a skin lesion on a light-colored background, likely used in the context of medical research or a medical report related to diagnosing skin diseases using artificial intelligence techniques.
+
+(f) Very small lesion
+
+picture_counter_7 The image shows a close-up view of skin with a small, possibly pigmented area on the left side, and a circular, orange and yellow marker placed nearby. The marker may be used for calibration or reference purposes in a medical imaging context.
+
+picture_counter_8 The image shows a close-up view of a skin lesion with irregular borders and varying shades of brown and red, likely used in a medical research paper focused on diagnosing skin conditions such as melanoma using artificial intelligence techniques.
+
+(b) Blood vessels
+
+(e) Bubbles
+
+picture_counter_9 The image shows a close-up view of a skin lesion, possibly a mole or melanoma, with a dark brown, irregularly shaped area on a lighter skin background. The lesion is surrounded by fine hairs and some air bubbles, indicating it might be taken through a dermatoscope. This image is likely used in a medical research paper focusing on the diagnosis of skin conditions using artificial intelligence techniques.
+
+(g) Very large lesion
+
+picture_counter_10 The image shows a close-up view of a skin lesion with varying colors, including shades of brown and dark areas. There are no graphs, bar plots, or other statistical visualizations present in the image. The lesion's appearance suggests it might be used in a medical research paper related to diagnosing skin diseases, potentially using artificial intelligence techniques.
+
+(h) Fuzzy border and variegated coloring
+
+(i) Low contrast and color calibration chart
+
+Fig. 1: Factors that complicate dermoscopy image segmentation (image source: ISIC 2016 dataset (Gutman et al., 2016)).
+
+niques such as adaptive thresholding (Green et al., 1994; Celebi et al., 2013), active contours (Erkol et al., 2005), region growing (Iyatomi et al., 2006; Celebi et al., 2007a), unsupervised clustering (G´mez et al., 2007), and support vector machines (Zortea o et al., 2011). These approaches depend on hand-crafted features, which are di GLYPH&lt;14&gt; cult to engineer and often limit invariance and discriminative power from the outset. As a result, such conventional segmentation algorithms do not always perform well on larger and more complex datasets. In contrast, DL integrates feature extraction and task-specific decision seamlessly, and does not just cope with, but actually requires larger datasets.
+
+Survey of surveys. Celebi et al. (2009b) reviewed 18 skin lesion segmentation algorithms for dermoscopic images, published between 1998 and 2008, with their required preprocessing and postprocessing steps. Celebi et al. (2015b) later extended their work with 32 additional algorithms published between 2009 and 2014, discussing performance evaluation and computational requirements of each approach, and suggesting guidelines for future works. Both surveys appeared before DL was widely adopted for skin lesion segmentation, but cover all the important works based on classical image processing and machine learning. Adegun and
+
+<!-- page_break -->
+
+Fig. 2: An overview of the various components of this review. We structure the review based on the di GLYPH&lt;11&gt; erent elements of a DL-based segmentation pipeline and conclude it with discussions on future potential research directions.
+
+picture_counter_11 The image is a diagram illustrating various aspects of DL-based (Deep Learning-based) skin lesion segmentation. It consists of a central node labeled "DL-based Skin Lesion Segmentation" connected to five main branches: "Input Data," "Model Design & Training," "Evaluation," and "Future Research." Each main branch further branches out into subtopics such as "Datasets," "Synthetic Data," "Supervision," "Image Preprocessing," "Model Architecture," "Loss Functions," "Segmentation Annotation," "Inter-Annotator Agreement," and "Metrics." Each subtopic is referenced with a section number.
+
+Viriri (2020a) reviewed the literature on DL -based skin image analysis, with an emphasis on the best-performing algorithms in the ISIC (International Skin Imaging Collaboration) Skin Image Analysis Challenges 2018 (Codella et al., 2019) and 2019 (Tschandl et al., 2018; Codella et al., 2018; Combalia et al., 2019). However, since their review focused on the ISIC Challenges 2018 and 2019, it is more general as it covers both lesion classification and segmentation. Consequently, the number of papers surveyed for skin lesion segmentation by Adegun and Viriri (2020a) is almost an order of magnitude smaller than that in this review.
+
+Main contributions. No existing survey approaches the present work in breadth or depth, as we cross-examine 177 research papers that deal with the automated segmentation of skin lesions in clinical and dermoscopic images. We analyze the works along several dimensions, including input data (datasets, preprocessing, and synthetic data generation), model design (architecture, modules, and losses), and evaluation (data annotation and evaluation metrics). We discuss these dimensions both from the viewpoint of select seminal works, and from a systematic viewpoint, examining how those choices have influenced current trends, and how their limitations should be addressed. We summarize all examined works in a comprehensive table to facilitate comparisons.
+
+Search strategy. We searched DBLP and Arxiv Sanity Preserver for all scholarly publications: peer-reviewed journal papers, papers published in the proceedings of conferences or workshops, and non-peer-reviewed preprints from 2014 to 2022. The DBLP search query was (conv* | trans* | deep | neural | learn*) (skin | derm*) (segment* | delineat* | extract* |
+
+<!-- page_break -->
+
+localiz*) , thus restricting our search to DL -based works involving skin and segmentation. We use DBLP for our literature search because (a) it allows for customized search queries and lists, and (b) we did not find any relevant publications on other platforms (Google Scholar and PubMed) that were not indexed by DBLP. For unpublished preprints, we also searched on Arxiv Sanity Preserver using a similar query . 3 We filtered our search results to remove false positives (31 papers) and included only papers related to skin lesion segmentation. We excluded papers that focused on general skin segmentation and general skin conditions (e.g., psoriasis, acne, or certain sub-types of skin lesions). We also included unpublished preprints from arXiv, which (a) passed minimum quality checks levels and (b) had at least 10 citations, and excluded those that were clearly of low quality. In particular, papers that had one or more of the following were excluded from this survey: (a) missing quantitative results, (b) missing important sections such as Abstract or Methods, (c) conspicuously poor writing quality, and (d) no methodological contribution. This led to the filtering out of papers of visibly low quality ((a-c) criteria above; 18 papers) and those with no methodological contribution (20 papers).
+
+The remaining text is organized as follows: in Section 2, we introduce the publicly available datasets and discuss preprocessing and synthetic data generation; in Section 3, we review the various network architectures used in deep segmentation models and discuss how deep models benefit from these networks. We also describe various loss functions designed either for general use or specifically for skin lesion segmentation. In Section 4, we detail segmentation evaluation techniques and measures. Finally, in Section 5, we discuss the open challenges in DL -based skin lesion segmentation and conclude our survey. A visual overview of the structure of this survey is presented in Fig. 2.

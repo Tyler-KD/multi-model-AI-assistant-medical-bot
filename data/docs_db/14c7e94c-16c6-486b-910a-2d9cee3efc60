@@ -1,0 +1,43 @@
+## The proposed framework
+
+In this section, the proposed framework has been explained. First, the used chest X-ray dataset has been described. Then, the developed framework, which includes 'pre-processing' phase and the 'Classification using CNN models based on transfer learning' phase, has been illustrated. Two different approaches have been used to train pre-trained CNN models using transfer learning. The first approach uses whole chest X-ray images, while the other approach uses lung-segmented images.
+
+
+## Used datasets
+
+In this research, the data obtained from the 'COVID-19 Radiography Database' has been used to apply the proposed framework. The database contains thousands of publicly available benchmark X-ray images and corresponding lung masks. The X-ray images are provided in Portable Network Graphics (PNG) format with a resolution of 299 × 299 pixels. The database includes 10,192 Normal cases, 3616 positive COVID-19 cases, 1345 Viral Pneumonia cases, and 6012 Lung Opacity images as shown in Table1. This database was developed by a team from Qatar University, Dhaka University, Bangladesh with cooperators from Malaysia and Pakistan and cooperators of medical   doctors 26 . Figure 1 illustrates samples from different classes in the COVID-19 Radiography Database.
+
+
+## Preprocessing
+
+The purpose of the pre-processing phase is to prepare the X-ray images for classification using CNN pre-trained models. In this phase, different pre-processing steps are applied to improve the performance of the classification. The pre-processing steps can be summarized as follows:
+
+| Classes         | Normal   |   Positive COVID-19 |   Viral pneumonia |   Lung opacity |
+|-----------------|----------|---------------------|-------------------|----------------|
+| Number of cases | 10,192   |                3616 |              1345 |           6012 |
+
+Table 1. COVID-19 radiography database distribution.
+
+picture_counter_1 The image is an X-ray of a human chest, showing the lungs, heart, and surrounding structures.
+
+Normal-3
+
+picture_counter_2 The image is a chest X-ray showing the rib cage, spine, and upper part of the lungs.
+
+picture_counter_3 The image is a chest X-ray displaying the thoracic cavity, including the lungs, heart, and surrounding structures.
+
+COVID-31
+
+picture_counter_4 The image is a chest X-ray showing the lungs and surrounding structures, likely used in the context of a medical research paper or a study on the use of artificial intelligence techniques in diagnosing diseases.
+
+Viral Pneumonia-13
+
+Lung\_Opacity-7
+
+Figure 1. Samples from COVID-19 radiography chest database representing different classes.
+
+Vol.:(0123456789)
+
+<!-- page_break -->
+
+Vol:.(1234567890)

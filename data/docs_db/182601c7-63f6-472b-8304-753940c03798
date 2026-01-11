@@ -1,0 +1,103 @@
+## Image enhancement
+
+Enhancing images is a significant step for the correct classification. It increases image contrast in order to improve classification performance. Different techniques can be applied to enhance the images. In this research, some of these techniques have been applied to the original X-ray images before introducing them to the classification models, they are as follows:
+
+- 1. Histogram Equalization (HE): The purpose of histogram equalization (HE) is to spread the gray levels inside the image. It modifies the brightness and contrast of the images to improve the image   quality 27 . The original X-ray images' intensity has been enhanced using histogram equalization (HE).
+- 2. Contrast Limited Adaptive Histogram Equalization (CLAHE): It originated from Global Histogram Equalization (GHE), it is based on dividing the image into non-overlapping blocks, and after that, the histogram of each block is gotten using a pre-specified   value 28 . In this research, CLAHE has been used to enhance the contrast of original X-ray images.
+- 3. Image Complement: The complement or inverse of X-ray images transforms the dark positions to lighter and the light positions to darker. As this is a standard process, which is similar to that used by radiologists, it may aid a deep learning model for improving classification performance. The complement of the binary image can be obtained by changing the zeros to ones and ones to zeros. Whereas for a grayscale image, each pixel is subtracted from 255.
+
+Figure 2 shows an original X-ray image and its enhanced versions after applying HE, CLAHE and image complement on the original image with the corresponding histogram plots for each version.
+
+
+## Segmentation
+
+In the segmentation step, the regions of interest (ROI), which are the lungs region in our case, are cropped from the associated image. In this research, the ground truth lungs' masks which are provided by the database have been used. A modified U-Net model was applied by the authors of the database on the X-ray images to get the lung masks associated with the full X-ray images. In this research, multiplication between each original image and the associated lung mask has been applied to get the segmented lungs. The same process of multiplication between different enhanced image versions and the associated masks has been applied to get different versions of segmented datasets with different enhancements. All these versions are introduced to CNN models as segmented versions of data. Figure 3 shows the segmented images of the original image and of the different enhanced images for one of the COVID samples.
+
+
+## Resizing images phase
+
+Resizing the images is an essential process to satisfy the requirement of CNN of equally sized input images. In this research, the process of resizing X-ray images has been done to fit all X-ray images to the input size of the used pre-trained CNN models which are VGG19 and EfficientNetB0. Therefore, all images' versions either full or segmented versions were resized to fit the CNNs input image size which is 224 × 224 pixels. To expedite
+
+picture_counter_5 The image is an X-ray of a human chest, showing the lungs, heart, and surrounding structures.
+
+picture_counter_6 The image is a chest X-ray showing the lungs, heart, and surrounding structures.
+
+picture_counter_7 The image depicts a chest X-ray, showing the lungs and heart.
+
+picture_counter_8 The image is a chest X-ray showing the lungs and surrounding structures.
+
+(a) Original COVID-31
+
+picture_counter_9 The image shows a bar plot with the x-axis ranging from 0 to 255 and the y-axis ranging from 0 to 3000. The plot appears to represent a histogram with several peaks, indicating the frequency distribution of pixel intensities or some similar metric. This type of plot is commonly used in medical research papers or studies involving artificial intelligence techniques for diagnosing diseases.
+
+( b) Enhanced HE
+
+picture_counter_10 The image is a bar plot depicting numerical data across a range of values from 0 to 255 on the x-axis, with corresponding frequencies or counts on the y-axis ranging from 0 to 3500.
+
+(c) Enhanced CLAHE
+
+(d) Complement
+
+picture_counter_11 The image is a histogram showing the distribution of data. The x-axis ranges from 0 to 250, and the y-axis ranges from 0 to 3000. The histogram has multiple bars with varying heights, indicating the frequency of occurrences within each bin. The highest frequency is observed around the bins between 150 and 200.
+
+(e) Histogram of original image
+
+picture_counter_12 The image shows a bar plot with the x-axis ranging from 0 to 255 and the y-axis ranging from 0 to 3000. The bars indicate the frequency distribution of a dataset, with noticeable peaks around the values of 70, 110, and 150 on the x-axis, and a smaller peak around 250. This plot likely represents the intensity distribution of pixel values, which is common in medical imaging analysis.
+
+(f) Histogram of HE image
+
+(g) Histogram of CLAHE
+
+(h) Histogram of complement
+
+Figure 2. An X-ray image and its enhanced versions after applying HE, CLAHE and complement to the original image and the corresponding histogram plots.
+
+<!-- page_break -->
+
+picture_counter_13 The image is an X-ray of a human chest, showing the lungs, heart, and surrounding structures.
+
+(a) Original COVID-31
+
+picture_counter_14 The image displays a binary mask of lungs, typically used in medical imaging to segment lung areas from chest X-rays or CT scans. The lungs are represented in white, while the background is black. This type of image is relevant to medical research papers focusing on disease diagnosis using artificial intelligence techniques.
+
+Mask of COVID-31
+
+picture_counter_15 The image shows a pair of lung X-rays labeled "Original COVID 21." The X-rays depict the internal structure of the lungs, likely highlighting areas affected by COVID-19 for diagnostic purposes.
+
+picture_counter_16 The image is an X-ray of a human chest. It shows the lungs, heart, and bones of the ribcage.
+
+(D) Complement
+
+picture_counter_17 The image displays a 3D reconstruction of human lungs, likely used to demonstrate the application of artificial intelligence techniques in medical imaging for diagnosing diseases.
+
+picture_counter_18 The image is a chest X-ray showing a frontal view of the lungs and heart. It is likely used in a medical research paper or a study demonstrating the use of artificial intelligence techniques for diagnosing diseases.
+
+( b) Enhanced HE
+
+picture_counter_19 The image is a chest X-ray showing the thoracic cavity, including the lungs, heart, and surrounding structures. This type of image is typically used in medical research papers or studies involving the use of artificial intelligence techniques for diagnosing diseases such as pneumonia, lung cancer, or other pulmonary conditions.
+
+(c) Enhanced CLAHE
+
+
+
+
+## Mul/g415plica/g415on
+
+
+## Segmented Lung region
+
+picture_counter_21 The image shows X-ray scans of two lungs, likely used to demonstrate the application of artificial intelligence techniques such as machine learning or deep learning in diagnosing lung-related diseases.
+
+(a) Original COVID-31
+
+picture_counter_22 The image depicts a medical scan, likely an X-ray of lungs, showing both left and right lung structures. The scan appears to be clear, with visible lung markings and no obvious signs of abnormalities such as masses or fluid accumulation.
+
+( b) Enhanced HE
+
+(c) Enhanced CLAHE
+
+(D) Complement
+
+Figure 3. X-ray original image and its enhanced versions and the segmented lung region of each version.
+
+the training process, it was found that the size of 112 × 112 pixels expedited the training without affecting the performance metrics.

@@ -1,0 +1,65 @@
+OPEN
+
+
+
+
+## COVID-ͷ9 detection from chest X-ray images using transfer learning
+
+Enas M. F. El Houby
+
+COVID-ͷ9 is a kind of coronavirus that appeared in China in the Province of Wuhan in December ͸Ͷͷ9. The most significant influence of this virus is its very highly contagious characteristic which may lead to death. The standard diagnosis of COVID-ͷ9 is based on swabs from the throat and nose, their sensitivity is not high enough and so they are prone to errors. Early diagnosis of COVID-ͷ9 disease is important to provide the chance of quick isolation of the suspected cases and to decrease the opportunity of infection in healthy people. In this research, a framework for chest X-ray image classification tasks based on deep learning is proposed to help in early diagnosis of COVID-ͷ9. The proposed framework contains two phases which are the pre-processing phase and classification phase which uses pre-trained convolution neural network models based on transfer learning. In the pre-processing phase, different image enhancements have been applied to full and segmented X-ray images to improve the classification performance of the CNN models. Two CNN pre-trained models have been used for classification which are VGGͷ9 and EfficientNetBͶ. From experimental results, the best model achieved a sensitivity of Ͷ.9ͼ, specificity of Ͷ.9ͺ, precision of Ͷ.9ͺͷ͸, Fͷ score of Ͷ.9ͻͶͻ and accuracy of Ͷ.9ͻ using enhanced full X-ray images for binary classification of chest X-ray images into COVID-ͷ9 or normal with VGGͷ9. The proposed framework is promising and achieved a classification accuracy of Ͷ.9͹ͻ for ͺ-class classification.
+
+Keywords Classification, Convolution neural network, Coronavirus, COVID-19, Deep learning, Transfer learning
+
+Since December 2019, coronavirus has been disseminated from China to many other countries. Coronavirus which is called SARS-CoV-2 causes COVID-19 as named by World Health Organization (WHO) on February 11, 2020. World Health Organization announced COVID-19 disease resulted from the coronavirus as a world pandemic in March   2020 . The disease has disseminated to nearly all countries, resulting in millions of people's 1 deaths among confirmed cases based on the statistics of the   WHO . By July 2023, nearly 700 million confirmed 2 cases, and almost 7 million confirmed deaths were recorded in the   world 3,4 . Most patients with the virus experience mild to moderate respiratory illness and heal without needing special treatment. But, some suffer from complications and need medical attention. Older people and those with underlying medical conditions like cardiovascular disease, diabetes, chronic respiratory disease, or cancer are more likely to develop serious illnesses. Anyone can get sick with COVID-19 and become seriously ill or die at any   age . 5
+
+Although the last diagnosis of COVID-19 depends on transcription-polymerase chain reaction (PCR) tests, in states of people with intensive respiratory symptoms the diagnosis protocol depends on medical imaging, which helps doctors to recognize the disease as the sensitivity of PCR is strongly   variable . As chest radiography 6 imaging such as computed tomography (CT) imaging and X-ray have been used successfully for the diagnosis of pneumonia, they have a high sensitivity for the diagnosis of COVID-19 . The suspected case undergoes an X-Ray 2 session and if more details are required, a computed tomography scan (CT-scan) session is taken. Therefore, X-ray 7 and CT scan   images  are being used as diagnostic methods for COVID-19 and to detect the   effects  of the 8 9 virus 6,10 . The availability and accessibility of X-ray imaging in many imaging centers and clinics is more present even in rural regions as it is standard equipment in healthcare systems. Particularly, chest X-ray is more readily available than CT, because CT scanners require high equipment and maintenance costs. CT is not very suitable for COVID-19 screening as well because of its cost, imaging time, and radiation exposure whereas X-ray is more cost and time effective in dealing with such a common   virus 11 .
+
+Systems and Information Department, National Research Centre, Dokki ͷ͸͹ͷͷ, Cairo, Egypt. email: enas\_mfahmy@ yahoo.com; em.fahmy@nrc.sci.eg glyph&lt;c=25,font=/CQBORJ+Corbel&gt;
+
+ol.:ȋͬͭͮͯ
+
+<!-- page_break -->
+
+Vol:.(1234567890)
+
+The abnormalities can only be explained by expert radiologists. With the huge number of suspected cases and the limited number of available radiologists, automatic methodologies for the recognition of these precise abnormalities can aid in early diagnosis with high accuracy. The studies in Artificial Intelligence (AI) and machine learning, especially Deep Learning (DL), achieved high performance in the diagnosis of medical images. Therefore, DL techniques are robust tools for such issues.
+
+Deep learning (DL) has been successfully used to predict COVID-19 from Chest images. Unlike the traditional machine learning techniques DL can be used to predict disease from raw images without feature extraction required. The role of deep learning is to learn the features using a trained model with a huge amount of data to improve the classification's accuracy which reduces the burden on physicians and decreases the effect of doctors' shortages of the struggle against the disease. Convolutional neural network (CNN) is the type of DL model intended for image analysis tasks and has already been utilized in many medical problems such as segmentation and   classification 12 .
+
+Many high-performing pre-trained CNN structures have been provided in the literature to be utilized in similar problems. These models were trained using ImageNet data which contains 1,000,000 images and 1000 classes to overcome the limitation of data and to reduce the training   time 13 . These models can be used for image recognition based on transfer learning after fine-tuning these networks to the new problems. The learned weights of these pre-trained models are provided and used directly in the new   problems 14 . The purpose of utilizing pretrained models is to take advantage of learned features on a larger dataset, therefore the new model can converge faster and perform better with a smaller dataset. This gives us the advantage of DL independence of feature engineering over traditional methods without giving up the time, computational resources and cost effeciencies. Examples of these pre-trained CNN models are visual geometry group VGG (16, 19) 15 , EfficientNet (B0 to B7) 16 , MobileNet 17 , and residual neural network (ResNet) 18 , etc.
+
+The contributions of this research can be summarized as follows:
+
+- · A framework has been developed to diagnose COVID-19 using chest X-ray images for both full and segmented images.
+- · A multiplication between each original image and the associated lung mask from the ground truth dataset provided by the database has been applied to get the segmented lung.
+- · Different image enhancement techniques have been applied to both full and segmented X-ray images to reach the best possible classification performance.
+- · CNN pre-trained models based on transfer learning have been used to classify both full and segmented chest X-ray images with all enhancement versions and achieved promising results.
+- · Since the purpose of utilizing pre-trained models is to take advantage of learned features on a larger dataset, therefore the smallest possible datasets that can achieve the best possible performance have been used for faster convergence.
+
+Recently, many works have been developed to detect and diagnose COVID-19 and other lung diseases based on different medical image modalities using different machine learning techniques especially deep learning and transfer learning techniques. The purpose of all these works is to improve the performances of the methodologies used in the detection and classification of COVID-19 and other lung diseases. The focus in the research will be in X-ray images as the adopted medical image modality in this research.
+
+The rest of the paper is organized as follows. Related COVID-19 articles using deep learning are reviewed in the 'Related work' section. Then, the proposed framework for COVID-19 classification is described in "The proposed framework" section. Next, the results of X-ray images obtained with the proposed framework are presented in "Experimental results" section. The discussion and comparison with literature are provided in "Discussion" section. Finally, the main 'Conclusions and future work' are outlined.
+
+
+## Related work
+
+Recently, many works have been developed to detect and diagnose COVID-19 and other lung diseases based on different medical image modalities using different machine learning techniques especially deep learning and transfer learning. The purpose of all these works is to improve the performances of the methodologies used in the detection and classification of COVID-19 and other lung diseases. Where the proposed research will use X-ray images as a medical image modality, the focus in this section will be on the previous work based on X-rays.
+
+Nishio, et al. 19 presented a system based on VGG16 to classify images of chest X-rays as healthy, COVID-19 pneumonia, and non-COVID-19 pneumonia. They applied the proposed system to 1248 X-ray images collected from 2 different public datasets. The collected X-ray images contain 500 healthy samples, 215 images for COVID19 pneumonia patients and 533 images for non-COVID-19 pneumonia patients. The achieved accuracy was 83.6%, while the sensitivity was 90.9%.
+
+Minaee et al. 20 applied deep learning to recognize COVID-19 cases using chest X-rays images. Transfer learning was used to train 4 CNN models which are DenseNet-121, SqueezeNet, ResNet50, and ResNet18 to binary classify images as COVID-19 or not. The training was applied to 84 (420 after augmentation) COVID-19 images and 2000 non-Covid images, while the test was applied to 100 COVID-19 images and 3000 non-COVID images. The best achieved sensitivity of these models was 98%, while the specificity was 92.9% for the SqueezeNet model.
+
+Sahin 21 proposed a CNN model for binary classification of COVID-19 cases as COVID and Normal using chest X-ray images. Also, two pre-trained models which are ResNet50 and MobileNetv2 are applied to the used dataset of 13,824 X-ray images. The proposed CNN model achieved an accuracy of 96.71% and F1-score of
+
+<!-- page_break -->
+
+97%. MobileNetv2 achieved an accuracy of 95.73% and F1-score of 96%, while ResNet50 achieved an accuracy of 91.54% and F1-score of 91%.
+
+Wang et al. 22 developed an open-source CNN called COVID-Net to detect COVID-19 cases using chest X-ray images. The proposed net can predict the case as one of three classes which are COVID-19 viral infection, non-COVID-19 infection, and normal. Also, an open access benchmark dataset COVIDx was introduced, it contains 13,975 X-ray images collected from 13,870 patients. The COVIDx dataset was generated using five different publicaly available datasets. The accuracy of COVID-Net reached 93.3%.
+
+Panwar et al. 23 developed a deep learning model called nCOVnet for detecting COVID-19 based on X-rays. A dataset of 284 X-ray images was used of which 142 images are normal cases and 142 images are COVID-19 cases. The model achieved an accuracy of 88.1%.
+
+Nigam et al. 24 used transfer learning to utilize 5 pre-trained models which are DenseNet121, NASNet, Xception, VGG16, and EfficientNet to classify Coronavirus suspected cases as normal, COVID-19 positive cases, and other classes. The used dataset contains 16,634 X-ray images, 6000 normal images, 5634 COVID images, and 5000 imges for others. The achieved accuracies were 79.01%, 85.03%, 88.03%, 89.96%, and 93.48% for VGG16, NASNet, Xception, DenseNet121, and EfficientNet respectively.
+
+Chow et al. 25 used transfer learning to utilize 18 CNN models including VGG-19, VGG-16, ShufeNet, SqueezeNet. etc. to classify the cases as normal or COVID-19. The used dataset contains 700 X-ray images (350 normal cases and 350 COVID-19 cases) from both public and private institutes. The highest 4 models are VGG19, VGG-16, ResNet-101, and SqueezeNet with accuracy ranging from 90.7 to 94.3% and F1-score from 90.8 to 94.3%. The VGG-16 is the highest with an accuracy of 94.3% and F1-score of 94.3%. The majority voting of the 18 models and the highest 4 models achieved an accuracy of 93.0% and 94.0%, respectively.

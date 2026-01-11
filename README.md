@@ -1,32 +1,11 @@
 <div align="center">
  
-![logo](https://github.com/souvikmajumder26/Multi-Agent-Medical-Assistant/blob/main/assets/logo_rounded.png)
+![logo](assets/logo.jpg)
 
-<h1 align="center"><strong>⚕️ Multi-Agent-Medical-Assistant :<h6 align="center">AI-powered multi-agentic system for medical diagnosis and assistance</h6></strong></h1>
-
-<!-- ![PyTorch - Version](https://img.shields.io/badge/PYTORCH-2.0+-red?style=for-the-badge&logo=pytorch) -->
-![Python - Version](https://img.shields.io/badge/PYTHON-3.11+-blue?style=for-the-badge&logo=python&logoColor=white)
-![LangGraph - Version](https://img.shields.io/badge/LangGraph-0.3+-teal?style=for-the-badge&logo=langgraph)
-![LangChain - Version](https://img.shields.io/badge/LangChain-0.3+-teal?style=for-the-badge&logo=langchain)
-![Qdrant Client - Version](https://img.shields.io/badge/Qdrant-1.13+-red?style=for-the-badge&logo=qdrant)
-![Pydantic - Version](https://img.shields.io/badge/Pydantic-2.10+-red?style=for-the-badge&logo=pydantic)
-![FastAPI - Version](https://img.shields.io/badge/FastAPI-0.115+-teal?style=for-the-badge&logo=fastapi)
-![Docling - Version](https://img.shields.io/badge/Docling-3.1+-orange?style=for-the-badge&logo=docling)
-[![Generic badge](https://img.shields.io/badge/License-Apache-<COLOR>.svg?style=for-the-badge)](https://github.com/souvikmajumder26/Multi-Agent-Medical-Assistant/blob/main/LICENSE) 
-[![GitHub Issues](https://img.shields.io/github/issues/souvikmajumder26/Multi-Agent-Medical-Assistant.svg?style=for-the-badge)](https://github.com/souvikmajumder26/Multi-Agent-Medical-Assistant/issues)
-![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg?style=for-the-badge)
+<h1 align="center"><strong> Multi Model AI Assistant Medical Bot<h6 align="center">AI-powered multi-agentic system for medical diagnosis and assistance</h6></strong></h1>
 
 </div>
 
-----
-
-> [!IMPORTANT]  
-> 📋 Version Updates from v2.0 to v2.1 and further:
-> 1. **Document Processing Upgrade**: Unstructured.io has been replaced with Docling for document parsing and extraction of text, tables, and images to be embedded.
-> 2. **Enhanced RAG References**: Links to source documents and reference images present in reranked retrieved chunks stored in local storage are added to the bottom of the RAG responses.
->
-> To use Unstructured.io based solution, refer release - [v2.0](https://github.com/souvikmajumder26/Multi-Agent-Medical-Assistant/tree/v2.0).
- 
 ## 📚 Table of Contents
 - [Overview](#overview)
 - [Demo](#demo)
@@ -76,18 +55,17 @@ For learners: Refer `agents/README.md` for detailed explanation of the agentic w
 ## 💫 Demo <a name="demo"></a>
 
 
-https://github.com/user-attachments/assets/d27d4a2e-1c7d-45e2-bbc5-b3d95ccd5b35
+<video src="assets/Multi-Agent-Medical-Assistant-v1.9_Compressed.mp4" controls width="640">
+  Your browser does not support the video tag.
+</video>
 
-
-If you like what you see and would want to support the project's developer, you can <a href="https://www.buymeacoffee.com/souvikmajumder" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a> ! :)
-
-📂 **For an even more detailed demo video**: Check out [`Multi-Agent-Medical-Assistant-v1.9`](assets/Multi-Agent-Medical-Assistant-v1.9_Compressed.mp4). 📽️
+📂 **For an even more detailed demo video**: Check out [`multi-model-AI-assistant-medical-bot`](assets/Multi-Agent-Medical-Assistant-v1.9_Compressed.mp4). 📽️
 
 ---
 
 ## 🛡️ Technical Flow Chart  <a name="technical-flowchart"></a>
 
-![Technical Flow Chart](assets/final_medical_assistant_flowchart_light_rounded.png)
+![Technical Flow Chart](assets/final_medical_assistant_flowchart_light.png)
 
 ---
 
@@ -182,8 +160,8 @@ If you like what you see and would want to support the project's developer, you 
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/souvikmajumder26/Multi-Agent-Medical-Assistant.git
-cd Multi-Agent-Medical-Assistant
+git clone https://github.com/smilingfaceme/multi-model-AI-assistant-medical-bot.git
+cd multi-model-AI-assistant-medical-bot
 ```
 
 ### 2️⃣ Create Environment File
@@ -299,8 +277,8 @@ docker logs medical-assistant-app
 
 ### 1️⃣ Clone the Repository  
 ```bash  
-git clone https://github.com/souvikmajumder26/Multi-Agent-Medical-Assistant.git  
-cd Multi-Agent-Medical-Assistant  
+git clone https://github.com/smilingfaceme/multi-model-AI-assistant-medical-bot.git  
+cd multi-model-AI-assistant-medical-bot  
 ```
 
 ### 2️⃣ Create & Activate Virtual Environment  
@@ -362,7 +340,6 @@ python ingest_rag_data.py --dir ./data/raw
 
 ## 🧠 Usage  <a name="usage"></a>
 
-> [!NOTE]
 > 1. The first run can be jittery and may get errors - be patient and check the console for ongoing downloads and installations.
 > 2. On the first run, many models will be downloaded - yolo for tesseract ocr, computer vision agent models, cross-encoder reranker model, etc.
 > 3. Once they are completed, retry. Everything should work seamlessly since all of it is thoroughly tested.
@@ -375,38 +352,10 @@ python ingest_rag_data.py --dir ./data/raw
 ---
 
 ## 🤝 Contributions  <a name="contributions"></a>
-Contributions are welcome! Please check the [issues](https://github.com/souvikmajumder26/Multi-Agent-Medical-Assistant/issues) tab for feature requests and improvements.  
+Contributions are welcome! Please check the [issues](https://github.com/smilingfaceme/multi-model-AI-assistant-medical-bot/issues) tab for feature requests and improvements.  
 
 ---
 
 ## ⚖️ License  <a name="license"></a>
 This project is licensed under the **Apache-2.0 License**. See the [LICENSE](LICENSE) file for details.  
 
----
-
-## 📝 Citing <a name="citing"></a>
-```
-@misc{Souvik2025,
-  Author = {Souvik Majumder},
-  Title = {Multi Agent Medical Assistant},
-  Year = {2025},
-  Publisher = {GitHub},
-  Journal = {GitHub repository},
-  Howpublished = {\url{https://github.com/souvikmajumder26/Multi-Agent-Medical-Assistant}}
-}
-```
-
----
-
-## 📬 Contact  <a name="contact"></a>
-For any questions or collaboration inquiries, reach out to **Souvik Majumder** on:  
-
-🔗 **LinkedIn**: [https://www.linkedin.com/in/souvikmajumder26](https://www.linkedin.com/in/souvikmajumder26)
-
-🔗 **GitHub**: [https://github.com/souvikmajumder26](https://github.com/souvikmajumder26)
-
-<p align="right">
- <a href="#top"><b>🔝 Return </b></a>
-</p>
-
----

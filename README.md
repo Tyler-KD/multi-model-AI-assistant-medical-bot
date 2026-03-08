@@ -1,4 +1,4 @@
-<h1><strong> Multi Model AI Assistant Medical Bot<h6 align="center">AI-powered multi-agentic system for medical diagnosis and assistance</h6></strong></h1>
+<h1><strong> Multi Model AI Assistant Medical Bot</strong></h1>
 
 </div>
 

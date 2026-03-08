@@ -160,7 +160,7 @@ For learners: Refer `agents/README.md` for detailed explanation of the agentic w
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/smilingfaceme/multi-model-AI-assistant-medical-bot.git
+git clone https://github.com/Tyler-KD/multi-model-AI-assistant-medical-bot.git
 cd multi-model-AI-assistant-medical-bot
 ```
 
@@ -277,7 +277,7 @@ docker logs medical-assistant-app
 
 ### 1️⃣ Clone the Repository  
 ```bash  
-git clone https://github.com/smilingfaceme/multi-model-AI-assistant-medical-bot.git  
+git clone https://github.com/Tyler-KD/multi-model-AI-assistant-medical-bot.git  
 cd multi-model-AI-assistant-medical-bot  
 ```
 
@@ -352,7 +352,7 @@ python ingest_rag_data.py --dir ./data/raw
 ---
 
 ## 🤝 Contributions  <a name="contributions"></a>
-Contributions are welcome! Please check the [issues](https://github.com/smilingfaceme/multi-model-AI-assistant-medical-bot/issues) tab for feature requests and improvements.  
+Contributions are welcome! Please check the [issues](https://github.com/Tyler-KD/multi-model-AI-assistant-medical-bot/issues) tab for feature requests and improvements.  
 
 ---
 
